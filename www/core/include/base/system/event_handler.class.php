@@ -66,6 +66,10 @@ class EventHandler implements EventHandlerInterface
 					$this->success = true;	
 				}
 			}
+			else
+			{
+				$this->success = true;
+			}
 		}
 	}
 	

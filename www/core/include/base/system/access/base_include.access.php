@@ -90,12 +90,12 @@ class BaseInclude_Access
 		if ($name and $folder)
 		{
 	 		$sql_write = "INSERT INTO ".constant("BASE_INCLUDE_TABLE")." (id, name, folder, db_version) " .
-								"VALUES (nextval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass),:name,:folder, NULL)";		
+								"VALUES (nextval('".self::BASE_INCLUDE_PK_SEQUENCE."'::regclass), :name, :folder, NULL)";		
 				
-			$res = $db->prepare($sql);
-			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
-			$db->bind_value($res, ":folder", $folder, PDO::PARAM_STR);
-			$db->execute($res);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":folder", $folder, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{

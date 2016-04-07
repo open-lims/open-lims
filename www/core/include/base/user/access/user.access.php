@@ -47,8 +47,10 @@ class User_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("USER_TABLE")." WHERE id='".$user_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("USER_TABLE")." WHERE id= :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -93,10 +95,13 @@ class User_Access
 															"username," .
 															"password) " .
 						"VALUES (nextval('".self::USER_PK_SEQUENCE."'::regclass)," .
-															"'".$username."'," .
-															"'".$password."')";
+															":username," .
+															":password)";
 																	
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":username", $username, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":password", $password, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) != 1)
 			{
@@ -105,7 +110,8 @@ class User_Access
 			else
 			{
 				$sql_read = "SELECT id FROM ".constant("USER_TABLE")." WHERE id = currval('".self::USER_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -128,12 +134,14 @@ class User_Access
 
 		if ($this->user_id)
 		{	
-			$user_id_tmp = $this->user_id;
+			$id_tmp = $this->user_id;
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("USER_TABLE")." WHERE id = ".$user_id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("USER_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -190,8 +198,11 @@ class User_Access
 
 		if ($this->user_id and $username)
 		{
-			$sql = "UPDATE ".constant("USER_TABLE")." SET username = '".$username."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_TABLE")." SET username = :username WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":username", $username, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -219,8 +230,11 @@ class User_Access
 			
 		if ($this->user_id and strlen($password) == 32)
 		{
-			$sql = "UPDATE ".constant("USER_TABLE")." SET password = '".$password."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_TABLE")." SET password = :password WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":password", $password, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -249,8 +263,10 @@ class User_Access
 		
 		if ($username)
 		{						
-			$sql = "SELECT id FROM ".constant("USER_TABLE")." WHERE LOWER(username) = '".$username."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("USER_TABLE")." WHERE LOWER(username) = :username";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":username", $username, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -278,7 +294,8 @@ class User_Access
 		$return_array = array();	
 											
 		$sql = "SELECT id FROM ".constant("USER_TABLE")." ORDER BY id";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		while ($data = $db->fetch($res))
 		{
 			array_push($return_array, $data['id']);
@@ -305,8 +322,10 @@ class User_Access
 		{
 			$return_array = array();	
 												
-			$sql = "SELECT id FROM ".constant("USER_TABLE")." WHERE id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("USER_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -332,7 +351,8 @@ class User_Access
 		global $db;
 											
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['result'])

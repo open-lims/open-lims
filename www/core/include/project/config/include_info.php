@@ -31,5 +31,4 @@
 	$requires[2] 	= "data";
 	$requires[3] 	= "item";
 	$requires[4] 	= "template";
-	$requires[5] 	= "extension";
 ?>

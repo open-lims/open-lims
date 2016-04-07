@@ -143,7 +143,7 @@ class User implements UserInterface {
 						throw new UserCreationFailedException("",1);
 					}
 					
-					$user_profile_setting = new UserRegionalSetting_Access(null);
+					$user_profile_setting = new UserRegionalSetting_Access(null);					
 					if ($user_profile_setting->create($user_id, 1, Registry::get_value("base_timezone_id"), true, true, "jS M Y", "dd.mm.yyyy", 1, "metric", "din", null, null, "comma", "dot", "T F S") == false)
 					{
 						if ($transaction_id != null)
@@ -277,7 +277,7 @@ class User implements UserInterface {
 					return false;
 				}
 				
-				$user_profile_setting = new UserProfileSetting_Access($this->user_id);
+				$user_profile_setting = new UserRegionalSetting_Access($this->user_id);
 				if ($user_profile_setting->delete() == false)
 				{
 					if ($transaction_id != null)

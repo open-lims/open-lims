@@ -57,8 +57,10 @@ class UserRegionalSetting_Access
 		}
 		else
 		{			
-			$sql = "SELECT * FROM ".constant("USER_REGIONAL_SETTING_TABLE")." WHERE id='".$user_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("USER_REGIONAL_SETTING_TABLE")." WHERE id=:user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -148,7 +150,6 @@ class UserRegionalSetting_Access
 		
 		if ($user_id and 
 			is_numeric($language_id) and 
-			is_numeric($timezone_id) and 
 			isset($time_display_format) and 
 			isset($time_enter_format) and 
 			$date_display_format and 
@@ -157,43 +158,7 @@ class UserRegionalSetting_Access
 			$system_of_paper_formats and 
 			$decimal_separator and 
 			$name_display_format)
-		{
-			if ($time_display_format == true)
-			{
-				$time_display_format_insert = "t";
-			}
-			else
-			{
-				$time_display_format_insert = "f";
-			}
-			
-			if ($time_enter_format == true)
-			{
-				$time_enter_format_insert = "t";
-			}
-			else
-			{
-				$time_enter_format_insert = "f";
-			}
-			
-			if (is_numeric($currency_id))
-			{
-				$currency_id_insert = $currency_id;
-			}
-			else
-			{
-				$currency_id_insert = "NULL";
-			}
-			
-			if (is_numeric($currency_significant_digits))
-			{
-				$currency_significant_digits_insert = $currency_significant_digits;
-			}
-			else
-			{
-				$currency_significant_digits_insert = "NULL";
-			}
-			
+		{			
 			$sql_write = "INSERT INTO ".constant("USER_REGIONAL_SETTING_TABLE")." (id," .
 															"language_id," .
 															"timezone_id," .
@@ -209,23 +174,65 @@ class UserRegionalSetting_Access
 															"decimal_separator," .
 															"thousand_separator," .
 															"name_display_format)" .
-											"VALUES (".$user_id."," .
-															"".$language_id."," .
-															"".$timezone_id."," .
-															"'".$time_display_format_insert."'," .
-															"'".$time_enter_format_insert."'," .
-															"'".$date_display_format."'," .
-															"'".$date_enter_format."'," .
-															"".$country_id."," .
-															"'".$system_of_units."'," .
-															"'".$system_of_paper_formats."'," .
-															"".$currency_id_insert."," .
-															"".$currency_significant_digits_insert."," .
-															"'".$decimal_separator."'," .
-															"'".$thousand_separator."'," .
-															"'".$name_display_format."')";
-										
-			$res_write = $db->db_query($sql_write);
+											"VALUES (:user_id," .
+															":language_id," .
+															":timezone_id," .
+															":time_display_format," .
+															":time_enter_format," .
+															":date_display_format," .
+															":date_enter_format," .
+															":country_id," .
+															":system_of_units," .
+															":system_of_paper_formats," .
+															":currency_id," .
+															":currency_significant_digits," .
+															":decimal_separator," .
+															":thousand_separator," .
+															":name_display_format)";
+
+			$res_write = $db->prepare($sql_write);
+			
+			if (is_numeric($currency_id))
+			{
+				$db->bind_value($res_write, ":currency_id", $currency_id, PDO::PARAM_INT);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":currency_id", null, PDO::PARAM_NULL);
+			}
+				
+			if (is_numeric($timezone_id))
+			{
+				$db->bind_value($res_write, ":timezone_id", $timezone_id, PDO::PARAM_INT);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":timezone_id", null, PDO::PARAM_NULL);
+			}
+				
+			if (is_numeric($currency_significant_digits))
+			{
+				$db->bind_value($res_write, ":currency_significant_digits", $currency_significant_digits, PDO::PARAM_INT);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":currency_significant_digits", null, PDO::PARAM_NULL);
+			}
+			
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":language_id", $language_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":time_display_format", $time_display_format, PDO::PARAM_BOOL);
+			$db->bind_value($res_write, ":time_enter_format", $time_enter_format, PDO::PARAM_BOOL);
+			$db->bind_value($res_write, ":date_display_format", $date_display_format, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":date_enter_format", $date_enter_format, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":country_id", $country_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":system_of_units", $system_of_units, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":system_of_paper_formats", $system_of_paper_formats, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":decimal_separator", $decimal_separator, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":thousand_separator", $thousand_separator, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":name_display_format", $name_display_format, PDO::PARAM_STR);
+							
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
@@ -253,12 +260,14 @@ class UserRegionalSetting_Access
 		if ($this->user_id)
 		{
 				
-			$user_id_tmp = $this->user_id;
+			$id_tmp = $this->user_id;
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("USER_REGIONAL_SETTING_TABLE")." WHERE id = ".$user_id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("USER_REGIONAL_SETTING_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -495,8 +504,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and is_numeric($language_id))
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET language_id = ".$language_id." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET language_id = :language_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":language_id", $language_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -524,8 +536,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and is_numeric($timezone_id))
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET timezone_id = ".$timezone_id." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET timezone_id = :timezone_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":timezone_id", $timezone_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -552,18 +567,12 @@ class UserRegionalSetting_Access
 		global $db;
 			
 		if ($this->user_id and isset($time_display_format))
-		{
-			if ($time_display_format == true)
-			{
-				$time_display_format_insert = "t";
-			}
-			else
-			{
-				$time_display_format_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET time_display_format = '".$time_display_format_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET time_display_format = :time_display_format WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":time_display_format", $time_display_format, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -590,18 +599,12 @@ class UserRegionalSetting_Access
 		global $db;
 			
 		if ($this->user_id and isset($time_enter_format))
-		{
-			if ($time_enter_format == true)
-			{
-				$time_enter_format_insert = "t";
-			}
-			else
-			{
-				$time_enter_format_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET time_enter_format = '".$time_enter_format_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET time_enter_format = :time_enter_format WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":time_enter_format", $time_enter_format, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -629,8 +632,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and $date_display_format)
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET date_display_format = '".$date_display_format."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET date_display_format = :date_display_format WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":date_display_format", $date_display_format, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -658,8 +664,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and $date_enter_format)
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET date_enter_format = '".$date_enter_format."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET date_enter_format = :date_enter_format WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":date_enter_format", $date_enter_format, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -687,8 +696,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and is_numeric($country_id))
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET country_id = '".$country_id."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET country_id = :country_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":country_id", $country_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -716,8 +728,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and $system_of_units)
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET system_of_units = '".$system_of_units."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET system_of_units = :system_of_units WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":system_of_units", $system_of_units, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -745,8 +760,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and $system_of_paper_format)
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET system_of_paper_format = '".$system_of_paper_format."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET system_of_paper_format = :system_of_paper_format WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":system_of_paper_format", $system_of_paper_format, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -774,8 +792,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and is_numeric($currency_id))
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET currency_id = '".$currency_id."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET currency_id = :currency_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":currency_id", $currency_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -803,8 +824,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and is_numeric($currency_significant_digits))
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET currency_significant_digits = '".$currency_significant_digits."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET currency_significant_digits = :currency_significant_digits WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":currency_significant_digits", $currency_significant_digits, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -832,8 +856,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and $decimal_separator)
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET decimal_separator = '".$decimal_separator."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET decimal_separator = :decimal_separator WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":decimal_separator", $decimal_separator, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -861,8 +888,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and $thousand_separator)
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET thousand_separator = '".$thousand_separator."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET thousand_separator = :thousand_separator WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":thousand_separator", $thousand_separator, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -890,8 +920,11 @@ class UserRegionalSetting_Access
 			
 		if ($this->user_id and $name_display_format)
 		{
-			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET name_display_format = '".$name_display_format."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_REGIONAL_SETTING_TABLE")." SET name_display_format = :name_display_format WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name_display_format", $name_display_format, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{

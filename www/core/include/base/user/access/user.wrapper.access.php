@@ -69,9 +69,6 @@ class User_Wrapper_Access
 			
 		if ($username)
    		{	
-			$username = strtolower(trim($username));
-   			$username = str_replace("*","%",$username);
-   			
    			$return_array = array();
    				
    			$sql = "SELECT ".constant("USER_TABLE").".id AS id, " .
@@ -79,10 +76,18 @@ class User_Wrapper_Access
    					"nameconcat(".constant("USER_PROFILE_TABLE").".forename, ".constant("USER_PROFILE_TABLE").".surname) AS fullname ".
    					"FROM ".constant("USER_TABLE")." " .
    					"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("USER_PROFILE_TABLE").".id " .
-   					"WHERE LOWER(username) LIKE '".$username."' OR " .
-   							"LOWER(forename) LIKE '".$username."' OR " .
-   							"LOWER(surname) LIKE '".$username."'" .
+   					"WHERE LOWER(username) LIKE :username OR " .
+   							"LOWER(forename) LIKE :forename OR " .
+   							"LOWER(surname) LIKE :surname " .
    					"".$sql_order_by."";  
+   			
+   			$username = strtolower(trim($username));
+   			$username = str_replace("*","%",$username);
+   			
+   			$res = $db->prepare($sql);
+   			$db->bind_value($res, ":username", $username, PDO::PARAM_STR);
+   			$db->bind_value($res, ":forename", $username, PDO::PARAM_STR);
+   			$db->bind_value($res, ":surname", $username, PDO::PARAM_STR);
    		}
    		else
    		{
@@ -92,11 +97,12 @@ class User_Wrapper_Access
    				"FROM ".constant("USER_TABLE")." " .
    				"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("USER_PROFILE_TABLE").".id " .
    				"".$sql_order_by."";
-   		}
-   						
-   		$return_array = array();
    			
-   		$res = $db->db_query($sql);
+   			$res = $db->prepare($sql);
+   		}
+  		
+   		
+   		$db->execute($res);
    			
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -133,24 +139,31 @@ class User_Wrapper_Access
 		global $db;
    		
    		if ($username)
-   		{
-			$username = strtolower(trim($username));
-   			$username = str_replace("*","%",$username);
-   			
+   		{   			
    			$sql = "SELECT COUNT(".constant("USER_TABLE").".id) AS result " .
    					"FROM ".constant("USER_TABLE")." " .
    					"JOIN ".constant("USER_PROFILE_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("USER_PROFILE_TABLE").".id " .
-   					"WHERE LOWER(username) LIKE '".$username."' OR " .
-   							"LOWER(forename) LIKE '".$username."' OR " .
-   							"LOWER(surname) LIKE '".$username."'";  
+   					"WHERE LOWER(username) LIKE :username OR " .
+   							"LOWER(forename) LIKE :forename OR " .
+   							"LOWER(surname) LIKE :surname";  
+   			
+   			$username = strtolower(trim($username));
+   			$username = str_replace("*","%",$username);
+   			
+   			$res = $db->prepare($sql);
+   			$db->bind_value($res, ":username", $username, PDO::PARAM_STR);
+   			$db->bind_value($res, ":forename", $username, PDO::PARAM_STR);
+   			$db->bind_value($res, ":surname", $username, PDO::PARAM_STR);
    		}
    		else
    		{
    			$sql = "SELECT COUNT(".constant("USER_TABLE").".id) AS result " .
    				"FROM ".constant("USER_TABLE").""; 
+   			
+   			$res = $db->prepare($sql);
    		}
    						
-   		$res = $db->db_query($sql);
+   		$db->execute($res);
    		$data = $db->fetch($res);
 	
 		return $data['result'];
@@ -197,10 +210,7 @@ class User_Wrapper_Access
 			{
 				$sql_order_by = "ORDER BY ".constant("GROUP_TABLE").".id";
 			}
-			
-			$groupname = strtolower(trim($groupname));
-   			$groupname = str_replace("*","%",$groupname);
-   			
+			   			
    			$return_array = array();
    				
    			$sql = "SELECT ".constant("GROUP_TABLE").".id AS id, " .
@@ -208,13 +218,16 @@ class User_Wrapper_Access
    					"COUNT(".constant("GROUP_HAS_USER_TABLE").".group_id) AS users ".
    					"FROM ".constant("GROUP_TABLE")." " .
    					"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." ON ".constant("GROUP_TABLE").".id = ".constant("GROUP_HAS_USER_TABLE").".group_id " .
-   					"WHERE LOWER(name) LIKE '".$groupname."'" .
+   					"WHERE LOWER(name) LIKE :groupname " .
    					"GROUP BY ".constant("GROUP_TABLE").".name, ".constant("GROUP_TABLE").".id " .
    					"".$sql_order_by."";
    			
-   			$return_array = array();
+   			$groupname = strtolower(trim($groupname));
+   			$groupname = str_replace("*","%",$groupname);
    			
-   			$res = $db->db_query($sql);
+   			$res = $db->prepare($sql);
+   			$db->bind_value($res, ":groupname", $groupname, PDO::PARAM_STR);
+   			$db->execute($res);
    			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -261,9 +274,15 @@ class User_Wrapper_Access
    				
    			$sql = "SELECT COUNT(".constant("GROUP_TABLE").".id) AS result " .
    					"FROM ".constant("GROUP_TABLE")." " .
-   					"WHERE LOWER(name) LIKE '".$groupname."'";
+   					"WHERE LOWER(name) LIKE :groupname";
    						
-   			$res = $db->db_query($sql);
+   			$groupname = strtolower(trim($groupname));
+   			$groupname = str_replace("*","%",$groupname);
+   			
+   			$res = $db->prepare($sql);
+   			$db->bind_value($res, ":groupname", $groupname, PDO::PARAM_STR);
+   			$db->execute($res);
+   			
    			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -328,7 +347,8 @@ class User_Wrapper_Access
    						
    		$return_array = array();
    			
-   		$res = $db->db_query($sql);
+   		$res = $db->prepare($sql);
+   		$db->execute($res);
    			
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -365,7 +385,8 @@ class User_Wrapper_Access
    		$sql = "SELECT COUNT(".constant("USER_TABLE").".id) AS result " .
    				"FROM ".constant("USER_TABLE")."";  
    						
-   		$res = $db->db_query($sql);
+   		$res = $db->prepare($sql);
+   		$db->execute($res);
    		$data = $db->fetch($res);
 	
 		return $data['result'];
@@ -419,7 +440,8 @@ class User_Wrapper_Access
    						
    		$return_array = array();
    			
-   		$res = $db->db_query($sql);
+   		$res = $db->prepare($sql);
+   		$db->execute($res);
    			
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -456,7 +478,8 @@ class User_Wrapper_Access
    		$sql = "SELECT COUNT(".constant("GROUP_TABLE").".id) AS result " .
    				"FROM ".constant("GROUP_TABLE")."";  
    						
-   		$res = $db->db_query($sql);
+   		$res = $db->prepare($sql);
+   		$db->execute($res);
    		$data = $db->fetch($res);
 	
 		return $data['result'];
@@ -473,7 +496,8 @@ class User_Wrapper_Access
 				"LEFT JOIN ".constant("GROUP_HAS_USER_TABLE")." ON ".constant("USER_TABLE").".id = ".constant("GROUP_HAS_USER_TABLE").".user_id " .
 				"WHERE ".constant("GROUP_HAS_USER_TABLE").".group_id = 1";
 				
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+   		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['result'])
