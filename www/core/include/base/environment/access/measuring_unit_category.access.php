@@ -284,7 +284,7 @@ class MeasuringUnitCategory_Access
 			$db->execute($res);
 			$data = $db->fetch($res);
 			
-			if ($data['created_by_user'] == "t")
+			if ($data['created_by_user'] == true)
 			{
 				return true;
 			}

@@ -63,8 +63,10 @@ class UserProfile_Access
 		}
 		else
 		{			
-			$sql = "SELECT * FROM ".constant("USER_PROFILE_TABLE")." WHERE id='".$user_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("USER_PROFILE_TABLE")." WHERE id=:user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -143,16 +145,8 @@ class UserProfile_Access
 			
 		if (is_numeric($user_id) and $gender and $forename and $surname and $mail)
 		{
-			if ($title)
-			{
-				$title_insert = "'".$title."'";
-			}
-			else
-			{
-				$title_insert = "NULL";
-			}
-			
-			$sql = "INSERT INTO ".constant("USER_PROFILE_TABLE")." (id," .
+					
+			$sql_write = "INSERT INTO ".constant("USER_PROFILE_TABLE")." (id," .
 																"gender," .
 																"title," .
 																"forename," .
@@ -172,12 +166,12 @@ class UserProfile_Access
 																"skype, " .
 																"lync, " .
 																"jabber) " .
-													"VALUES (".$user_id."," .
-																"'".$gender."'," .
-																"".$title_insert."," .
-																"'".$forename."'," .
-																"'".$surname."'," .
-																"'".$mail."'," .
+													"VALUES (:user_id," .
+																":gender," .
+																":title," .
+																":forename," .
+																":surname," .
+																":mail," .
 																"NULL," .
 																"NULL," .
 																"NULL," .
@@ -193,9 +187,19 @@ class UserProfile_Access
 																"NULL," .
 																"NULL)";
 			
-			$res = $db->db_query($sql);
 			
-			if ($db->row_count($res) == 1)
+			$res_write = $db->prepare($sql_write);
+			
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":gender", $gender, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":title", $title, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":forename", $forename, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":surname", $surname, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":mail", $mail, PDO::PARAM_STR);
+			
+			$db->execute($res_write);
+			
+			if ($db->row_count($res_write) == 1)
 			{
 				self::__construct($user_id);
 				return $user_id;
@@ -221,12 +225,14 @@ class UserProfile_Access
 
 		if ($this->user_id)
 		{	
-			$user_id_tmp = $this->user_id;
+			$id_tmp = $this->user_id;
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("USER_PROFILE_TABLE")." WHERE id = ".$user_id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("USER_PROFILE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -538,8 +544,11 @@ class UserProfile_Access
 
 		if ($this->user_id and $gender)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET gender = '".$gender."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET gender = :gender WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":gender", $gender, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -566,18 +575,12 @@ class UserProfile_Access
 		global $db;
 
 		if ($this->user_id)
-		{
-			if ($title)
-			{
-				$title_insert = "'".$title."'";
-			}
-			else
-			{
-				$title_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET title = ".$title_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET title = :title WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":title", $title, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -605,8 +608,11 @@ class UserProfile_Access
 		
 		if ($this->user_id and $forename)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET forename = '".$forename."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET forename = :forename WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":forename", $forename, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -634,8 +640,11 @@ class UserProfile_Access
 
 		if ($this->user_id and $surname)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET surname = '".$surname."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET surname = :surname WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":surname", $surname, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -663,8 +672,11 @@ class UserProfile_Access
 		
 		if ($this->user_id and $mail)
 		{
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET mail = '".$mail."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET mail = :mail WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":mail", $mail, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -691,18 +703,12 @@ class UserProfile_Access
 		global $db;
 			
 		if ($this->user_id)
-		{
-			if ($institution)
-			{
-				$institution_insert = "'".$institution."'";
-			}
-			else
-			{
-				$institution_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET institution = ".$institution_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET institution = :institution WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":institution", $institution, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -729,18 +735,12 @@ class UserProfile_Access
 		global $db;
 
 		if ($this->user_id)
-		{
-			if ($department)
-			{
-				$department_insert = "'".$department."'";
-			}
-			else
-			{
-				$department_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET department = ".$department_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET department = :department WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":department", $department, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -767,18 +767,12 @@ class UserProfile_Access
 		global $db;
 		
 		if ($this->user_id)
-		{
-			if ($street)
-			{
-				$street_insert = "'".$street."'";
-			}
-			else
-			{
-				$street_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET street = ".$street_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET street = :street WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":street", $street, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -805,18 +799,12 @@ class UserProfile_Access
 		global $db;
 			
 		if ($this->user_id)
-		{
-			if ($zip)
-			{
-				$zip_insert = "'".$zip."'";
-			}
-			else
-			{
-				$zip_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET zip = ".$zip_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET zip = :zip WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":zip", $zip, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -843,18 +831,12 @@ class UserProfile_Access
 		global $db;
 			
 		if ($this->user_id)
-		{
-			if ($city)
-			{
-				$city_insert = "'".$city."'";
-			}
-			else
-			{
-				$city_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET city = ".$city_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET city = :city WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":city", $city, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res)){
 				$this->city = $city;
@@ -880,18 +862,12 @@ class UserProfile_Access
 		global $db;
 		
 		if ($this->user_id)
-		{
-			if ($country)
-			{
-				$country_insert = "'".$country."'";
-			}
-			else
-			{
-				$country_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET country = ".$country_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET country = :country WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":country", $country, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -918,18 +894,12 @@ class UserProfile_Access
 		global $db;
 		
 		if ($this->user_id)
-		{
-			if ($phone)
-			{
-				$phone_insert = "'".$phone."'";
-			}
-			else
-			{
-				$phone_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET phone = ".$phone_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET phone = :phone WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":phone", $phone, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -956,18 +926,21 @@ class UserProfile_Access
 		global $db;
 		
 		if ($this->user_id)
-		{
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET icq = :icq WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			
 			if (is_numeric($icq))
 			{
-				$icq_insert = $icq;
+				$db->bind_value($res, ":icq", $icq, PDO::PARAM_INT);
 			}
 			else
 			{
-				$icq_insert = "NULL";
+				$db->bind_value($res, ":icq", null, PDO::PARAM_NULL);
 			}
 			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET icq = ".$icq_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -994,18 +967,12 @@ class UserProfile_Access
 		global $db;
 		
 		if ($this->user_id)
-		{
-			if ($msn)
-			{
-				$msn_insert = "'".$msn."'";
-			}
-			else
-			{
-				$msn_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET msn = ".$msn_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET msn = :msn WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":msn", $msn, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -1033,17 +1000,11 @@ class UserProfile_Access
 			
 		if ($this->user_id)
 		{
-			if ($yahoo)
-			{
-				$yahoo_insert = "'".$yahoo."'";
-			}
-			else
-			{
-				$yahoo_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET yahoo = ".$yahoo_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET yahoo = :yahoo WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":yahoo", $yahoo, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -1070,18 +1031,12 @@ class UserProfile_Access
 		global $db;
 		
 		if ($this->user_id)
-		{
-			if ($aim)
-			{
-				$aim_insert = "'".$aim."'";
-			}
-			else
-			{
-				$aim_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET aim = ".$aim_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET aim = :aim WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":aim", $aim, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -1108,18 +1063,12 @@ class UserProfile_Access
 		global $db;
 
 		if ($this->user_id)
-		{
-			if ($skype)
-			{
-				$skype_insert = "'".$skype."'";
-			}
-			else
-			{
-				$skype_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET skype = ".$skype_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET skype = :skype WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":skype", $skype, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -1146,18 +1095,12 @@ class UserProfile_Access
 		global $db;
 
 		if ($this->user_id)
-		{
-			if ($lync)
-			{
-				$lync_insert = "'".$lync."'";
-			}
-			else
-			{
-				$lync_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET lync = ".$lync_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET lync = :lync WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":lync", $lync, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -1184,18 +1127,12 @@ class UserProfile_Access
 		global $db;
 
 		if ($this->user_id)
-		{
-			if ($jabber)
-			{
-				$jabber_insert = "'".$jabber."'";
-			}
-			else
-			{
-				$jabber_insert = "NULL";
-			}
-			
-			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET jabber = ".$jabber_insert." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_PROFILE_TABLE")." SET jabber = :jabber WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":jabber", $jabber, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{

@@ -154,29 +154,13 @@ class SystemLog_Access
 				$db->bind_value($res_write, ":line", null, PDO::PARAM_NULL);
 			}
 			
-			if ($link)
-			{
-				$db->bind_value($res_write, ":link", $link, PDO::PARAM_STR);
-			}
-			else
-			{
-				$db->bind_value($res_write, ":link", null, PDO::PARAM_NULL);
-			}
-			
-			if ($content_errorno)
-			{
-				$db->bind_value($res_write, ":content_errorno", $content_errorno, PDO::PARAM_STR);
-			}
-			else
-			{
-				$db->bind_value($res_write, ":content_errorno", null, PDO::PARAM_NULL);
-			}
-			
 			$db->bind_value($res_write, ":type_id", $type_id, PDO::PARAM_INT);
 			$db->bind_value($res_write, ":datetime", date("Y-m-d H:i:s"), PDO::PARAM_STR);
 			$db->bind_value($res_write, ":ip", $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
 			$db->bind_value($res_write, ":content_string", $content_string, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":content_errorno", null, PDO::PARAM_NULL);
 			$db->bind_value($res_write, ":file", $file, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":link", $link, PDO::PARAM_STR);
 			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)

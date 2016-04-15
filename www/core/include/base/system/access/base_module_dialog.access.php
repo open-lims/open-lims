@@ -122,15 +122,6 @@ class BaseModuleDialog_Access
 			{
 				$db->bind_value($res_write, ":weight", null, PDO::PARAM_NULL);
 			}
-				
-			if (isset($language_address))
-			{
-				$db->bind_value($res_write, ":language_address", $language_address, PDO::PARAM_STR);
-			}
-			else
-			{
-				$db->bind_value($res_write, ":language_address", null, PDO::PARAM_NULL);
-			}
 			
 			$db->bind_value($res_write, ":module_id", $module_id, PDO::PARAM_INT);
 			$db->bind_value($res_write, ":dialog_type", $dialog_type, PDO::PARAM_STR);
@@ -138,6 +129,7 @@ class BaseModuleDialog_Access
 			$db->bind_value($res_write, ":class", $class, PDO::PARAM_STR);
 			$db->bind_value($res_write, ":method", $method, PDO::PARAM_STR);
 			$db->bind_value($res_write, ":internal_name", $internal_name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":language_address", $language_address, PDO::PARAM_STR);
 			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)

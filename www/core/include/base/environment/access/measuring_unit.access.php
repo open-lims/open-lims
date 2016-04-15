@@ -150,15 +150,6 @@ class MeasuringUnit_Access
 				$db->bind_value($res_write, ":category_id", null, PDO::PARAM_NULL);
 			}
 			
-			if ($calculation)
-			{
-				$db->bind_value($res_write, ":calculation", $calculation, PDO::PARAM_STR);
-			}
-			else
-			{
-				$db->bind_value($res_write, ":calculation", null, PDO::PARAM_NULL);
-			}
-			
 			if (is_numeric($min_value))
 			{
 				$db->bind_value($res_write, ":min_value", $min_value, PDO::PARAM_STR);
@@ -222,6 +213,7 @@ class MeasuringUnit_Access
 			
 			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
 			$db->bind_value($res_write, ":unit_symbol", $unit_symbol, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":calculation", $calculation, PDO::PARAM_STR);
 			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
@@ -814,16 +806,7 @@ class MeasuringUnit_Access
 			$sql = "UPDATE ".constant("MEASURING_UNIT_TABLE")." SET calculation = :calculation WHERE id = :id";
 			$res = $db->prepare($sql);
 			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
-			
-			if ($calculation)
-			{
-				$db->bind_value($res, ":calculation", $calculation, PDO::PARAM_STR);
-			}
-			else
-			{
-				$db->bind_value($res, ":calculation", null, PDO::PARAM_NULL);
-			}
-			
+			$db->bind_value($res, ":calculation", $calculation, PDO::PARAM_STR);			
 			$db->execute($res);
 			
 			if ($db->row_count($res))
@@ -1040,7 +1023,7 @@ class MeasuringUnit_Access
 			$db->execute($res);
 			$data = $db->fetch($res);
 			
-			if ($data['created_by_user'] == "t")
+			if ($data['created_by_user'] == true)
 			{
 				return true;
 			}

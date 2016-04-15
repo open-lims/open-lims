@@ -101,19 +101,11 @@ class BaseModuleNavigation_Access
 
 			$res_write = $db->prepare($sql_write);
 			
-			if ($alias)
-			{
-				$db->bind_value($res_write, ":alias", $alias, PDO::PARAM_STR);
-			}
-			else
-			{
-				$db->bind_value($res_write, ":alias", null, PDO::PARAM_NULL);
-			}
-			
 			$db->bind_value($res_write, ":language_address", $language_address, PDO::PARAM_STR);
 			$db->bind_value($res_write, ":position", $position, PDO::PARAM_INT);
 			$db->bind_value($res_write, ":colour", $colour, PDO::PARAM_STR);
 			$db->bind_value($res_write, ":module_id", $module_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":alias", $alias, PDO::PARAM_STR);
 			$db->bind_value($res_write, ":controller_class", $controller_class, PDO::PARAM_STR);
 			$db->bind_value($res_write, ":controller_file", $controller_file, PDO::PARAM_STR);
 			$db->execute($res_write);

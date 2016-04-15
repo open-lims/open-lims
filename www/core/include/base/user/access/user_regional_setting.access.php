@@ -79,24 +79,8 @@ class UserRegionalSetting_Access
 				$this->decimal_separator 			= $data['decimal_separator'];
 				$this->thousand_separator 			= $data['thousand_separator'];
 				$this->name_display_format 			= $data['name_display_format'];
-				
-				if ($data['time_display_format'] == "t")
-				{
-					$this->time_display_format = true;
-				}
-				else
-				{
-					$this->time_display_format = false;
-				}
-				
-				if ($data['time_enter_format'] == "t")
-				{
-					$this->time_enter_format = true;
-				}
-				else
-				{
-					$this->time_enter_format = false;
-				}
+				$this->time_display_format			= $data['time_display_format'];
+				$this->time_enter_format 			= $data['time_enter_format'];
 			}
 			else
 			{

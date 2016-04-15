@@ -51,8 +51,10 @@ class UserAdminSetting_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE id='".$user_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE id=:user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -60,69 +62,13 @@ class UserAdminSetting_Access
 				$this->user_id 				= $user_id;
 				
 				$this->last_password_change	= $data['last_password_change'];
-				
-				if ($data['can_change_password'] == "t")
-				{
-					$this->can_change_password = true;
-				}
-				else
-				{
-					$this->can_change_password = false;
-				}
-				
-				if ($data['must_change_password'] == "t")
-				{
-					$this->must_change_password = true;
-				}
-				else
-				{
-					$this->must_change_password = false;
-				}
-				
-				if ($data['user_locked'] == "t")
-				{
-					$this->user_locked = true;
-				}
-				else
-				{
-					$this->user_locked = false;
-				}
-				
-				if ($data['user_inactive'] == "t")
-				{
-					$this->user_inactive = true;
-				}
-				else
-				{
-					$this->user_inactive = false;
-				}
-				
-				if ($data['secure_password'] == "t")
-				{
-					$this->secure_password = true;
-				}
-				else
-				{
-					$this->secure_password = false;
-				}
-				
-				if ($data['block_write'] == "t")
-				{
-					$this->block_write = true;
-				}
-				else
-				{
-					$this->block_write = false;
-				}
-				
-				if ($data['create_folder'] == "t")
-				{
-					$this->create_folder = true;
-				}
-				else
-				{
-					$this->create_folder = false;
-				}
+				$this->can_change_password = $data['can_change_password'];
+				$this->must_change_password = $data['must_change_password'];
+				$this->user_locked = $data['user_locked'];
+				$this->user_inactive = $data['user_inactive'];
+				$this->secure_password = $data['secure_password'];
+				$this->block_write = $data['block_write'];
+				$this->create_folder = $data['create_folder'];
 			}
 			else
 			{
@@ -155,9 +101,7 @@ class UserAdminSetting_Access
 	public function create($user_id)
 	{
 		global $db;
-		
-		$datetime = date("Y-m-d H:i:s");
-		
+				
 		if ($user_id)
 		{
 			$sql_write = "INSERT INTO ".constant("USER_ADMIN_SETTING_TABLE")." (id," .
@@ -169,17 +113,22 @@ class UserAdminSetting_Access
 															"last_password_change," .
 															"block_write," .
 															"create_folder) " .
-											"VALUES (".$user_id."," .
+											"VALUES (:user_id," .
 															"'f'," .
 															"'f'," .
 															"'f'," .
 															"'f'," .
 															"'f'," .
-															"'".$datetime."'," .
+															":datetime," .
 															"'f'," .
 															"'f')";
 																	
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":datetime", date("Y-m-d H:i:s"), PDO::PARAM_STR);
+			
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
@@ -207,12 +156,14 @@ class UserAdminSetting_Access
 
 		if ($this->user_id)
 		{
-			$user_id_tmp = $this->user_id;
+			$id_tmp = $this->user_id;
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE id = ".$user_id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -358,18 +309,12 @@ class UserAdminSetting_Access
 		global $db;
 
 		if ($this->user_id and isset($can_change_password))
-		{
-			if ($can_change_password == true)
-			{
-				$can_change_password_insert = "t";
-			}
-			else
-			{
-				$can_change_password_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET can_change_password = '".$can_change_password_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET can_change_password = :can_change_password WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":can_change_password", $can_change_password, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -396,18 +341,12 @@ class UserAdminSetting_Access
 		global $db;
 		
 		if ($this->user_id and isset($must_change_password))
-		{
-			if ($must_change_password == true)
-			{
-				$must_change_password_insert = "t";
-			}
-			else
-			{
-				$must_change_password_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET must_change_password = '".$must_change_password_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET must_change_password = :must_change_password WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":must_change_password", $must_change_password, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -435,17 +374,11 @@ class UserAdminSetting_Access
 			
 		if ($this->user_id and isset($user_locked))
 		{
-			if ($user_locked == true)
-			{
-				$user_locked_insert = "t";
-			}
-			else
-			{
-				$user_locked_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET user_locked = '".$user_locked_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET user_locked = :user_locked WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_locked", $user_locked, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -473,17 +406,11 @@ class UserAdminSetting_Access
 			
 		if ($this->user_id and isset($user_inactive))
 		{
-			if ($user_inactive == true)
-			{
-				$user_inactive_insert = "t";
-			}
-			else
-			{
-				$user_inactive_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET user_inactive = '".$user_inactive_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET user_inactive = :user_inactive WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_inactive", $user_inactive, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -510,18 +437,12 @@ class UserAdminSetting_Access
 		global $db;
 			
 		if ($this->user_id and isset($secure_password))
-		{
-			if ($secure_password == true)
-			{
-				$secure_password_insert = "t";
-			}
-			else
-			{
-				$secure_password_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET secure_password = '".$secure_password_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET secure_password = :secure_password WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":secure_password", $secure_password, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -549,8 +470,11 @@ class UserAdminSetting_Access
 			
 		if ($this->user_id and $last_password_change)
 		{
-			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET last_password_change = ".$last_password_change." WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET last_password_change = :last_password_change WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":last_password_change", $last_password_change, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -578,17 +502,11 @@ class UserAdminSetting_Access
 			
 		if ($this->user_id and isset($block_write))
 		{
-			if ($block_write == true)
-			{
-				$block_write_insert = "t";
-			}
-			else
-			{
-				$block_write_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET block_write = '".$block_write_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET block_write = :block_write WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":block_write", $block_write, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -615,18 +533,12 @@ class UserAdminSetting_Access
 		global $db;
 		
 		if ($this->user_id and isset($create_folder))
-		{
-			if ($create_folder == true)
-			{
-				$create_folder_insert = "t";
-			}
-			else
-			{
-				$create_folder_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET create_folder = '".$create_folder_insert."' WHERE id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("USER_ADMIN_SETTING_TABLE")." SET create_folder = :create_folder WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":create_folder", $create_folder, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -652,7 +564,8 @@ class UserAdminSetting_Access
 		global $db;
 									
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE user_inactive = 't'";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['result'])
@@ -673,7 +586,8 @@ class UserAdminSetting_Access
 		global $db;
 									
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("USER_ADMIN_SETTING_TABLE")." WHERE user_locked = 't'";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['result'])

@@ -45,8 +45,10 @@ class Group_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("GROUP_TABLE")." WHERE id='".$group_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("GROUP_TABLE")." WHERE id = :group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -81,9 +83,11 @@ class Group_Access
 		if ($name)
 		{
 			$sql_write = "INSERT INTO ".constant("GROUP_TABLE")." (id,name) " .
-						"VALUES (nextval('".self::GROUP_PK_SEQUENCE."'::regclass),'".$name."')";
+						"VALUES (nextval('".self::GROUP_PK_SEQUENCE."'::regclass), :name)";
 																	
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) != 1)
 			{
@@ -92,7 +96,8 @@ class Group_Access
 			else
 			{
 				$sql_read = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE id = currval('".self::GROUP_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -115,12 +120,14 @@ class Group_Access
 
 		if ($this->group_id)
 		{
-			$group_id_tmp = $this->group_id;
+			$id_tmp = $this->group_id;
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("GROUP_TABLE")." WHERE id = ".$group_id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("GROUP_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -162,8 +169,11 @@ class Group_Access
 			
 		if ($this->group_id and $name)
 		{
-			$sql = "UPDATE ".constant("GROUP_TABLE")." SET name = '".$name."' WHERE id = ".$this->group_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("GROUP_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->group_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -192,8 +202,10 @@ class Group_Access
 		
 		if ($name)
 		{					
-			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE LOWER(name) = '".$name."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE LOWER(name) = :name";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -219,7 +231,8 @@ class Group_Access
 		global $db;
 									
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("GROUP_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['result'])
@@ -242,7 +255,8 @@ class Group_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("GROUP_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -273,8 +287,11 @@ class Group_Access
    			
    			$return_array = array();
    				
-   			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE LOWER(name) LIKE '".$groupname."'";   			
-   			$res = $db->db_query($sql);
+   			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE LOWER(name) LIKE :name";   			
+   			$res = $db->prepare($sql);
+			$db->bind_value($res, ":name", $groupname, PDO::PARAM_STR);
+			$db->execute($res);
+			
 			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['id']);
@@ -309,8 +326,10 @@ class Group_Access
 		
 			$return_array = array();	
 												
-			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE id = ".$group_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -336,7 +355,8 @@ class Group_Access
 		global $db;
 											
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("GROUP_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['result'])

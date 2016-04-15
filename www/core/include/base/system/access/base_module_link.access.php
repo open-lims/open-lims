@@ -114,19 +114,11 @@ class BaseModuleLink_Access
 	 		{
 	 			$db->bind_value($res_write, ":weight", null, PDO::PARAM_NULL);
 	 		}
-	 		
-	 		if ($link_file)
-	 		{
-	 			$db->bind_value($res_write, ":link_file", $link_file, PDO::PARAM_STR);
-	 		}
-	 		else
-	 		{
-	 			$db->bind_value($res_write, ":link_file", null, PDO::PARAM_NULL);
-	 		}
 			
 			$db->bind_value($res_write, ":module_id", $module_id, PDO::PARAM_INT);
 			$db->bind_value($res_write, ":link_type", $link_type, PDO::PARAM_STR);
 			$db->bind_value($res_write, ":link_array", $link_array, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":link_file", $link_file, PDO::PARAM_STR);
 			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)

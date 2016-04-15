@@ -48,8 +48,10 @@ class GroupHasUser_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -90,9 +92,12 @@ class GroupHasUser_Access
 		if (is_numeric($group_id) and is_numeric($user_id))
 		{
 			$sql_write = "INSERT INTO ".constant("GROUP_HAS_USER_TABLE")." (primary_key, group_id, user_id) " .
-						"VALUES (nextval('".self::GROUP_HAS_USER_PK_SEQUENCE."'::regclass),".$group_id.",".$user_id.")";
+						"VALUES (nextval('".self::GROUP_HAS_USER_PK_SEQUENCE."'::regclass), :group_id, :user_id)";
 																	
-			$res_write = $db->db_query($sql_write);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) != 1)
 			{
@@ -101,7 +106,8 @@ class GroupHasUser_Access
 			else
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE primary_key = currval('".self::GROUP_HAS_USER_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -128,8 +134,10 @@ class GroupHasUser_Access
 			
 			$this->__destruct();
 
-			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE primary_key = ".$primary_key_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -186,8 +194,11 @@ class GroupHasUser_Access
 
 		if ($this->primary_key and is_numeric($group_id))
 		{
-			$sql = "UPDATE ".constant("GROUP_HAS_USER_TABLE")." SET group_id = ".$group_id." WHERE primary_key = ".$this->primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("GROUP_HAS_USER_TABLE")." SET group_id = :group_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -215,8 +226,11 @@ class GroupHasUser_Access
 		
 		if ($this->primary_key and is_numeric($user_id))
 		{
-			$sql = "UPDATE ".constant("GROUP_HAS_USER_TABLE")." SET user_id = ".$user_id." WHERE primary_key = ".$this->primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("GROUP_HAS_USER_TABLE")." SET user_id = :id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -247,8 +261,11 @@ class GroupHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = ".$user_id." AND group_id = ".$group_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = :user_id AND group_id = :group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -278,8 +295,10 @@ class GroupHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT group_id FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT group_id FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -313,8 +332,10 @@ class GroupHasUser_Access
 		{					
 			$return_array = array();
 			
-			$sql = "SELECT user_id FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = ".$group_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT user_id FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = :group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -348,8 +369,10 @@ class GroupHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(group_id) AS result FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT COUNT(group_id) AS result FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['result'])
@@ -379,8 +402,10 @@ class GroupHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT COUNT(user_id) AS result FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = ".$group_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT COUNT(user_id) AS result FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = :group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['result'])
@@ -411,8 +436,10 @@ class GroupHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			return true;
@@ -435,8 +462,10 @@ class GroupHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = ".$group_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("GROUP_HAS_USER_TABLE")." WHERE group_id = :group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			return true;	

@@ -123,7 +123,7 @@ class Regional implements RegionalInterface
 			$time_display_format = $this->user_regional_setting->get_time_display_format();
 			if (isset($time_display_format))
 			{
-				if ($time_display_format == "t")
+				if ($time_display_format == true)
 				{
 					return array(true, "h:i:s a");
 				}
