@@ -45,8 +45,10 @@ class DataUserData_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("DATA_USER_DATA_TABLE")." WHERE user_id='".$user_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("DATA_USER_DATA_TABLE")." WHERE user_id= :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['user_id'])
@@ -84,9 +86,12 @@ class DataUserData_Access
 		if (is_numeric($user_id) and is_numeric($quota))
 		{
 			$sql_write = "INSERT INTO ".constant("DATA_USER_DATA_TABLE")." (user_id,quota,filesize) " .
-					"VALUES (".$user_id.",".$quota.",0)";
+					"VALUES (:user_id, :quota, 0)";
 					
-			$res_write = $db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":quota", $quota, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
@@ -112,12 +117,14 @@ class DataUserData_Access
 	
 		if ($this->user_id)
 		{
-			$user_id_tmp = $this->user_id;
+			$id_tmp = $this->user_id;
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".constant("DATA_USER_DATA_TABLE")." WHERE user_id = ".$user_id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("DATA_USER_DATA_TABLE")." WHERE user_id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -174,8 +181,11 @@ class DataUserData_Access
 			
 		if ($this->user_id and is_numeric($quota))
 		{
-			$sql = "UPDATE ".constant("DATA_USER_DATA_TABLE")." SET quota = '".$quota."' WHERE user_id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("DATA_USER_DATA_TABLE")." SET quota = :quota WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":quota", $quota, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -203,8 +213,11 @@ class DataUserData_Access
 			
 		if ($this->user_id and is_numeric($filesize))
 		{
-			$sql = "UPDATE ".constant("DATA_USER_DATA_TABLE")." SET filesize = '".$filesize."' WHERE user_id = ".$this->user_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("DATA_USER_DATA_TABLE")." SET filesize = :filesize WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $this->user_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":filesize", $filesize, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -231,7 +244,8 @@ class DataUserData_Access
    		global $db;
 		
 		$sql = "SELECT SUM(filesize) AS size FROM ".constant("DATA_USER_DATA_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['size'])

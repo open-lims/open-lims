@@ -43,8 +43,10 @@ class DataEntityIsItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE data_entity_id='".$data_entity_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE data_entity_id= :data_entity_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_id", $data_entity_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['data_entity_id'])
@@ -78,9 +80,12 @@ class DataEntityIsItem_Access
 		if (is_numeric($data_entity_id) and is_numeric($item_id))
 		{	
 			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_IS_ITEM_TABLE")." (data_entity_id,item_id) " .
-					"VALUES (".$data_entity_id.",".$item_id.")";
+					"VALUES (:data_entity_id, :item_id)";
 					
-			$res_write = $db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":data_entity_id", $data_entity_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{	
@@ -106,8 +111,11 @@ class DataEntityIsItem_Access
 			
 		if ($this->data_entity_id and $this->item_id) {
 			
-			$sql = "DELETE FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE data_entity_id = ".$this->data_entity_id." AND item_id = ".$this->item_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE data_entity_id = :data_entity_id AND item_id = :item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_id", $this->data_entity_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":item_id", $this->item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -166,8 +174,10 @@ class DataEntityIsItem_Access
 		
 		if (is_numeric($item_id))
 		{	
-			$sql = "SELECT data_entity_id FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE item_id='".$item_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT data_entity_id FROM ".constant("DATA_ENTITY_IS_ITEM_TABLE")." WHERE item_id= :item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['data_entity_id'])

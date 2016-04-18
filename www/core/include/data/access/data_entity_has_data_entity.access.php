@@ -41,23 +41,18 @@ class DataEntityHasDataEntity_Access
 			
 		if (is_numeric($data_entity_pid) and is_numeric($data_entity_cid))
 		{
-			$sql = "SELECT * FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid." AND data_entity_cid = ".$data_entity_cid."";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = :data_entity_pid AND data_entity_cid = :data_entity_cid";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_pid", $data_entity_pid, PDO::PARAM_INT);
+			$db->bind_value($res, ":data_entity_cid", $data_entity_cid, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['data_entity_pid'])
 			{
 				$this->data_entity_pid	= $data['data_entity_pid'];
 				$this->data_entity_cid	= $data['data_entity_cid'];
-				
-				if ($data['link'] == 't')
-				{
-					$this->link = true;
-				}
-				else
-				{
-					$this->link = false;
-				}
+				$this->link = $data['link'];
 			}
 			else
 			{
@@ -92,28 +87,25 @@ class DataEntityHasDataEntity_Access
 		global $db;
 		
 		if (is_numeric($data_entity_pid) and is_numeric($data_entity_cid))
-		{
-			if ($link == true)
-			{
-				$link_insert = "t";
-			}
-			else
-			{
-				$link_insert = "f";
-			}
+		{			
+			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." (data_entity_pid,data_entity_cid,link,link_item_id) " .
+					"VALUES (:data_entity_pid, :data_entity_cid, :link, :link_item_id)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":data_entity_pid", $data_entity_pid, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":data_entity_cid", $data_entity_cid, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":link", $link, PDO::PARAM_BOOL);
 			
 			if (is_numeric($link_item_id))
 			{
-				$link_item_id_insert = $link_item_id;
+				$db->bind_value($res_write, ":link_item_id", $link_item_id, PDO::PARAM_INT);
 			}
 			else
 			{
-				$link_item_id_insert = "NULL";
+				$db->bind_value($res_write, ":link_item_id", null, PDO::PARAM_NULL);
 			}
 			
-			$sql_write = "INSERT INTO ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." (data_entity_pid,data_entity_cid,link,link_item_id) " .
-					"VALUES (".$data_entity_pid.",".$data_entity_cid.",'".$link_insert."',".$link_item_id_insert.")";
-			$res_write = $db->db_query($sql_write);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
@@ -139,7 +131,11 @@ class DataEntityHasDataEntity_Access
 		
 		if ($this->data_entity_pid and $this->data_entity_cid)
 		{
-			$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$this->data_entity_pid." AND data_entity_cid = ".$this->data_entity_cid."";
+			$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = :data_entity_pid AND data_entity_cid = :data_entity_cid";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_pid", $this->data_entity_pid, PDO::PARAM_INT);
+			$db->bind_value($res, ":data_entity_cid", $this->data_entity_cid, PDO::PARAM_INT);
+			$db->execute($res);
 			$res = $db->db_query($sql);
 			
 			if ($res !== false)
@@ -204,18 +200,20 @@ class DataEntityHasDataEntity_Access
 			
 			if ($list == "linked_only")
 			{
-				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid." AND link_item_id IS NOT NULL";
+				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = :data_entity_pid AND link_item_id IS NOT NULL";
 			}
 			elseif ($list == "without_linked")
 			{
-				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid." AND link_item_id IS NULL";
+				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = :data_entity_pid AND link_item_id IS NULL";
 			}
 			else
 			{
-				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = ".$data_entity_pid."";
+				$sql = "SELECT data_entity_cid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = :data_entity_pid";
 			}
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_pid", $data_entity_pid, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -249,8 +247,10 @@ class DataEntityHasDataEntity_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT data_entity_pid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = ".$data_entity_cid." AND (link = 'f' OR link IS NULL)";
-			$res = $db->db_query($sql);
+			$sql = "SELECT data_entity_pid FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = :data_entity_cid AND (link = 'f' OR link IS NULL)";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_cid", $data_entity_cid, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -284,8 +284,10 @@ class DataEntityHasDataEntity_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = ".$data_entity_cid."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_cid = :data_entity_cid";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_cid", $data_entity_cid, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($res !== false)
 			{

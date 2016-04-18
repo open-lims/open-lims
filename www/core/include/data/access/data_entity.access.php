@@ -49,8 +49,10 @@ class DataEntity_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("DATA_ENTITY_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("DATA_ENTITY_TABLE")." WHERE id= :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -60,15 +62,7 @@ class DataEntity_Access
 				$this->owner_id			= $data['owner_id'];
 				$this->owner_group_id	= $data['owner_group_id'];
 				$this->permission		= $data['permission'];
-				
-				if ($data['automatic'] == "t")
-				{
-					$this->automatic = true;
-				}
-				else
-				{
-					$this->automatic = false;
-				}
+				$this->automatic 		= $data['automatic'] ;
 			}
 			else
 			{
@@ -99,35 +93,37 @@ class DataEntity_Access
 	{
 		global $db;
 
-		$datetime = date("Y-m-d H:i:s");
+		$sql_write = "INSERT INTO ".constant("DATA_ENTITY_TABLE")." (id,datetime,owner_id,owner_group_id,permission,automatic) " .
+				"VALUES (nextval('".self::DATA_ENTITY_PK_SEQUENCE."'::regclass), :datetime, :owner_id, :owner_group_id, NULL, 't')";
+				
+		$res_write = $db->prepare($sql_write);
+		$db->bind_value($res_write, ":datetime", date("Y-m-d H:i:s"), PDO::PARAM_STR);
 		
 		if ($owner_id)
 		{
-			$owner_id_insert = $owner_id;
+			$db->bind_value($res_write, ":owner_id", $owner_id, PDO::PARAM_STR);
 		}
 		else
 		{
-			$owner_id_insert = "null";
+			$db->bind_value($res_write, ":owner_id", null, PDO::PARAM_NULL);
 		}
 		
 		if ($owner_group_id)
 		{
-			$owner_group_id_insert = $owner_group_id;
+			$db->bind_value($res_write, ":owner_group_id", $owner_group_id, PDO::PARAM_STR);
 		}
 		else
 		{
-			$owner_group_id_insert = "null";
+			$db->bind_value($res_write, ":owner_group_id", null, PDO::PARAM_NULL);
 		}
 		
-		$sql_write = "INSERT INTO ".constant("DATA_ENTITY_TABLE")." (id,datetime,owner_id,owner_group_id,permission,automatic) " .
-				"VALUES (nextval('".self::DATA_ENTITY_PK_SEQUENCE."'::regclass),'".$datetime."',".$owner_id_insert.",".$owner_group_id_insert.",NULL,'t')";
-				
-		$res_write = $db->db_query($sql_write);	
+		$db->execute($res_write);
 		
 		if ($db->row_count($res_write) == 1)
 		{
 			$sql_read = "SELECT id FROM ".constant("DATA_ENTITY_TABLE")." WHERE id = currval('".self::DATA_ENTITY_PK_SEQUENCE."'::regclass)";
-			$res_read = $db->db_query($sql_read);
+			$res_read = $db->prepare($sql_read);
+			$db->execute($res_read);
 			$data_read = $db->fetch($res_read);
 								
 			self::__construct($data_read['id']);
@@ -153,8 +149,10 @@ class DataEntity_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".constant("DATA_ENTITY_TABLE")." WHERE id = ".$id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("DATA_ENTITY_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -256,8 +254,11 @@ class DataEntity_Access
 			
 		if ($this->id and $datetime)
 		{
-			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET datetime = '".$datetime."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET datetime = :datetime WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -285,8 +286,11 @@ class DataEntity_Access
 			
 		if ($this->id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_id = ".$owner_id." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_id = :owner_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":owner_id", $datetime, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -314,8 +318,11 @@ class DataEntity_Access
 			
 		if ($this->id and is_numeric($owner_group_id))
 		{
-			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_group_id = ".$owner_group_id." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_group_id = :owner_group_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":owner_group_id", $owner_group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -343,8 +350,11 @@ class DataEntity_Access
 			
 		if ($this->id and is_numeric($permission))
 		{
-			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET permission = ".$permission." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET permission = :permission WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":permission", $permission, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -371,18 +381,12 @@ class DataEntity_Access
 		global $db;
 
 		if ($this->id and isset($automatic))
-		{
-			if ($automatic == true)
-			{
-				$automatic_insert = "t";
-			}
-			else
-			{
-				$automatic_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET automatic = '".$automatic_insert."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET automatic = :automatic WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":automatic", $automatic, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -407,8 +411,10 @@ class DataEntity_Access
 			
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("DATA_ENTITY_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("DATA_ENTITY_TABLE")." WHERE id= :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -436,8 +442,10 @@ class DataEntity_Access
 			
 		if (is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_id = NULL WHERE owner_id = ".$owner_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_id = NULL WHERE owner_id = :owner_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":owner_id", $owner_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			return true;
 		}
@@ -457,8 +465,10 @@ class DataEntity_Access
 			
 		if (is_numeric($owner_group_id))
 		{
-			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_group_id = NULL WHERE owner_group_id = ".$owner_group_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("DATA_ENTITY_TABLE")." SET owner_group_id = NULL WHERE owner_group_id = :owner_group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":owner_group_id", $owner_group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			return true;
 		}
