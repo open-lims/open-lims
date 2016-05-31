@@ -37,7 +37,9 @@ require_once("../config/version.php");
 require_once("../core/include/base/system/system_config.class.php");
 
 SystemConfig::load_system_config("../config/main.php");
- 
+
+date_default_timezone_set(constant("TIMEZONE"));
+
 if (version_compare(PHP_VERSION, '5.3.0', 'le'))
 {
     die("PHP 5.3.0 is minimum required!");

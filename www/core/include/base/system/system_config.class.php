@@ -59,6 +59,8 @@ class SystemConfig implements SystemConfigInterface
 				define("ENABLE_DB_LOG_ON_COMMIT",		$server['behaviour']['on_db_commit']);	
 				
 				define("SENDMAIL_FROM", 				$mail['from']);
+				
+				define("TIMEZONE",						$server['timezone']);
 			}
 			else
 			{
