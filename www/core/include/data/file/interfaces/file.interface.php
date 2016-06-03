@@ -56,7 +56,7 @@ interface FileInterface
 	 * Deletes a file, including all versions
 	 * @return bool
 	 */
-	public function delete();
+	public function delete($recursive, $content);
 	
 	/**
 	 * Deletes a specific file version

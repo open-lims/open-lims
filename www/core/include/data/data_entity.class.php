@@ -361,7 +361,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @throws DataEntityDeleteFailedException
 	 * @throws DataEntityNoInstanceException
 	 */
-	protected function delete()
+	protected function delete($recursive = false, $content = null)
 	{
 		global $transaction;
 		

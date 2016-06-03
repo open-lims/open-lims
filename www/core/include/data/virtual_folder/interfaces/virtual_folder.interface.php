@@ -47,7 +47,7 @@ interface VirtualFolderInterface
 	 * Deletes a Virtual-Folder
 	 * @return bool
 	 */
-	public function delete();
+	public function delete($recursive, $content);
 	
 	/**
 	 * Adds a given Folder to the current Virtual-Folder

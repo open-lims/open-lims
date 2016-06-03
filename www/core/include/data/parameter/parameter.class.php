@@ -216,7 +216,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	 * @throws ParameterDeleteFailedException
 	 * @throws ParameterDeleteIDMissingException
 	 */
-	protected function delete()
+	protected function delete($recursive = false, $content = null)
 	{
 		global $transaction;
 		

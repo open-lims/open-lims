@@ -57,7 +57,7 @@ interface ValueInterface
 	 * Deletes a value
 	 * @return bool
 	 */
-	public function delete();
+	public function delete($recursive, $content);
 	
 	/**
 	 * Deletes a specific value version

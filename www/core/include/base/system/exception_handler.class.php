@@ -111,7 +111,7 @@ class ExceptionHandler  // implements ExceptionHandlerInterface
 				
 				if ($exception->get_write_log())
 				{
-					if (method_exists($session, get_user_id))
+					if (method_exists($session, "get_user_id"))
 					{
 						if ($session->get_user_id())
 						{

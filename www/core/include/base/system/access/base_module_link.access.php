@@ -102,7 +102,7 @@ class BaseModuleLink_Access
 		{
 			
 			$sql_write = "INSERT INTO ".constant("BASE_MODULE_LINK_TABLE")." (id, module_id, link_type, link_array, link_file, weight, disabled) " .
-					"VALUES (nextval('".self::BASE_MODULE_LINK_PK_SEQUENCE."'::regclass), :module_d, :link_type, :link_array, :link_file, :weight, 'f')";
+					"VALUES (nextval('".self::BASE_MODULE_LINK_PK_SEQUENCE."'::regclass), :module_id, :link_type, :link_array, :link_file, :weight, 'f')";
 			
 			$res_write = $db->prepare($sql_write);
 			

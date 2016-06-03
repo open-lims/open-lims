@@ -1171,7 +1171,7 @@ class SystemHandler implements SystemHandlerInterface
 	
 	public static function check_installation()
 	{
-		return BaseInclude_Access::check_installation($module_name);
+		return BaseInclude_Access::check_installation();
 	}
 }
 ?>

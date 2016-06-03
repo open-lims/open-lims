@@ -63,6 +63,8 @@ class ListRequest_IO
     	
     	if (is_array($this->rows))
     	{
+    		$return = "";
+    		
     		if (is_array($this->first_line_entry))
     		{
     			if ($this->first_line_entry_class)
@@ -80,7 +82,7 @@ class ListRequest_IO
 					if (is_array($this->first_line_entry[$value[1]]))
 					{
 						
-						if ($this->first_line_entry[$value[1]]['link'] and $this->first_line_entry[$value[1]]['content'])
+						if (empty($this->first_line_entry[$value[1]]['link']) === false and empty($this->first_line_entry[$value[1]]['content']) === false)
 						{
 							if (strpos($this->first_line_entry[$value[1]]['link'], "?") === false)
 							{
@@ -91,7 +93,7 @@ class ListRequest_IO
 								$return .= "<td><a href='".$this->first_line_entry[$value[1]]['link']."'>".$this->first_line_entry[$value[1]]['content']."</a></td>";
 							}	
 						}
-						elseif(!$this->first_line_entry[$value[1]]['link'] and $this->first_line_entry[$value[1]]['content'])
+						elseif(empty($this->first_line_entry[$value[1]]['link']) and empty($this->first_line_entry[$value[1]]['content']) === false)
 						{
 							$return .= "<td>".$this->first_line_entry[$value[1]]['content']."</td>";
 						}else
@@ -152,11 +154,11 @@ class ListRequest_IO
 						
 						$content_string = "";
 						
-						if (is_array($content[$row_value[1]]) and $content[$row_value[1]]['class'])
+						if (is_array($content[$row_value[1]]) and empty($content[$row_value[1]]['class']) === false)
 						{
-							if ($row_value[4])
+							if (empty($row_value[4]) === false)
 							{
-								if ($this->array[$key]['id'])
+								if (empty($this->array[$key]['id']) === false)
 								{
 									$content_string .= "<div class='".$row_value[4]." ".$content[$row_value[1]]['class']."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
 								}
@@ -174,7 +176,7 @@ class ListRequest_IO
 						{
 							if ($row_value[4])
 							{
-								if ($this->array[$key]['id'])
+								if (empty($this->array[$key]['id']) === false)
 								{
 									$content_string .= "<div class='".$row_value[4]."' id='".$row_value[4]."".$this->array[$key]['id']."'>";
 								}
@@ -189,12 +191,12 @@ class ListRequest_IO
 						// !! LABEL !!
 						if (is_array($content[$row_value[1]]))
 						{
-							if ($content[$row_value[1]]['label'])
+							if (empty($content[$row_value[1]]['label']) === false)
 							{
 								$content_string .= "<span title='".$content[$row_value[1]]['label']."'>";
 							}
 							
-							if ($content[$row_value[1]]['link'] and $content[$row_value[1]]['content'])
+							if (empty($content[$row_value[1]]['link']) === false and empty($content[$row_value[1]]['content']) === false)
 							{
 								if (strpos($content[$row_value[1]]['link'], "?") === false)
 								{
@@ -205,12 +207,12 @@ class ListRequest_IO
 									$content_string .= "<a href='".$content[$row_value[1]]['link']."'>".$content[$row_value[1]]['content']."</a>";
 								}
 							}
-							elseif(!$content[$row_value[1]]['link'] and $content[$row_value[1]]['content'])
+							elseif(empty($content[$row_value[1]]['link']) and empty($content[$row_value[1]]['content']) === false)
 							{
 								$content_string .= $content[$row_value[1]]['content'];
 							}
 
-							if ($content[$row_value[1]]['label'])
+							if (empty($content[$row_value[1]]['label']) === false)
 							{
 								$content_string .= "</span>";
 							}
@@ -220,7 +222,7 @@ class ListRequest_IO
 							$content_string .= $content[$row_value[1]];
 						}
 						
-						if ($row_value[4])
+						if (empty($row_value[4]) === false)
 						{
 							$content_string .= "</div>";
 						}
@@ -247,7 +249,7 @@ class ListRequest_IO
 			}
 			
 
-			if ($this->last_line_text)
+			if (empty($this->last_line_text) === false)
 			{
 				$return .= "<tr><td colspan='".count($this->rows)."'>".$this->last_line_text."</td></tr>";
 			}

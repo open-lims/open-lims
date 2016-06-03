@@ -352,7 +352,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	 * @see FileInterface::delete()
 	 * @return bool
 	 */
-	public function delete()
+	public function delete($recursive = false, $content = null)
 	{
 		global $transaction;
 		

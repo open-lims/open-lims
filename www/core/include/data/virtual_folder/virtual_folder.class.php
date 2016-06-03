@@ -150,7 +150,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	 * @see VirtualFolderInterface::delete()
 	 * @return bool
 	 */
-	public final function delete()
+	public final function delete($recursive = false, $content = null)
 	{
 		global $transaction;
 

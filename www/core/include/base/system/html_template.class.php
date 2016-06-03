@@ -77,11 +77,11 @@ class HTMLTemplate extends Template implements ConcreteTemplateInterface
 										
 					$container_begin_array = explode(",",$container_begin);
 					
-					if ($container_begin_array[2])
+					if (isset($container_begin_array[2]))
 					{
 						$container_begin_string = Common_IO::container_begin($container_begin_array[0],$container_begin_array[1],$container_begin_array[2]);
 					}
-					elseif ($container_begin_array[1])
+					elseif (isset($container_begin_array[1]))
 					{
 						$container_begin_string = Common_IO::container_begin($container_begin_array[0],$container_begin_array[1]);
 					}

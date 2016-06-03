@@ -317,7 +317,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	 * @see ValueInterface::delete()
 	 * @return bool
 	 */
-	public function delete()
+	public function delete($recursive = false, $content = null)
 	{
 		global $transaction;
 		

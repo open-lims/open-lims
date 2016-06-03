@@ -67,7 +67,7 @@ class Navigation_IO
 					
 					$params = http_build_query($paramquery,'','&#38;');
 					
-					if (!$_GET['nav'] and $active_alias == "base")
+					if (isset($_GET['nav']) === false and $active_alias === "base")
 					{
 						$_GET['nav'] = "base";
 					}
@@ -242,7 +242,7 @@ class Navigation_IO
 			if (file_exists($module_controller_path))
 			{
 				require_once($module_controller_path);
-				if (method_exists($module_controller_array['class'], get_navigation))
+				if (method_exists($module_controller_array['class'], "get_navigation"))
 				{
 					if (($navigation_array = $module_controller_array['class']::get_navigation()) !== false)
 					{

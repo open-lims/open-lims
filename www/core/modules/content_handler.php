@@ -234,7 +234,14 @@ class ContentHandler_IO
 					$header_search_params = http_build_query($header_search_paramquery,'','&#38;');
 					
 					$template->set_var("header_search_params", $header_search_params);
-					$template->set_var("header_search_current_module", $_GET['nav']);
+					if (isset($_GET['nav']))
+					{
+						$template->set_var("header_search_current_module", $_GET['nav']);
+					}
+					else
+					{
+						$template->set_var("header_search_current_module", "");
+					} 
 					
 					$template->output();
 
