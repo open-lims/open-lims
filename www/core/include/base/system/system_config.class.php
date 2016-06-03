@@ -3,7 +3,7 @@
  * @package base
  * @version 0.4.0.0
  * @author Roman Konertz <konertz@open-lims.org>
- * @copyright (c) 2008-2014 by Roman Konertz
+ * @copyright (c) 2008-2016 by Roman Konertz
  * @license GPLv3
  * 
  * This file is part of Open-LIMS
@@ -59,6 +59,8 @@ class SystemConfig implements SystemConfigInterface
 				define("ENABLE_DB_LOG_ON_COMMIT",		$server['behaviour']['on_db_commit']);	
 				
 				define("SENDMAIL_FROM", 				$mail['from']);
+				
+				define("TIMEZONE",						$server['timezone']);
 			}
 			else
 			{
