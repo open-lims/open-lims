@@ -40,6 +40,8 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	private $group_folder;
 	private $group_id;
   	
+	private $ci_group_id;
+	
   	/**
   	 * @param integer $folder_id
   	 */
@@ -152,29 +154,32 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	}
 	
 	/**
-	 * @param integer $group_id
 	 * @return bool
 	 */
-	public function create($group_id)
+	public function create()
 	{
 		global $transaction;
 		
-		if (is_numeric($group_id))
+		if (is_numeric($this->ci_group_id))
 		{
-			$group = new Group($group_id);
+			$group = new Group($this->ci_group_id);
 			
 			// Folder
 			$group_folder_id = constant("GROUP_FOLDER_ID");
 			$folder = new Folder($group_folder_id);
 
 			$path = new Path($folder->get_path());
-			$path->add_element($group_id);
+			$path->add_element($this->ci_group_id);
 			
-			$folder = new Folder(null);
-			if (($folder_id = parent::create($group->get_name(), $group_folder_id, $path->get_path_string(), 1, $group_id)) != null)
+			parent::ci_set_name($group->get_name());
+			parent::ci_set_toid($group_folder_id);
+			parent::ci_set_path($path->get_path_string());
+			parent::ci_set_owner_id(1);
+			parent::ci_set_owner_group_id($this->ci_group_id);
+			if (($folder_id = parent::create()) != null)
 			{
 				$folder_is_group_folder_access = new FolderIsGroupFolder_Access(null);
-				if ($folder_is_group_folder_access->create($group_id, $folder_id) == null)
+				if ($folder_is_group_folder_access->create($this->ci_group_id, $folder_id) == null)
 				{
 					return false;
 				}
@@ -205,12 +210,21 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	}
 	
 	/**
+	 * Injects $group_id into create()
+	 * @param integer $group_id
+	 */
+	public function ci_set_group_id($group_id)
+	{
+		$this->ci_group_id = $group_id;
+	}
+	
+	/**
 	 * @see ConcreteFolderCaseInterface::delete()
 	 * @param bool $recursive
 	 * @param bool $content
 	 * @return bool
 	 */
-	public function delete($recursive, $content)
+	public function delete()
 	{
 		global $transaction;
 		
@@ -220,7 +234,7 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 			
 			if ($this->group_folder->delete() == true)
 			{
-				if (parent::delete($recursive, $content) == true)
+				if (parent::delete() == true)
 				{
 					if ($transaction_id != null)
 					{

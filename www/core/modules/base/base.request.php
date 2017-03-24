@@ -300,7 +300,8 @@ class BaseRequest
 										{
 											if(method_exists($module_dialog['class'], $module_dialog['method']))
 											{
-												$module_dialog['class']::$module_dialog['method']();
+												$method = $module_dialog['method'];
+												$module_dialog['class']::$method();
 											}
 											else
 											{

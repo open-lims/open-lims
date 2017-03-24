@@ -103,7 +103,8 @@
 						{
 							if (method_exists($module_dialog['class'], $module_dialog['method']))
 							{
-								$pdf = $module_dialog['class']::$module_dialog['method']();
+								$method = $module_dialog['method'];
+								$pdf = $module_dialog['class']::$method();
 								if (is_object($pdf))
 								{
 									$pdf->Output();

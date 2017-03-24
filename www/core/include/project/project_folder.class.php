@@ -40,6 +40,9 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
   	private $project_folder;
 	private $project_id;
   	
+	private $ci_project_id;
+	private $ci_base_folder_id;
+	
 	protected $set_data_entity = true;
 	
   	/**
@@ -261,34 +264,37 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	
 	/**
 	 * Creates a new Project Folder including Folder
-	 * @param integer $project_id
 	 * @return integer
 	 */
-	public function create($project_id, $base_folder_id)
+	public function create()
 	{
-		if (is_numeric($project_id))
+		if (is_numeric($this->ci_project_id))
 		{
-			$project = new Project($project_id);
+			$project = new Project($this->ci_project_id);
 			
 			// Folder
-			if ($base_folder_id == null)
+			if ($this->ci_base_folder_id == null)
 			{
 				$project_folder_id = constant("PROJECT_FOLDER_ID");
 			}
 			else
 			{
-				$project_folder_id = $base_folder_id;
+				$project_folder_id = $this->ci_base_folder_id;
 			}
 			
 			$folder = new Folder($project_folder_id);
 
 			$path = new Path($folder->get_path());
-			$path->add_element($project_id);
+			$path->add_element($this->ci_project_id);
 			
-			if (($folder_id = parent::create($project->get_name(), $project_folder_id, $path->get_path_string(), $project->get_owner_id(), null)) != null)
+			parent::ci_set_name($project->get_name());
+			parent::ci_set_toid($project_folder_id);
+			parent::ci_set_path($path->get_path_string());
+			parent::ci_set_owner_id($project->get_owner_id());
+			if (($folder_id = parent::create()) != null)
 			{
 				$project_has_folder_access = new ProjectHasFolder_Access(null);
-				if ($project_has_folder_access->create($project_id, $folder_id) == null)
+				if ($project_has_folder_access->create($this->ci_project_id, $folder_id) == null)
 				{
 					return null;
 				}
@@ -319,12 +325,28 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * Injects $project_id into create()
+	 * @param integer $project_id
+	 */
+	public function ci_set_project_id($project_id)
+	{
+		$this->ci_project_id = $project_id;
+	}
+	
+	/**
+	 * Injects $base_folder_id into create()
+	 * @param integer $base_folder_id
+	 */
+	public function ci_set_base_folder_id($base_folder_id)
+	{
+		$this->ci_base_folder_id = $base_folder_id;
+	}
+	
+	/**
 	 * @see ConcreteFolderCaseInterface::delete()
-	 * @param bool $recursive
-	 * @param bool $content
 	 * @return bool
 	 */
-	public function delete($recursive, $content)
+	public function delete()
 	{
 		global $transaction;
 		
@@ -334,7 +356,7 @@ class ProjectFolder extends Folder implements ConcreteFolderCaseInterface
 			
 			if ($this->project_folder->delete() == true)
 			{
-				if (parent::delete($recursive, $content) == true)
+				if (parent::delete() == true)
 				{
 					if ($transaction_id != null)
 					{

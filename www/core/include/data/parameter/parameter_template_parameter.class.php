@@ -38,6 +38,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ParameterTemplateParameter extends Parameter implements ParameterTemplateParameterInterface
 {	
+	private $ci_template_id;
+	
 	/**
 	 * @see ParameterTemplateParameterInterface::__construct()
 	 * @param integer $parameter_id
@@ -70,18 +72,18 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 	{
 		global $transaction;
 		
-		if (is_numeric($folder_id) and is_numeric($owner_id) and is_numeric($template_id) and is_numeric($limit_id) and $parameter_array)
+		if (is_numeric($this->ci_folder_id) and is_numeric($this->owner_id) and is_numeric($this->template_id) and is_numeric($this->limit_id) and $this->parameter_array)
 		{			
-			if (is_array($parameter_array))
+			if (is_array($this->parameter_array))
 			{
 				$transaction_id = $transaction->begin();
 				
 				try
 				{
-					$parameter_id = parent::create($folder_id, $limit_id, $parameter_array, $owner_id);
+					$parameter_id = parent::create();
 					
 					$parameter_has_template = new ParameterHasTemplate_Access(null, null);
-					if ($parameter_has_template->create($parameter_id, $template_id) == null)
+					if ($parameter_has_template->create($parameter_id, $this->template_id) == null)
 					{
 						throw new ParameterCreateTemplateLinkFailedException();
 					}
@@ -112,6 +114,15 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 		}
 	}
 
+	/**
+	 * Injects $template_id into create()
+	 * @param integer $template_id
+	 */
+	public function ci_set_template_id($template_id)
+	{
+		$this->ci_template_id = $template_id;
+	}
+	
 	/**
 	 * @see ParameterTemplateParameterInterface::delete()
 	 * @return bool

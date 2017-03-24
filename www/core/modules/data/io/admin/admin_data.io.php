@@ -48,7 +48,8 @@ class AdminDataIO
 				{
 					require_once($value['class_path']);
 					$additional_quota_array[$additional_quota_counter]['title'] = Language::get_message($value['language_address'], "dialog");
-					$additional_quota_array[$additional_quota_counter]['value'] = $value['class']::$value['method']();
+					$method = $value['method'];
+					$additional_quota_array[$additional_quota_counter]['value'] = $value['class']::$method();
 					$additional_quota_counter++;
 				}
 			}

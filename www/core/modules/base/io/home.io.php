@@ -40,7 +40,8 @@ if (is_array($home_summery_left_array) and count($home_summery_left_array) >= 1)
 	foreach ($home_summery_left_array as $key => $value)
 	{
 		require_once($value['class_path']);
-		$content_array[$counter]['content'] = $value['class']::$value['method']();
+		$method = $value['method'];
+		$content_array[$counter]['content'] = $value['class']::$method();
 		$counter++;
 	}
 	
@@ -57,7 +58,8 @@ if (is_array($home_summery_right_array) and count($home_summery_right_array) >= 
 	foreach ($home_summery_right_array as $key => $value)
 	{
 		require_once($value['class_path']);
-		$content_array[$counter]['content'] = $value['class']::$value['method']();
+		$method = $value['method'];
+		$content_array[$counter]['content'] = $value['class']::$method();
 		$counter++;
 	}
 	
@@ -129,7 +131,8 @@ if (is_array($module_dialog_array) and count($module_dialog_array) >= 1)
 	foreach ($module_dialog_array as $key => $value)
 	{
 		require_once($value['class_path']);
-		$content .= $value['class']::$value['method']();
+		$method = $value['method'];
+		$content .= $value['class']::$method();
 	}
 	
 	$template->set_var("content", $content);

@@ -49,19 +49,23 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	protected $parameter;
 	protected $parameter_version;
 	
+	protected $ci_folder_id;
+	protected $ci_limit_id;
+	protected $ci_parameter_id;
+	
 	/**
 	 * @param integer $parameter_id
 	 */
-	function __construct($parameter_id)
+	function __construct($id)
 	{
-		if (is_numeric($parameter_id))
+		if (is_numeric($id))
     	{
-    		if (Parameter_Access::exist_parameter_by_parameter_id($parameter_id) == true)
+    		if (Parameter_Access::exist_parameter_by_parameter_id($id) == true)
     		{
     			$this->parameter_id = $parameter_id;
-				$this->parameter = new Parameter_Access($parameter_id);
+				$this->parameter = new Parameter_Access($id);
 				
-				$this->parameter_version_id = ParameterVersion_Access::get_current_entry_by_parameter_id($parameter_id);
+				$this->parameter_version_id = ParameterVersion_Access::get_current_entry_by_parameter_id($id);
 				$this->parameter_version = new ParameterVersion_Access($this->parameter_version_id);
 				
 				parent::__construct($this->parameter->get_data_entity_id());
@@ -129,34 +133,30 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	
 	/**
 	 * @see ParameterInterface::create()
-	 * @param integer $folder_id
-	 * @param integer $limit_id
-	 * @param array $parameter_array
-	 * @param integer $owner_id
 	 * @return integer
 	 * @throws ParameterCreateFailedException
 	 * @throws ParameterCreateVersionCreateFailedException
 	 * @throws ParameterCreateValueCreateFailedException
 	 * @throws ParameterCreateIDMissingException
 	 */
-	protected function create($folder_id, $limit_id, $parameter_array, $owner_id = null)
+	protected function create()
 	{
 		global $user, $regional, $transaction;
 		
-		if (is_numeric($folder_id) and is_array($parameter_array))
+		if (is_numeric($this->ci_folder_id) and is_array($this->ci_parameter_array))
 		{
 			$transaction_id = $transaction->begin();
 			
 			try
 			{
-				if ($owner_id == null)
+				if ($this->ci_owner_id == null)
 				{
-					$owner_id = $user->get_user_id();
+					$this->ci_owner_id = $user->get_user_id();
 				}
 				
-				$folder = Folder::get_instance($folder_id);
+				$folder = Folder::get_instance($this->ci_folder_id);
 						
-				$data_entity_id = parent::create($owner_id, null);
+				$data_entity_id = parent::create();
 				parent::set_as_child_of($folder->get_data_entity_id());
 				
 				$parameter_access = new Parameter_Access(null);
@@ -166,12 +166,12 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 				}
 				
 				$parameter_version_access = new ParameterVersion_Access(null);
-				if (($parameter_version_id = $parameter_version_access->create($parameter_id, 1, 1, null, true, $owner_id, null, $limit_id)) == null)
+				if (($parameter_version_id = $parameter_version_access->create($parameter_id, 1, 1, null, true, $this->ci_owner_id, null, $this->ci_limit_id)) == null)
 				{
 					throw new ParameterCreateVersionCreateFailedException();
 				}
 				
-				foreach($parameter_array as $key => $value)
+				foreach($this->ci_parameter_array as $key => $value)
 				{
 					$value['value'] = str_replace($regional->get_decimal_separator(),".",$value['value']);
 					
@@ -210,13 +210,40 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 	}
 	
 	/**
+	 * Injects $folder_id into create()
+	 * @param integer $folder_id
+	 */
+	public function ci_set_folder_id($folder_id)
+	{
+		$this->ci_folder_id = $folder_id;
+	}
+	
+	/**
+	 * Injects $folder_id into create()
+	 * @param integer $limit_id
+	 */
+	public function ci_set_limit_id($limit_id)
+	{
+		$this->ci_limit_id = $limit_id;
+	}
+	
+	/**
+	 * Injects $folder_id into create()
+	 * @param array $parameter_array
+	 */
+	public function ci_set_parameter_array($parameter_array)
+	{
+		$this->ci_parameter_array = $parameter_array;
+	}
+		
+	/**
 	 * @return bool
 	 * @throws ParameterDeleteVersionValueFailedException
 	 * @throws ParameterDeleteVersionFailedException
 	 * @throws ParameterDeleteFailedException
 	 * @throws ParameterDeleteIDMissingException
 	 */
-	protected function delete($recursive = false, $content = null)
+	protected function delete()
 	{
 		global $transaction;
 		

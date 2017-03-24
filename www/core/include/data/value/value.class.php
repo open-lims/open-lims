@@ -48,6 +48,10 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 		
 	private $content_array;
 	
+	private $ci_folder_id;
+	private $ci_type_id;
+	private $ci_value;
+	
 	/**
 	 * @see ValueInterface::__construct();
 	 * @param integer $value_id
@@ -211,42 +215,42 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	 * @param bool $premature
 	 * @return integer
 	 */
-	public function create($folder_id, $owner_id, $type_id, $value)
+	public function create()
 	{
 		global $user, $transaction;
 		
-		if ($folder_id and $type_id)
+		if ($this->ci_folder_id and $this->ci_type_id)
 		{
 			$transaction_id = $transaction->begin();
 			
 			try
 			{
-				if ($owner_id == null)
+				if ($this->ci_owner_id == null)
 				{
-					$owner_id = $user->get_user_id();
+					$this->ci_owner_id = $user->get_user_id();
 				}
 				
-				$checksum = md5(serialize($value));
+				$checksum = md5(serialize($this->ci_value));
 				
-				$folder = Folder::get_instance($folder_id);
+				$folder = Folder::get_instance($this->ci_folder_id);
 					
-				$data_entity_id = parent::create($owner_id, null);
+				$data_entity_id = parent::create();
 				parent::set_as_child_of($folder->get_data_entity_id());
 				
 				$value_access = new Value_Access(null);
 				
-				if (($value_id = $value_access->create($data_entity_id, $type_id)) == null)
+				if (($value_id = $value_access->create($data_entity_id, $this->ci_type_id)) == null)
 				{
 					throw new ValueCreateFailedException();
 				}
 				
-				if ($type_id != 2 and is_array($value))
+				if ($this->ci_type_id != 2 and is_array($this->ci_value))
 				{
 					$full_text_index = false;
 					$full_text_key_array = array();
 					$full_text_content_string = "";
 				
-					foreach ($value as $fe_key => $fe_value)
+					foreach ($this->ci_value as $fe_key => $fe_value)
 					{
 						if (strpos($fe_key, "-vartype") !== false)
 						{
@@ -265,11 +269,11 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 						{
 							if ($full_text_content_string)
 							{
-								$full_text_content_string = $full_text_content_string." ".$value[$fe_value];
+								$full_text_content_string = $full_text_content_string." ".$this->ci_value[$fe_value];
 							}
 							else
 							{
-								$full_text_content_string = $value[$fe_value];
+								$full_text_content_string = $this->ci_value[$fe_value];
 							}
 						}
 					}
@@ -277,11 +281,11 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				else
 				{
 					$full_text_index = true;
-					$full_text_content_string = $value;
+					$full_text_content_string = $this->ci_value;
 				}
 				
 				$value_version_access = new ValueVersion_access(null);
-				if ($value_version_access->create($value_id, 1, serialize($value), $checksum, null, 1, true, $owner_id) == null)
+				if ($value_version_access->create($value_id, 1, serialize($this->ci_value), $checksum, null, 1, true, $this->ci_owner_id) == null)
 				{
 					throw new ValueCreateVersionCreateFailedException();
 				}
@@ -314,10 +318,37 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	}
 	
 	/**
+	 * Injects $folder_id into create()
+	 * @param integer $folder_id
+	 */
+	public function ci_set_folder_id($folder_id)
+	{
+		$this->ci_folder_id = $folder_id;
+	}
+	
+	/**
+	 * Injects $type_id into create()
+	 * @param integer $type_id
+	 */
+	public function ci_set_type_id($type_id)
+	{
+		$this->ci_type_id = $type_id;
+	}
+	
+	/**
+	 * Injects $value into create()
+	 * @param array $value
+	 */
+	public function ci_set_value($value)
+	{
+		$this->ci_value = $value;
+	}
+	
+	/**
 	 * @see ValueInterface::delete()
 	 * @return bool
 	 */
-	public function delete($recursive = false, $content = null)
+	public function delete()
 	{
 		global $transaction;
 		

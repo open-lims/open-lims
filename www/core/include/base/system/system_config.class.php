@@ -50,7 +50,9 @@ class SystemConfig implements SystemConfigInterface
 				define("BIN_DIR",						constant("BASE_DIR")."/bin");
 				define("INCLUDE_DIR",					constant("WWW_DIR")."/core/include");
 				define("MODULES_DIR",					constant("WWW_DIR")."/core/modules");
-								
+				
+				define("IMAGICK_ENABLED",				$server['imagick']['enable']);
+				
 				define("DEBUG", 						$server['behaviour']['debug_mode']);
 				define("AVOID_CSS_CACHE", 				$server['behaviour']['avoid_css_cache']);
 				define("AVOID_JS_CACHE", 				$server['behaviour']['avoid_js_cache']);
@@ -98,4 +100,5 @@ class SystemConfig implements SystemConfigInterface
 	{
 		return self::$database;
 	}
+
 }

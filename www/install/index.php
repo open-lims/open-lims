@@ -45,11 +45,6 @@ if (version_compare(PHP_VERSION, '5.3.0', 'le'))
     die("PHP 5.3.0 is minimum required!");
 }
 
-if (!extension_loaded("imagick"))
-{
-	die("Extension \"Imagick\" is missing!");
-}
-
 if (!extension_loaded("mbstring"))
 {
 	die("Extension \"mbstring\" is missing!");

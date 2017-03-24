@@ -39,6 +39,8 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 {
   	private $sample_folder;
 	private $sample_id;
+	
+	private $ci_sample_id;
   	
   	/**
   	 * @param integer $folder_id
@@ -273,28 +275,31 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	
 	/**
 	 * Creates a new Sample Folder including Folder
-	 * @param integer $sample_id
 	 * @return integer
 	 */
-	public function create($sample_id)
+	public function create()
 	{
-		if (is_numeric($sample_id))
+		if (is_numeric($this->ci_sample_id))
 		{
-			$sample = new Sample($sample_id);
+			$sample = new Sample($this->ci_sample_id);
 			
 			// Folder
 			$sample_folder_id = constant("SAMPLE_FOLDER_ID");
 			$folder = new Folder($sample_folder_id);
 
 			$path = new Path($folder->get_path());
-			$path->add_element($sample_id);
+			$path->add_element($this->ci_sample_id);
 
 			$name = $sample->get_name()." (".$sample->get_formatted_id().")";
 			
-			if (($folder_id = parent::create($name, $sample_folder_id, $path->get_path_string(), $sample->get_owner_id(), null)) != null)
+			parent::ci_set_name($name);
+			parent::ci_set_toid($sample_folder_id);
+			parent::ci_set_path($path->get_path_string());
+			parent::ci_set_owner_id($sample->get_owner_id());
+			if (($folder_id = parent::create()) != null)
 			{
 				$sample_has_folder_access = new SampleHasFolder_Access(null);
-				if ($sample_has_folder_access->create($sample_id, $folder_id) == null)
+				if ($sample_has_folder_access->create($this->ci_sample_id, $folder_id) == null)
 				{
 					return null;
 				}
@@ -325,12 +330,19 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * Injects $sample_id into create()
+	 * @param integer $sample_id
+	 */
+	public function ci_set_project_id($sample_id)
+	{
+		$this->ci_sample_id = $sample_id;
+	}
+	
+	/**
 	 * @see ConcreteFolderCaseInterface::delete()
-	 * @param bool $recursive
-	 * @param bool $content
 	 * @return bool
 	 */
-	public function delete($recursive, $content)
+	public function delete()
 	{
 		global $transaction;
 		
@@ -340,7 +352,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 			
 			if ($this->sample_folder->delete() == true)
 			{
-				if (parent::delete($recursive, $content) == true)
+				if (parent::delete() == true)
 				{
 					if ($transaction_id != null)
 					{

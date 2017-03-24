@@ -41,7 +41,7 @@ class Main
     		$GLOBALS['fatal_error'] = "PHP 5.3.0 is minimum required!";
 		}
 		
-		if (!extension_loaded("imagick"))
+		if (!extension_loaded("imagick") and constant("IMAGICK_ENABLED") === true)
 		{
 			$GLOBALS['fatal_error'] = "Extension \"Imagick\" is missing!";
 		}
@@ -176,7 +176,7 @@ class Main
 		
 		if (@is_object($db))
 		{
-			@$db->db_close();
+			@$db->close();
 		}
 	}
 		

@@ -28,6 +28,10 @@
  */ 	 
 interface ItemInterface
 {	
+	function __construct($id);
+	
+	function __destruct();
+	
 	/**
 	 * @return integer
 	 */

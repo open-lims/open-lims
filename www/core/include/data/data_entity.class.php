@@ -58,6 +58,10 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	protected $parent_folder_id;
 	protected $parent_folder_object;
 	
+	// Creator Variables
+	protected $ci_owner_id;
+	protected $ci_owner_group_id;
+	
 	/**
 	 * @see DataEntityInterface::__construct()
 	 * @param integer $entity_id
@@ -305,17 +309,17 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @throws DataEntityCreateItemLinkException
 	 * @throws DataEntityCreateIDMissingException
 	 */
-	protected function create($owner_id, $owner_group_id)
+	protected function create()
 	{
 		global $transaction;
 		
-		if (is_numeric($owner_id))
+		if (is_numeric($this->ci_owner_id))
 		{
 			$transaction_id = $transaction->begin();
 			
 			try
 			{
-				if(($data_entity_id = $this->data_entity->create($owner_id, $owner_group_id)) == null)
+				if(($data_entity_id = $this->data_entity->create($this->ci_owner_id, $this->ci_owner_group_id)) == null)
 				{
 					throw new DataEntityCreateEntryFailedException();
 				}	
@@ -354,6 +358,24 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	}
 	
 	/**
+	 * Injects $owner_id into create()
+	 * @param integer $owner_id
+	 */
+	public function ci_set_owner_id($owner_id)
+	{
+		$this->ci_owner_id = $owner_id;
+	}
+	
+	/**
+	 * Injects $owner_group_id into create()
+	 * @param integer $owner_group_id
+	 */
+	public function ci_set_owner_group_id($owner_group_id)
+	{
+		$this->ci_owner_group_id = $owner_group_id;
+	}
+	
+	/**
 	 * Deletes a DataEntity
 	 * @return bool
 	 * @throws DataEntityDeleteParentLinkException
@@ -361,7 +383,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 	 * @throws DataEntityDeleteFailedException
 	 * @throws DataEntityNoInstanceException
 	 */
-	protected function delete($recursive = false, $content = null)
+	protected function delete()
 	{
 		global $transaction;
 		
@@ -708,6 +730,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			return false;
 		}
 	}
+	
 	
 	/**
 	 * @see DataEntityInterface::set_permission()

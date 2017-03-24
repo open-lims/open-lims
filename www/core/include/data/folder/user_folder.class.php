@@ -39,6 +39,8 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 {
 	private $user_folder;
 	private $user_id;
+	
+	private $ci_user_id;
   	
   	/**
   	 * @param integer $folder_id
@@ -135,26 +137,29 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 	}
 	
 	/**
-	 * @param integer $user_id
 	 * @return bool
 	 */
-	public function create($user_id)
+	public function create()
 	{
-		if (is_numeric($user_id))
+		if (is_numeric($this->ci_user_id))
 		{
-			$user = new User($user_id);
+			$user = new User($this->ci_user_id);
 			
 			// Folder
 			$user_folder_id = constant("USER_FOLDER_ID");
 			$folder = new Folder($user_folder_id);
 
 			$path = new Path($folder->get_path());
-			$path->add_element($user_id);
+			$path->add_element($this->ci_user_id);
 			
-			if (($folder_id = parent::create($user->get_username(), $user_folder_id, $path->get_path_string(), $user_id, null)) != null)
+			parent::ci_set_name($user->get_username());
+			parent::ci_set_toid($user_folder_id);
+			parent::ci_set_path($path->get_path_string());
+			parent::ci_set_owner_id($this->ci_user_id);
+			if (($folder_id = parent::create()) != null)
 			{
 				$folder_is_user_folder_access = new FolderIsUserFolder_Access(null);
-				if ($folder_is_user_folder_access->create($user_id, $folder_id) == null)
+				if ($folder_is_user_folder_access->create($this->ci_user_id, $folder_id) == null)
 				{
 					return false;
 				}
@@ -164,7 +169,11 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 				$public_path->add_element("_public");
 				
 				$public_folder = new Folder(null);
-				if (($public_folder->create("_public", $folder_id, $public_path->get_path_string(), $user_id, null)) == null)
+				$public_folder->ci_set_name("_public");
+				$public_folder->ci_set_toid($folder_id);
+				$public_folder->ci_set_path($public_path->get_path_string());
+				$public_folder->ci_set_owner_id($this->ci_user_id);
+				if (($public_folder->create()) == null)
 				{
 					$this->delete();
 					return false;
@@ -177,7 +186,11 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 				$private_path->add_element("_private");
 				
 				$private_folder = new Folder(null);
-				if (($private_folder->create("_private", $folder_id, $private_path->get_path_string(), $user_id, null)) == null)
+				$public_folder->ci_set_name("_private");
+				$public_folder->ci_set_toid($folder_id);
+				$public_folder->ci_set_path($private_path->get_path_string());
+				$public_folder->ci_set_owner_id($this->ci_user_id);
+				if (($private_folder->create()) == null)
 				{
 					$this->delete();
 					return false;
@@ -210,12 +223,19 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 	}
 	
 	/**
+	 * Injects $user_id into create()
+	 * @param integer $user_id
+	 */
+	public function ci_set_user_id($user_id)
+	{
+		$this->ci_user_id = $user_id;
+	}
+	
+	/**
 	 * @see ConcreteFolderCaseInterface::delete()
-	 * @param bool $recursive
-	 * @param bool $content
 	 * @return bool
 	 */
-	public function delete($recursive, $content)
+	public function delete()
 	{
 		global $transaction;
 		
@@ -225,7 +245,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 			
 			if ($this->user_folder->delete() == true)
 			{
-				if (parent::delete($recursive, $content) == true)
+				if (parent::delete() == true)
 				{
 					if ($transaction_id != null)
 					{

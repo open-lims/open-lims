@@ -29,27 +29,6 @@
 interface VirtualFolderInterface
 {
 	/**
-	 * @param integer $virtual_folder_id
-	 */
-	function __construct($virtual_folder_id);
-	
-	function __destruct();
-	
-	/**
-	 * Creates a new Virtual-Folder in a given Folder
-	 * @param integer $folder_id
-	 * @param string $name
-	 * @return integer
-	 */
-	public function create($folder_id, $name);
-	
-	/**
-	 * Deletes a Virtual-Folder
-	 * @return bool
-	 */
-	public function delete($recursive, $content);
-	
-	/**
 	 * Adds a given Folder to the current Virtual-Folder
 	 * @param integer $folder_id
 	 * @return bool

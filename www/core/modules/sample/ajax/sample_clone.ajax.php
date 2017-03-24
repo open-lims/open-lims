@@ -390,7 +390,8 @@ class SampleCloneAjax
 							
 							if (class_exists($value['class']) and method_exists($value['class'], $value['method']))
 							{
-								echo $value['class']::$value['method']("sample", $sample_source_sample, false, true, $form_field_name);
+								$method = $value['method'];
+								echo $value['class']::$method("sample", $sample_source_sample, false, true, $form_field_name);
 							}
 							else
 							{
@@ -416,7 +417,8 @@ class SampleCloneAjax
 							
 							if (class_exists($value['class']) and method_exists($value['class'], $value['method']))
 							{
-								echo $value['class']::$value['method']($source_sample->get_item_id(), true, $form_field_name);
+								$method = $value['method'];
+								echo $value['class']::$method($source_sample->get_item_id(), true, $form_field_name);
 							}
 							else
 							{

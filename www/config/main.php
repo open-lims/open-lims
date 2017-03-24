@@ -24,13 +24,13 @@
 /**
  * 
  */
-$server['main_folder']							= "D:/web/open-lims";
+$server['main_folder']							= "C:/www/open-lims";
 $server['timezone']								= "Europe/Berlin";
 
 $database['type'] 								= "pgsql";
 $database['database'] 							= "open-lims";
-$database['user'] 								= "dbadmin";
-$database['password']							= "dbadmin";
+$database['user'] 								= "postgres";
+$database['password']							= "postgres";
 
 // Primary Database Server
 $database[0]['server']							= "localhost";
@@ -54,7 +54,7 @@ $mail[0]['smtp']['password'] 					= "";
 $ldap['enable']									= false;
 
 
-$server['imagick']['enable']					= true;	
+$server['imagick']['enable']					= false;	
 
 
 $server['behaviour']['debug_mode']				= true;

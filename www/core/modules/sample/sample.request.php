@@ -527,7 +527,8 @@ class SampleRequest
 								{
 									if (method_exists($module_dialog['class'], $module_dialog['method']))
 									{
-										$module_dialog['class']::$module_dialog['method']("sample", $_GET['sample_id'], true, false);
+										$method = $module_dialog['method'];
+										$module_dialog['class']::$method("sample", $_GET['sample_id'], true, false);
 									}
 									else
 									{
@@ -598,11 +599,13 @@ class SampleRequest
 												
 												if ($_GET['run'] == "item_add")
 												{
-													$module_dialog['class']::$module_dialog['method']($current_requirements[$_GET['key']]['type_id'], $current_requirements[$_GET['key']]['category_id'], "Sample", $_GET['sample_id'], $_GET['key']);
+													$method = $module_dialog['method'];
+													$module_dialog['class']::$method($current_requirements[$_GET['key']]['type_id'], $current_requirements[$_GET['key']]['category_id'], "Sample", $_GET['sample_id'], $_GET['key']);
 												}
 												elseif ($_GET['run'] == "item_edit")
 												{
-													$module_dialog['class']::$module_dialog['method']($current_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
+													$method = $module_dialog['method'];
+													$module_dialog['class']::$method($current_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
 												}
 											}
 										}
@@ -722,7 +725,8 @@ class SampleRequest
 								{
 									if (method_exists($module_dialog['class'], $module_dialog['method']))
 									{
-										$module_dialog['class']::$module_dialog['method']($item_id);
+										$method = $module_dialog['method'];
+										$module_dialog['class']::$method($item_id);
 									}
 									else
 									{
@@ -827,11 +831,13 @@ class SampleRequest
 								
 								if ($role == "add")
 								{
-									$module_dialog['class']::$module_dialog['method']($current_requirements[$_GET['key']]['type_id'], $current_requirements[$_GET['key']]['category_id'], "Sample", $_GET['parent_id'], $_GET['key']);
+									$method = $module_dialog['method'];
+									$module_dialog['class']::$method($current_requirements[$_GET['key']]['type_id'], $current_requirements[$_GET['key']]['category_id'], "Sample", $_GET['parent_id'], $_GET['key']);
 								}
 								elseif ($role == "edit")
 								{
-									$module_dialog['class']::$module_dialog['method']($current_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
+									$method = $module_dialog['method'];
+									$module_dialog['class']::$method($current_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
 								}
 							}
 							else

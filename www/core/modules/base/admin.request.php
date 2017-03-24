@@ -547,7 +547,8 @@ class AdminRequest
 							{
 								if (method_exists($module_dialog['class'], $module_dialog['method']))
 								{
-									$module_dialog['class']::$module_dialog['method']($sql);
+									$method = $module_dialog['method'];
+									$module_dialog['class']::$method($sql);
 								}
 								else
 								{
@@ -584,7 +585,8 @@ class AdminRequest
 							{
 								if (method_exists($module_dialog['class'], $module_dialog['method']))
 								{
-									$module_dialog['class']::$module_dialog['method']($sql);
+									$method = $module_dialog['method'];
+									$module_dialog['class']::$method($sql);
 								}
 								else
 								{
@@ -621,7 +623,8 @@ class AdminRequest
 							{
 								if (method_exists($module_dialog['class'], $module_dialog['method']))
 								{
-									$module_dialog['class']::$module_dialog['method']($sql);
+									$method = $module_dialog['method'];
+									$module_dialog['class']::$method($sql);
 								}
 								else
 								{

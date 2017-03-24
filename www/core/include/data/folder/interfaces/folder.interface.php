@@ -62,15 +62,7 @@ interface FolderInterface
 	 * @return bool
 	 */
 	public function exist_subfolder_name($name);
-	
-	/**
-	 * Deletes a folder including sub-folders and content
-	 * @param bool $recursive
-	 * @param bool $content
-	 * @return bool
-	 */
-	public function delete($recursive, $content);
-	
+		
 	/**
 	 * @return bool
 	 */

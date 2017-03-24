@@ -52,6 +52,9 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	protected $virtual_folder_id;
 	protected $virtual_folder;
 	
+	private $ci_folder_id;
+	private $ci_name;
+	
 	/**
 	 * @see VirtualFolderInterface::__construct()
 	 * @param integer $virtual_folder_id
@@ -90,34 +93,33 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	
 	/**
 	 * @see VirtualFolderInterface::create()
-	 * @param integer $folder_id
-	 * @param string $name
 	 * @return integer
 	 * @throws VirtualFolderCreateFailedException
 	 * @throws VirtualFolderCreateFolderNotFoundException
 	 * @throws VirtualFolderCreateIDMissingException
 	 */
-	public final function create($folder_id, $name)
+	public final function create()
 	{
 		global $transaction;
 		
-		if (is_numeric($folder_id) and $name)
+		if (is_numeric($this->ci_folder_id) and $this->ci_name)
 		{
 			$transaction_id = $transaction->begin();
 			
 			try
 			{
-				$folder = Folder::get_instance($folder_id);
+				$folder = Folder::get_instance($this->ci_folder_id);
 				
 				if ($folder->exist_folder() == false)
 				{
 					throw new VirtualFolderCreateFolderNotFoundException();
 				}
 				
-				$data_entity_id = parent::create(1 , null);
+				parent::ci_set_owner_id(1);
+				$data_entity_id = parent::create();
 				parent::set_as_child_of($folder->get_data_entity_id());
 				
-				if (($vfolder_id = $this->virtual_folder->create($data_entity_id, $name)) == null)
+				if (($vfolder_id = $this->virtual_folder->create($data_entity_id, $this->ci_name)) == null)
 				{
 					throw new VirtualFolderCreateFailedException();
 				}
@@ -147,10 +149,28 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	}
 	
 	/**
+	 * Injects $folder_id into create()
+	 * @param integer $folder_id
+	 */
+	public function ci_set_folder_id($folder_id)
+	{
+		$this->ci_folder_id = $folder_id;
+	}
+	
+	/**
+	 * Injects $name into create()
+	 * @param string $name
+	 */
+	public function ci_set_name($name)
+	{
+		$this->name = $name;
+	}
+	
+	/**
 	 * @see VirtualFolderInterface::delete()
 	 * @return bool
 	 */
-	public final function delete($recursive = false, $content = null)
+	public final function delete()
 	{
 		global $transaction;
 

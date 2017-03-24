@@ -637,7 +637,8 @@ class ProjectRequest
 								{
 									if (method_exists($module_dialog['class'], $module_dialog['method']))
 									{
-										$module_dialog['class']::$module_dialog['method']("project", $_GET['project_id'], true);
+										$method = $module_dialog['method'];
+										$module_dialog['class']::$method("project", $_GET['project_id'], true);
 									}
 									else
 									{
@@ -710,11 +711,13 @@ class ProjectRequest
 												
 												if ($_GET['run'] == "item_add")
 												{
-													$module_dialog['class']::$module_dialog['method']($current_status_requirements[$_GET['key']]['type_id'], $current_status_requirements[$_GET['key']]['category_id'], "Project", $_GET['project_id'], $_GET['key']);
+													$method = $module_dialog['method'];
+													$module_dialog['class']::$method($current_status_requirements[$_GET['key']]['type_id'], $current_status_requirements[$_GET['key']]['category_id'], "Project", $_GET['project_id'], $_GET['key']);
 												}
 												elseif ($_GET['run'] == "item_edit")
 												{
-													$module_dialog['class']::$module_dialog['method']($current_status_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
+													$method = $module_dialog['method'];
+													$module_dialog['class']::$method($current_status_requirements[$_GET['key']]['fulfilled'][0]['item_id']);
 												}
 											}
 										}
