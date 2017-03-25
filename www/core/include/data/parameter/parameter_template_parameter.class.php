@@ -90,17 +90,11 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 				}
 				catch(BaseException $e)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw $e;
 				}
 				
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return $parameter_id;
 			}
 			else
@@ -151,17 +145,11 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			return true;
 		}
 		else

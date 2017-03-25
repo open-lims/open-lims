@@ -380,18 +380,12 @@ class ProjectSecurity implements ProjectSecurityInterface
 	    		$project_permission = ProjectPermission::get_instance($project_permission_array[0]);
 	    		if ($project_permission->set_user_id($owner_id) == true)
 	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 	    		}
 	    		else
 	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectSecurityChangeException();
 	    		}
     		}
@@ -401,18 +395,12 @@ class ProjectSecurity implements ProjectSecurityInterface
     			{
     				$project_permission = new ProjectPermissionUser(null);
 					$project_permission->create($owner_id, $this->project_id, (int)Registry::get_value("project_user_default_permission"), null, 1);
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
     			}
     			catch(ProjectPermissionUserException $e)
     			{
-    				if ($transaction_id != null)
-    				{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectSecurityChangeException();
     			}
     		}
@@ -450,10 +438,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 						}
 	    				catch(ProjectPermissionUserException $e)
 	    				{
-	    					if ($transaction_id != null)
-	    					{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw new ProjectSecurityChangeException();
 	    				}
 					}
@@ -472,10 +457,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 						}
 	    				catch(ProjectPermissionUserException $e)
 	    				{
-	    					if ($transaction_id != null)
-	    					{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw new ProjectSecurityChangeException();
 	    				}
 					}
@@ -523,10 +505,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     				}
     				catch(ProjectPermissionException $e)
     				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectSecurityChangeException();
     				}
     			}
@@ -539,10 +518,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     			$project_permission = ProjectPermission::get_instance($project_permission_array[0]);
 				if (($return_value = $project_permission->set_organisation_unit_id($organisation_unit_id)) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectSecurityChangeException();
 				}
     		}
@@ -555,10 +531,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     			}
     			catch(ProjectPermissionOrganisationUnitException $e)
     			{
-    				if ($transaction_id != null)
-    				{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectSecurityChangeException();
     			}
     		}
@@ -576,19 +549,13 @@ class ProjectSecurity implements ProjectSecurityInterface
 					}
 	    			catch(ProjectPermissionGroupException $e)
 	    			{
-	    				if ($transaction_id != null)
-	    				{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectSecurityChangeException();
 	    			}
 				}
 			}
     	
-    		if ($transaction_id != null)
-    		{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
     		return $return_value;
     	}
     	else

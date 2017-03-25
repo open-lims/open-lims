@@ -643,10 +643,7 @@ class SampleCloneAjax
 		
 		if (($sample_id = $sample->clone_sample($sample_source_sample, $sample_name, $sample_manufacturer, $sample_location, $sample_description, null, $sample_expiry, $sample_expiry_warning, $sample_template_array, $sample_item_array)) == null)
 		{
-			if ($transaction_id != null)
-			{
-				$transaction->rollback($transaction_id);
-			}
+			$transaction->rollback($transaction_id);
 		}
 
 		$session->delete_value("SAMPLE_CLONE_ROLE");
@@ -695,10 +692,7 @@ class SampleCloneAjax
 			$event_handler = new EventHandler($item_add_event);
 			if ($event_handler->get_success() == true)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				
 				if ($sample_item_retrace)
 				{
@@ -716,20 +710,13 @@ class SampleCloneAjax
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
-				
+				$transaction->rollback($transaction_id);
 				return "0";
 			}
 		}
 		else
 		{
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			
 			$paramquery = array();
 			$paramquery['username'] = $username;

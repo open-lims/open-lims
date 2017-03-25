@@ -297,17 +297,11 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			self::__construct($value_id);
 			return $value_id;
 		}
@@ -367,10 +361,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					$value_version = new ValueVersion_Access($fe_value);
 					if ($value_version->delete() == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
@@ -379,36 +370,24 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				{
 					if (parent::delete() == true)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -451,10 +430,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 							$value->open_value_version_id($fe_value);	
 							if ($value->delete_version($value->get_internal_revision()) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return 0;
 							}								
 						}	
@@ -469,18 +445,12 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 	
 					if ($this->value_version->delete() == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return 0;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return 1;
 					}
 				}
@@ -667,19 +637,13 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				{
 					if(($value_version_id = $this->value_version->create($this->value_id, $new_version, $value_string , $value_checksum, $previous_version_pk_id, $new_internal_revision, true, $user->get_user_id())) == null)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}		
 					
 					if ($current_value_version->set_current(false) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
@@ -687,10 +651,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 				{
 					if (($value_version_id = $this->value_version->create($this->value_id, $new_version, $value_string , $value_checksum, $previous_version_pk_id, $new_internal_revision, false, $user->get_user_id())) == null)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
@@ -700,21 +661,13 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					$this->value_version->set_text_search_vector($full_text_content_string, "english");
 				}
 				
-				$this->value_version->__construct($value_version_id);
-				
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
-				
+				$this->value_version->__construct($value_version_id);				
+				$transaction->commit($transaction_id);				
 				return true;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return true;
 			}
 		}
@@ -796,18 +749,12 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 					{
 						$this->value_version->set_text_search_vector($new_value_string, "english");
 						$this->value_version->__construct($value_version_id);
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
@@ -818,10 +765,7 @@ class Value extends DataEntity implements ValueInterface, EventListenerInterface
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}

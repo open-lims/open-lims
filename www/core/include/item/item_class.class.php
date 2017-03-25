@@ -111,10 +111,7 @@ class ItemClass implements ItemClassInterface
     				$item_has_item_class_access = new ItemHasItemClass_Access($value);
     				if ($item_has_item_class_access->delete() == false)
     				{
-    					if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
     				}
     			}
@@ -129,10 +126,7 @@ class ItemClass implements ItemClassInterface
 					$item_information = new ItemInformation($value);
 					if ($item_information->unlink_class($this->class_id) == false)
 					{
-    					if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
     				}
 				}
@@ -140,20 +134,13 @@ class ItemClass implements ItemClassInterface
     		
     		if ($this->item_class->delete() == true)
     		{
-    			if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				$this->__destruct();
-    		
     			return true;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     	}

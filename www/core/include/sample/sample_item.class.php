@@ -111,10 +111,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    		{
 	    			if ($sample_has_item->set_parent_item_id($this->parent_item_id) == false)
 	    			{
-	    				if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 	    			}
 	    		}
@@ -126,36 +123,24 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 					
 					if ($event_handler->get_success() == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 	    		}
 	    		else
 	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 	    			return false;
 	    		}
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			return false;
     		}
     	}
@@ -224,19 +209,13 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
     		
     		if (Sample_Wrapper::delete_data_entity_sub_item_links($this->item_id) == false)
     		{
-    			if ($transaction_id != null)
-  				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		
     		if (SampleHasItem_Access::delete_sub_items($this->item_id) == false)
     		{
-    			if ($transaction_id != null)
-  				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		
@@ -251,18 +230,12 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	  					$sample_has_item = new SampleHasItem_Access($value);
 	  					if ($sample_has_item->delete() == false)
 	  					{
-	  						if ($transaction_id != null)
-	  						{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 	  					}
 	  				}
 	  				
-	  				if ($transaction_id != null)
-	  				{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
   				}
   				else
@@ -442,10 +415,7 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    		$item_class = new ItemClass(null);
 	    		if (($item_class_id = $item_class->create($class_name, $user->get_user_id())) == null)
 	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 	    		}
 	    	}
@@ -458,18 +428,12 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 	    	
 	    	if ($item_class->link_item($this->item_id) == true)
 	    	{
-	    		if ($transaction_id != null)
-	    		{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 	    	}
 	    	else
 	    	{
-	    		if ($transaction_id != null)
-	    		{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 	    		return false;
 	    	}
     	}
@@ -517,27 +481,18 @@ class SampleItem implements SampleItemInterface, EventListenerInterface
 		    		{
 		    			$item_information->link_class($this->item_class_id);
 		    		}
-		    		if ($transaction_id != null)
-		    		{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 	    			return true;
     			}
     			else
     			{
-    				if ($transaction_id != null)
-    				{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 	    			return false;
     			}
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			return false;
     		}
     	}

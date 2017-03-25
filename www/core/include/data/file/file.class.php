@@ -67,7 +67,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 		{
 			if (File_Access::exist_file_by_file_id($id) == true)
 			{
-				$this->file_id = $file_id;
+				$this->file_id = $id;
 				$this->file = new File_Access($id);
 				
 				$this->file_version_id = FileVersion_Access::get_current_entry_by_toid($id);
@@ -267,18 +267,11 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			}	
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
-			
+			$transaction->commit($transaction_id);
 			return $file_id;
 		}
 		else
@@ -289,10 +282,6 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	
 	/**
 	 * @see FileInterface::create()
-	 * @param string $name
-	 * @param integer $folder_id
-	 * @param string $path
-	 * @param integer $owner_id
 	 * @return integer
 	 */
 	public function create()
@@ -329,18 +318,11 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			}	
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
-			
+			$transaction->commit($transaction_id);
 			self::__construct($file_id);
 			
 			return $file_id;
@@ -385,8 +367,8 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 	public function delete()
 	{
 		global $transaction;
-		
-		if (($this->file_id != null) and $this->file and $this->file_version)
+				
+		if (isset($this->file_id) and is_object($this->file) and is_object($this->file_version))
 		{
 			$transaction_id = $transaction->begin();
 			
@@ -398,10 +380,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 
 			if ($event_handler->get_success() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			
@@ -438,19 +417,14 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
 				
 				$folder->decrease_filesize($this->get_owner_id(), $file_size);				
-			
-				$file_delete = $this->file->delete();
 				
-				if ($file_delete == true)
+				if (($file_delete = $this->file->delete()) === true)
 				{
 					// Data Entity Delete
 					if (parent::delete() == true)
@@ -466,10 +440,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 										$delete_success = unlink($value);
 										if ($delete_success == false)
 										{
-											if ($transaction_id != null)
-											{
-												$transaction->rollback($transaction_id);
-											}
+											$transaction->rollback($transaction_id);
 											$this->file->__consturct($temp_file_id);
 											$this->file->set_flag(-1); // Corrupt
 											return false;
@@ -477,10 +448,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 									}
 									else
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										$this->file->__consturct($temp_file_id);
 										$this->file->set_flag(-1); // Corrupt
 										return false;
@@ -488,38 +456,25 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 								}	
 							}
 						}
-						
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
-					
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
-				}
+				}				
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -560,10 +515,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 					
 					if ($event_handler->get_success() == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return 0;
 					}
 					
@@ -577,10 +529,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 							$file->open_file_version_id($value);
 							if ($file->delete_version($file->get_internal_revision()) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return 0;
 							}											
 						}	
@@ -621,65 +570,44 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 								$delete_success = unlink($path);
 								if ($delete_success == false)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									$this->file->set_flag(-1); // Corrupt
 									return 0;
 								}
 							}
 							else
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								$this->file->set_flag(-1); // Corrupt
 								return 0;
 							}
 						}
 						else
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							$this->file->set_flag(-1); // Corrupt
 							return 0;
 						}	
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return 0;
 					}
 					
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return 1;
 				}
 				else
 				{
 					if ($this->delete())
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return 2;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return 0;
 					}
 				}
@@ -809,10 +737,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 							$file_name_array[$file_name_array_length] == "pl" or 
 							$file_name_array[$file_name_array_length] == "asp")
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return 7;
 						}
 						else
@@ -830,10 +755,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 								
 								if ($event_handler->get_success() == false)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return 6;
 								}
 		 						
@@ -855,14 +777,15 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			 						 */
 			 						try
 			 						{
-			 							$file_id = $this->create($file_array['name'], $folder_id, $target, $user->get_user_id());
+			 							$this->ci_set_name($file_array['name']);
+			 							$this->ci_set_folder_id($folder_id);
+			 							$this->ci_set_path($target);
+			 							$this->ci_set_owner_id($user->get_user_id());
+			 							$file_id = $this->create();
 			 						}
 			 						catch(BaseException $e)
 			 						{
-			 							if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										return 2;
 			 						}
 			 						$data_entity_id = $this->get_data_entity_id();
@@ -885,18 +808,12 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 									// Rename file with the object id
 									if (rename($target, $new_filename) == true)
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->commit($transaction_id);
-										}
+										$transaction->commit($transaction_id);
 										return 1;
 									}
 									else
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										return 2;
 									}
 		 						}
@@ -906,18 +823,12 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 		 							
 		 							if (unlink($target))
 		 							{
-		 								if ($transaction_id != null)
-		 								{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 		 								return 6;
 		 							}
 		 							else
 		 							{
-		 								if ($transaction_id != null)
-		 								{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										// Write Log - Delete Error
 		 								return 6; 								
 		 							}
@@ -927,18 +838,12 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 							{
 								if ($file_upload_error_no == 1 or $file_upload_error_no == 2)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return 4;
 								}
 								else
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return 2;
 								}
 							}
@@ -946,28 +851,19 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return 5;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return 5;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return 8;
 			}
 		}
@@ -1020,10 +916,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 						$file_name_array[$file_name_array_length] == "pl" or 
 						$file_name_array[$file_name_array_length] == "asp")
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return 7;
 					}
 					else
@@ -1044,10 +937,7 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 								
 								if ($event_handler->get_success() == false)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return 6;
 								}
 			
@@ -1143,18 +1033,12 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 									// Rename file with the object id
 									if (rename($target, $new_filename) == true)
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->commit($transaction_id);
-										}
+										$transaction->commit($transaction_id);
 										return 1;
 									}
 									else
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										return 2;
 									}
 								}
@@ -1163,18 +1047,12 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 									// Delete File - Overquota
 									if (unlink($target))
 									{
-		 								if ($transaction_id != null)
-		 								{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 		 								return 6;
 		 							}
 		 							else
 		 							{
-		 								if ($transaction_id != null)
-		 								{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 								 		// Write Log - Delete Error (nach Rollback)
 		 								return 6; 								
 		 							}
@@ -1185,18 +1063,12 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 								// Delete File - Equals previous version
 								if (unlink($target))
 								{
-	 								if ($transaction_id != null)
-	 								{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 	 								return 5;
 	 							}
 	 							else
 	 							{
-	 								if ($transaction_id != null)
-	 								{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 	 								// Write Log - Delete Error
 	 								return 5; 								
 	 							}
@@ -1206,18 +1078,12 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 						{
 							if ($file_upload_error_no == 1 or $file_upload_error_no == 2)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return 4;
 							}
 							else
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return 2;
 							}	
 						}
@@ -1225,19 +1091,13 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return 3;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return 8;
 			}
 		}
@@ -1308,19 +1168,14 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 				
 				if ($file_version_id == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
+
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}	
 			
@@ -1330,19 +1185,13 @@ class File extends DataEntity implements FileInterface, EventListenerInterface
 			// Rename file with the object id
 			if (copy($current_file_path, $new_file_path) == true)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				self::__construct($file_id);
 				return true;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}

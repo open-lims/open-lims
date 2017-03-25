@@ -145,27 +145,18 @@ class SampleTemplate implements SampleTemplateInterface
 				$oldl = new Oldl(null);
 				if (($oldl_id = $oldl->create($data_entity_id)) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 		
 				if ($this->sample_template->create($id, $title, $category_id, $oldl_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}	
 			}
@@ -205,27 +196,18 @@ class SampleTemplate implements SampleTemplateInterface
 			
 			if ($this->sample_template->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			
 			if ($oldl->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
 		}

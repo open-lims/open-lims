@@ -56,26 +56,27 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
   			$this->group_id = $this->group_folder->get_group_id();
   			
   			$group = new Group($this->group_id);
-			if ($group->is_user_in_group($user->get_user_id()) == true)
-			{
-				if ($this->read_access == false)
+  				
+  			if ($group->is_user_in_group($user->get_user_id()) == true)
+  			{
+  				if ($this->read_access == false)
   				{
-					$this->data_entity_permission->set_read_permission();
-	  				if ($this->data_entity_permission->is_access(1))
-					{
-						$this->read_access = true;
-					}
+  					$this->data_entity_permission->set_read_permission();
+  					if ($this->data_entity_permission->is_access(1))
+  					{
+  						$this->read_access = true;
+  					}
   				}
   				
   				if ($this->write_access == false)
   				{
-					$this->data_entity_permission->set_write_permission();
-	  				if ($this->data_entity_permission->is_access(2))
-					{
-						$this->write_access = true;
-					}
+  					$this->data_entity_permission->set_write_permission();
+  					if ($this->data_entity_permission->is_access(2))
+  					{
+  						$this->write_access = true;
+  					}
   				}
-			}
+  			}
   		}
   		else
   		{
@@ -220,8 +221,6 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 	
 	/**
 	 * @see ConcreteFolderCaseInterface::delete()
-	 * @param bool $recursive
-	 * @param bool $content
 	 * @return bool
 	 */
 	public function delete()
@@ -236,27 +235,18 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 			{
 				if (parent::delete() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -311,21 +301,34 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
 		if ($event_object instanceof GroupCreateEvent)
     	{
     		$group_folder = new GroupFolder(null);
-    		if ($group_folder->create($event_object->get_group_id()) == false)
+    		$group_folder->ci_set_group_id($event_object->get_group_id());
+    		if ($group_folder->create() == false)
     		{
 				return false;
     		}
     	}
     	
-		if ($event_object instanceof GroupPostDeleteEvent)
+		if ($event_object instanceof GroupDeleteEvent)
     	{
     		$folder_id = GroupFolder::get_folder_by_group_id($event_object->get_group_id());
-    		$group_folder = new GroupFolder($folder_id);
-			
-			if ($group_folder->delete(true, true) == false)
-			{
-				return false;
-			}
+    		if ($folder_id)
+    		{
+	    		$group_folder = new GroupFolder($folder_id);
+				$group_folder->di_set_content(true);
+				$group_folder->di_set_recursive(true);
+				if ($group_folder->delete() == false)
+				{
+					return false;
+				}
+    		}
+    	}
+    	
+    	/**
+    	 * @todo Delete physical folder on disk, seperate it from database action
+    	 */
+    	if ($event_object instanceof GroupDeletePostEvent)
+    	{
+    		
     	}
     	
 		if ($event_object instanceof GroupRenameEvent)

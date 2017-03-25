@@ -187,20 +187,12 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
-			
+			$transaction->commit($transaction_id);
 			self::__construct($parameter_id);
-			
 			return $parameter_id;
 		}
 		else
@@ -261,10 +253,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 					{
 						if(ParameterFieldValue_Access::delete_by_parameter_version_id($value) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw new ParameterDeleteVersionValueFailedException();
 						}
 						
@@ -272,10 +261,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 						
 						if ($parameter_version->delete() == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw new ParameterDeleteVersionFailedException();
 						}
 					}
@@ -283,10 +269,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 				
 				if ($this->parameter->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ParameterDeleteFailedException();
 				}
 				
@@ -294,17 +277,11 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			return true;
 		}
 		else
@@ -351,10 +328,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 						$parameter->open_parameter_version_id($fe_value);	
 						if ($parameter->delete_version($parameter->get_internal_revision()) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw new ParameterDeletePreviousVersionFailedException();
 						}								
 					}	
@@ -374,18 +348,12 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 				
 				if ($this->parameter_version->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ParameterDeleteVersionFailedException();
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return 1;
 				}
 			}
@@ -791,20 +759,12 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
 						}
 						catch(BaseException $e)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw $e;
 						}
 						
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						
+						$transaction->commit($transaction_id);
 						$this->parameter_version_id = $parameter_version_id;
-					
 						return true;
 					}
 					else

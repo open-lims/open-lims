@@ -54,6 +54,16 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	private $sample_folder_id;
 	private $sample_folder_object;
 	
+	private $ci_organisation_unit_id;
+	private $ci_template_id;
+	private $ci_name;
+	private $ci_manufacturer_id;
+	private $ci_location_id;
+	private $ci_desc;
+	private $ci_language_id;
+	private $ci_date_of_expiry;
+	private $ci_expiry_warning;
+		
 	private static $sample_delete_array = array();
 	
 	/**
@@ -147,9 +157,12 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			$path->add_element($sample_id);
 					
 			$sample_folder = new SampleFolder(null);
-			if (($folder_id = $sample_folder->create($sample_id)) == null)
+			$sample_folder->ci_set_sample_id($sample_id);
+			if (($folder_id = $sample_folder->create()) == null)
 			{
-				$sample_folder->delete(true, true);
+				$sample_folder->di_set_content(true);
+				$sample_folder->di_set_recursive(true);
+				$sample_folder->delete();
 				throw new SampleCreateFolderException("Could not create main folder");
 			}
 			$folder = Folder::get_instance($folder_id);
@@ -185,9 +198,15 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						$folder_path->add_element($folder_name);
 
 						$sub_folder = Folder::get_instance(null);
-						if (($sub_folder_id = $sub_folder->create($value, $folder_id, $folder_path->get_path_string(), $user->get_user_id(), null)) == null)
+						$sub_folder->ci_set_name($value);
+						$sub_folder->ci_set_toid($folder_id);
+						$sub_folder->ci_set_path($folder_path->get_path_string());
+						$sub_folder->ci_set_owner_id($user->get_user_id());
+						if (($sub_folder_id = $sub_folder->create()) == null)
 						{
-							$sample_folder->delete(true, true);
+							$sample_folder->di_set_content(true);
+							$sample_folder->di_set_recursive(true);
+							$sample_folder->delete();
 							throw new SampleCreateSubFolderException("Could not create sub folder");
 						}
 						
@@ -239,12 +258,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
     /**
      * @see SampleInterface::create()
      * @todo sample adding via template required field via item_id
-     * @param integer $organisation_unit_id
-     * @param integer $template_id
-     * @param string $name
-     * @param string $supplier
-     * @param integer $location_id
-     * @param string $desc
      * @return integer Sample-ID
      * @throws SampleCreateFailedException
      * @throws SampleCreateIDMissingException
@@ -257,17 +270,17 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
      * @throws SampleCreateItemSampleException
      * @throws SampleCreateItemValueException
      */
-    public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $location_id, $desc, $language_id, $date_of_expiry, $expiry_warning)
+    public function create()
     {    	
     	global $user, $transaction;
     	
-    	if ($this->sample and is_numeric($template_id) and $name)
+    	if ($this->sample and is_numeric($this->ci_template_id) and $this->ci_name)
     	{
     		$transaction_id = $transaction->begin();
     		
     		try
 			{
-	    		if (($sample_id = $this->sample->create($name, $user->get_user_id(), $template_id, $manufacturer_id, $desc, $language_id, $date_of_expiry, $expiry_warning)) == null)
+	    		if (($sample_id = $this->sample->create($this->ci_name, $user->get_user_id(), $this->ci_template_id, $this->ci_manufacturer_id, $this->ci_desc, $this->ci_language_id, $this->ci_date_of_expiry, $this->ci_expiry_warning)) == null)
 	    		{
 	    			throw new SampleCreateFailedException();
 	    		}
@@ -277,7 +290,7 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					$this->sample->set_comment_text_search_vector($desc, "english");
 				}
 
-				$this->create_sample_folder($sample_id, $template_id);
+				$this->create_sample_folder($sample_id, $this->ci_template_id);
 				$this->create_sample_item($sample_id);
 	
     			
@@ -289,19 +302,19 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					throw new SampleCreateUserException();
     			}
     			
-    			if (is_numeric($organisation_unit_id))
+    			if (is_numeric($this->ci_organisation_unit_id))
     			{
-    				if ($sample_security->create_organisation_unit($organisation_unit_id) == null)
+    				if ($sample_security->create_organisation_unit($this->ci_organisation_unit_id) == null)
     				{
 						throw new SampleCreateOrganisationUnitException();
     				}
     			}    			
     			
-    			if (is_numeric($location_id) and $location_id > 0)
+    			if (is_numeric($this->ci_location_id) and $this->ci_location_id > 0)
     			{
 	    			// Create First Location
 	    			$sample_has_locaiton_access = new SampleHasLocation_Access(null);
-	    			if ($sample_has_locaiton_access->create($sample_id, $location_id, $user->get_user_id()) == null)
+	    			if ($sample_has_locaiton_access->create($sample_id, $this->ci_location_id, $user->get_user_id()) == null)
 	    			{
 						throw new SampleCreateLocationException("Could not create first location");
 	    			}
@@ -350,26 +363,99 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					$this->sample_folder_object->delete(true, true);
 				}
 				
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
-
+			$transaction->commit($transaction_id);
 			self::__construct($sample_id);
-			
     		return $sample_id;	
     	}
     	else
     	{
     		throw new SampleCreateIDMissingException();
     	}
+    }
+    
+    /**
+     * Injects $organisation_unit_id into create()
+     * @param integer $organisation_unit_id
+     */
+    public function ci_set_organisation_unit_id($organisation_unit_id)
+    {
+    	$this->ci_organisation_unit_id = $organisation_unit_id;
+    }
+    
+    /**
+     * Injects $template_id into create()
+     * @param integer $template_id
+     */
+    public function ci_set_template_id($template_id)
+    {
+    	$this->ci_template_id = $template_id;
+    }
+    
+    /**
+     * Injects $name into create()
+     * @param string $name
+     */
+    public function ci_set_name($name)
+    {
+    	$this->ci_name = $name;
+    }
+    
+    /**
+     * Injects $manufacturer_id into create()
+     * @param integer $manufacturer_id
+     */
+    public function ci_set_manufacturer_id($manufacturer_id)
+    {
+    	$this->ci_manufacturer_id = $manufacturer_id;
+    }
+    
+    /**
+     * Injects $location_id into create()
+     * @param integer $location_id
+     */
+    public function ci_set_location_id($location_id)
+    {
+    	$this->ci_location_id = $location_id;	
+    }
+    
+    /**
+     * Injects $desc into create()
+     * @param string $desc
+     */
+    public function ci_set_desc($desc)
+    {
+    	$this->ci_desc = $desc;
+    }
+    
+    /**
+     * Injects $language_id into create()
+     * @param integer $language_id
+     */
+    public function ci_set_language_id($language_id)
+    {
+    	$this->ci_language_id = $language_id;
+    }
+    
+    /**
+     * Injects $date_of_expiry into create()
+     * @param string $date_of_expiry
+     */
+    public function ci_set_date_of_expiry($date_of_expiry)
+    {
+    	$this->ci_date_of_expiry = $date_of_expiry;
+    }
+    
+    /**
+     * Injects $expiry_warning into create()
+     * @param boolean $expiry_warning
+     */
+    public function ci_set_expiry_warning($expiry_warning)
+    {
+    	$this->ci_expiry_warning = $expiry_warning;
     }
     
     /**
@@ -707,20 +793,12 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					$this->sample_folder_object->delete(true, true);
 				}
 				
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
-
+			$transaction->commit($transaction_id);
 			self::__construct($sample_id);
-			
     		return $sample_id;	
     	}
     	else
@@ -843,7 +921,9 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					$this->__destruct();
 		    		$folder_id = SampleFolder::get_folder_by_sample_id($tmp_sample_id);
 		    		$folder = Folder::get_instance($folder_id);
-		    		if ($folder->delete(true, true) == false)
+		    		$folder->di_set_content(true);
+		    		$folder->di_set_recursive(true);
+		    		if ($folder->delete() == false)
 		    		{
 						throw new SampleDeleteFolderException();
 		    		}
@@ -852,17 +932,11 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-    		{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			return true;
 		}
 		else
@@ -1749,27 +1823,18 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 	    	
 			if ($folder->set_name($folder_name) == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
     		
     		if ($this->sample->set_name($name) == false)
     		{
-    			if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     	}

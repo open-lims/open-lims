@@ -95,26 +95,17 @@ class ProjectPermissionGroup extends ProjectPermission implements ProjectPermiss
     				$virtual_folder = new VirtualFolder($virtual_folder_id);
     				if ($virtual_folder->link_folder($project_folder_id) == false)
     				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 			    		throw new ProjectPermissionGroupCreateVirtualFolderException();
     				}
     			}
     			
-    			if ($transaction_id != null)
-	    		{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 	    		return $permission_id;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-	    		{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			throw new ProjectPermissionGroupCreateException();
     		}
     	}
@@ -165,10 +156,7 @@ class ProjectPermissionGroup extends ProjectPermission implements ProjectPermiss
 	    			$virtual_folder = new VirtualFolder($virtual_folder_id);
 	    			if ($virtual_folder->unlink_folder($project_folder_id) == false)
 		    		{
-		    			if ($transaction_id != null)
-	    				{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 				    	throw new ProjectPermissionGroupDeleteVirtualFolderException();
 		    		}
 	    		}
@@ -176,18 +164,12 @@ class ProjectPermissionGroup extends ProjectPermission implements ProjectPermiss
     		
     		if (parent::delete() == true)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 			    throw new ProjectPermissionGroupDeleteException();
     		}
     	}

@@ -179,10 +179,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				// Create Project
 				if (($project_id = $this->project->create($organisation_unit_id, $parent_project_id, $name, $owner_id, $template_id, $project_quota)) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id, false);
-					}
+					$transaction->rollback($transaction_id, false);
 					throw new ProjectCreateException("Could not create Project in DB");
 				}
 				else
@@ -195,10 +192,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$project_has_project_status = new ProjectHasProjectStatus_Access(null);
 					if ($project_has_project_status->create($project_id,$project_all_status_array[0]) != true)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id, false);
-						}
+						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateStatusException("Could not create status");
 					}
 					
@@ -217,13 +211,14 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$path->add_element($project_id);
 					
 					$project_folder = new ProjectFolder(null);
-					if (($folder_id = $project_folder->create($project_id, $base_folder_id)) == null)
+					$project_folder->ci_set_project_id($project_id);
+					$project_folder->ci_set_base_folder_id($base_folder_id);
+					if (($folder_id = $project_folder->create()) == null)
 					{
-						$project_folder->delete(true, true);
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id, false);
-						}
+						$project_folder->di_set_content(true);
+						$project_folder->di_set_recursive(true);
+						$project_folder->delete();
+						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateFolderException("Could not create main folder");
 					}
 					
@@ -231,14 +226,20 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$supplementary_path = new Path($path->get_path_string());
 					$supplementary_path->add_element("supplementary");
 
+					/**
+					 * @toto language of supplementary folder
+					 */
 					$supplementary_folder = Folder::get_instance(null);
-					if (($supplementary_folder->create("supplementary", $folder_id, $supplementary_path->get_path_string(), $owner_id, null)) == null)
+					$supplementary_folder->ci_set_name("supplementary");
+					$supplementary_folder->ci_set_toid($folder_id);
+					$supplementary_folder->ci_set_path($supplementary_path->get_path_string());
+					$supplementary_folder->ci_set_owner_id($owner_id);
+					if (($supplementary_folder->create()) == null)
 					{
+						$project_folder->di_set_content(true);
+						$project_folder->di_set_recursive(true);
 						$project_folder->delete();
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id, false);
-						}
+						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateSupplementaryFolderException("Could not create supplementary folder");
 					}
 					
@@ -263,14 +264,15 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					
 					foreach($folder_array as $key => $value)
 					{
-						$projet_status_folder = new ProjectStatusFolder(null);
-						if (($status_folder_id = $projet_status_folder->create($project_id, $value)) == null)
+						$project_status_folder = new ProjectStatusFolder(null);
+						$project_status_folder->ci_set_project_id($project_id);
+						$project_status_folder->ci_set_project_status_id($value);
+						if (($status_folder_id = $project_status_folder->create()) == null)
 						{
-							$project_folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id, false);
-							}
+							$project_folder->di_set_content(true);
+							$project_folder->di_set_recursive(true);
+							$project_folder->delete();
+							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreateStatusFolderException("Could not create status folder");
 						}
 
@@ -299,17 +301,20 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    						$folder_name = strtolower(trim($sub_value));
 	    						$folder_name = str_replace(" ","-",$folder_name);
 	    										
-								$folder_path = new Path($projet_status_folder->get_path());
+								$folder_path = new Path($project_status_folder->get_path());
 								$folder_path->add_element($folder_name);
 								
 								$sub_folder = Folder::get_instance(null);
-								if ($sub_folder->create($sub_value, $status_folder_id, $folder_path->get_path_string(), $user->get_user_id(), null) == null)
+								$sub_folder->ci_set_name($sub_value);
+								$sub_folder->ci_set_toid($status_folder_id);
+								$sub_folder->ci_set_path($folder_path->get_path_string());
+								$sub_folder->ci_set_owner_id($user->get_user_id());
+								if ($sub_folder->create() == null)
 								{
-									$project_folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id, false);
-									}
+									$project_folder->di_set_content(true);
+									$project_folder->di_set_recursive(true);
+									$project_folder->delete();
+									$transaction->rollback($transaction_id, false);
 									throw new ProjectCreateStatusSubFolderException("Could not create status sub folder");
 								}
 	    					}
@@ -320,11 +325,10 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$value = Value::get_instance(null);
 					if ($value->create($folder_id, $owner_id, 2, $description) == null)
 					{
-						$project_folder->delete(true, true);
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id, false);
-						}
+						$project_folder->di_set_content(true);
+						$project_folder->di_set_recursive(true);
+						$project_folder->delete();
+						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateDescriptionException("Could not create description value");
 					}
 					
@@ -335,21 +339,19 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					
 					if ($project_item->link_item() == false)
 					{
-						$project_folder->delete(true, true);
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id, false);
-						}
+						$project_folder->di_set_content(true);
+						$project_folder->di_set_recursive(true);
+						$project_folder->delete();
+						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateDescriptionException("Could not create description item link");
 					}
 					
 					if ($project_item->set_required(true) == false)
 					{
-						$project_folder->delete(true, true);
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id, false);
-						}
+						$project_folder->di_set_content();
+						$project_folder->di_set_recursive();
+						$project_folder->delete();
+						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateDescriptionException("Could not create description item role");
 					}
 					
@@ -360,11 +362,10 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array) == null)
 						{
-							$project_folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id, false);
-							}
+							$project_folder->di_set_content(true);
+							$project_folder->di_set_recursive(true);
+							$project_folder->delete();
+							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreateMasterDataException("Could not create master-data value");
 						}
 						
@@ -375,21 +376,19 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						if ($project_item->link_item() == false)
 						{
-							$project_folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id, false);
-							}	
+							$project_folder->di_set_content(true);
+							$project_folder->di_set_recursive(true);
+							$project_folder->delete();
+							$transaction->rollback($transaction_id, false);	
 							throw new ProjectCreateMasterDataException("Could not create master-data item link");
 						}
 						
 						if ($project_item->set_required(true) == false)
 						{
-							$project_folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id, false);
-							}
+							$project_folder->di_set_content(true);
+							$project_folder->di_set_recursive(true);
+							$project_folder->delete();
+							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreateMasterDataException("Could not create master-data item role");
 						}
 					}
@@ -406,11 +405,10 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						}
 						catch (ProjectPermissionUserException $e)
 						{
-							$project_folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id, false);
-							}
+							$project_folder->di_set_content(true);
+							$project_folder->di_set_recursive(true);
+							$project_folder->delete();
+							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreatePermissionUserException("Could not create user/owner permission");
 						}
 					
@@ -427,11 +425,10 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 								catch (ProjectPermissionUserException $e)
 								{
-									$project_folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id, false);
-									}
+									$project_folder->di_set_content(true);
+									$project_folder->di_set_recursive(true);
+									$project_folder->delete();
+									$transaction->rollback($transaction_id, false);
 									throw new ProjectCreatePermissionLeaderException("Could not create leader permission");
 								}
 							}
@@ -444,11 +441,10 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						}
 						catch (ProjectPermissionOrganisationUnitException $e)
 						{
-							$project_folder->delete(true, true);
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id, false);
-							}
+							$project_folder->di_set_content(true);
+							$project_folder->di_set_recursive(true);
+							$project_folder->delete();
+							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreatePermissionOrganisationUnitException("Could not create Organisation Unit permission");
 						}
 					
@@ -466,11 +462,10 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 								catch (ProjectPermissionUserException $e)
 								{
-									$project_folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id, false);
-									}
+									$project_folder->di_set_content(true);
+									$project_folder->di_set_recursive(true);
+									$project_folder->delete();
+									$transaction->rollback($transaction_id, false);
 									throw new ProjectCreatePermissionQualityManagerException("Could not create quality-manager permission");
 								}
 							}
@@ -489,11 +484,10 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 								catch (ProjectPermissionGroupException $e)
 								{
-									$project_folder->delete(true, true);
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id, false);
-									}
+									$project_folder->di_set_content(true);
+									$project_folder->di_set_recursive(true);
+									$project_folder->delete();
+									$transaction->rollback($transaction_id, false);
 									throw new ProjectCreatePermissionGroupException("Could not create group permissions");
 								}
 							}
@@ -501,10 +495,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					}
 							
 					self::__construct($project_id);
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return $project_id;
 				}
 			}
@@ -544,11 +535,8 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     		
     		if ($this->exist_subproject() == true)
     		{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-					throw new ProjectDeleteContainsSubProjectsException();
-				}
+				$transaction->rollback($transaction_id);
+				throw new ProjectDeleteContainsSubProjectsException();
     		}
     		
     		$tmp_project_id = $this->project_id;
@@ -567,10 +555,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    			}
 	    			catch (ProjectPermissionException $e)
 	    			{
-	    				if ($transaction_id != null)
-	    				{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectDeletePermissionException();
 	    			}
 	    		}
@@ -591,10 +576,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    			}
 	    			catch (ProjectLogDeleteException $e)
 	    			{
-	    				if ($transaction_id != null)
-	    				{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectDeleteLogException();
 	    			}
 	    		}
@@ -615,10 +597,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    			}
 	    			catch (ProjectStatusDeleteException $e)
 	    			{
-	    				if ($transaction_id != null)
-	    				{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectDeleteStatusException();
 	    			}
 	    		}
@@ -634,10 +613,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 	    			$project_link = new ProjectLink_Access($value);
 	    			if ($project_link->delete() == false)
 	    			{
-	    				if ($transaction_id != null)
-	    				{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectDeleteLinkException();
 	    			}
 	    		}
@@ -654,10 +630,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$project_item->set_item_id($item_value);
 					if ($project_item->unlink_item() == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectDeleteItemException();
 					}
 				}
@@ -673,10 +646,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     				$project_task = new ProjectTask($value);
     				if ($project_task->delete() == false)
     				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectDeleteTaskException();
     				}
     			}
@@ -685,20 +655,14 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     		// Extension Links
     		if (ProjectHasExtensionRun_Access::delete_by_project_id($tmp_project_id) == false)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ProjectDeleteException("Extension delete failed");
     		}
     		
     		// Project DB Entry
     		if ($this->project->delete() == false)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ProjectDeleteException("Database delete failed");
     		}
     		else
@@ -706,20 +670,16 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     			$this->__destruct();
 	    		$project_folder_id = ProjectFolder::get_folder_by_project_id($tmp_project_id);
 	    		$project_folder = new ProjectFolder($project_folder_id);
-	    		if ($project_folder->delete(true, true) == false)
+	    		$project_folder->di_set_content(true);
+	    		$project_folder->di_set_recursive(true);
+	    		if ($project_folder->delete() == false)
 	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectDeleteFolderException();
 	    		}
 	    		else
 	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 	    		}
     		}
@@ -1704,10 +1664,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				{
 					if (ProjectTask::check_over_time_tasks($this->project_id) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectSetNextStatusException();
 					}
 					
@@ -1716,36 +1673,24 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					{
 						if ($project_log->link_status($next_status_id) == true)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->commit($transaction_id);
-							}
+							$transaction->commit($transaction_id);
 							return true;
 						}
 						else
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw new ProjectSetNextStatusException();
 						}
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectSetNextStatusException();
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectSetNextStatusException();
 				}
 			}
@@ -1911,28 +1856,19 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$destination_id = constant("PROJECT_FOLDER_ID");
 					if ($folder->move_folder($destination_id, false) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMoveFolderException();
 					}
 					
 					if ($this->project->set_toid_project(null) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMoveException();
 					}
 					
 					if ($this->project->set_toid_organ_unit($organisation_unit_id) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMoveException();
 					}			
 					
@@ -1940,35 +1876,23 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 			
 					if ($project_security->change_owner_permission($this->get_owner_id()) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMovePermissionException();
 					}
 					
 					if ($project_security->change_ou_user_permission($organisation_unit_id) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMovePermissionException();
 					}
 					
 					if ($project_security->change_organisation_unit_permission($organisation_unit_id) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMovePermissionException();
 					}
 					
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
@@ -2025,10 +1949,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 							}
 							catch (ProjectPermissionException $e)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								throw new ProjectMovePermissionException();
 							}
 						}
@@ -2036,19 +1957,13 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					
 					if ($this->project->set_toid_organ_unit(null) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMoveException();
 					}
 					
 					if ($this->project->set_toid_project($project_id) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMoveException();
 					}
 					
@@ -2057,17 +1972,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$destination_id = ProjectFolder::get_folder_by_project_id($project_id);
 					if ($folder->move_folder($destination_id, false) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectMoveFolderException();
 					}
 					
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
@@ -2575,27 +2484,18 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
     		
     		if ($folder->set_name($name) == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			
 			if ($this->project->set_name($name) == false)
     		{
-    			if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     	}

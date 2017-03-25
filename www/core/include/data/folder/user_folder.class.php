@@ -151,7 +151,7 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 
 			$path = new Path($folder->get_path());
 			$path->add_element($this->ci_user_id);
-			
+
 			parent::ci_set_name($user->get_username());
 			parent::ci_set_toid($user_folder_id);
 			parent::ci_set_path($path->get_path_string());
@@ -186,10 +186,10 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 				$private_path->add_element("_private");
 				
 				$private_folder = new Folder(null);
-				$public_folder->ci_set_name("_private");
-				$public_folder->ci_set_toid($folder_id);
-				$public_folder->ci_set_path($private_path->get_path_string());
-				$public_folder->ci_set_owner_id($this->ci_user_id);
+				$private_folder->ci_set_name("_private");
+				$private_folder->ci_set_toid($folder_id);
+				$private_folder->ci_set_path($private_path->get_path_string());
+				$private_folder->ci_set_owner_id($this->ci_user_id);
 				if (($private_folder->create()) == null)
 				{
 					$this->delete();
@@ -247,27 +247,18 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 			{
 				if (parent::delete() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -322,21 +313,34 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
 		if ($event_object instanceof UserCreateEvent)
     	{
     		$user_folder = new UserFolder(null);
-    		if ($user_folder->create($event_object->get_user_id()) == false)
+    		$user_folder->ci_set_user_id($event_object->get_user_id());
+    		if ($user_folder->create() == false)
     		{
 				return false;
     		}
     	}
     	
-		if ($event_object instanceof UserPostDeleteEvent)
+		if ($event_object instanceof UserDeleteEvent)
     	{
     		$folder_id = UserFolder::get_folder_by_user_id($event_object->get_user_id());
-    		$user_folder = new UserFolder($folder_id);
-			
-			if ($user_folder->delete(true, true) == false)
-			{
-				return false;
-			}
+    		if ($folder_id)
+    		{
+	    		$user_folder = new UserFolder($folder_id);
+				$user_folder->di_set_content(true);
+				$user_folder->di_set_recursive(true);
+				if ($user_folder->delete() == false)
+				{
+					return false;
+				}
+    		}
+    	}
+    	
+    	/**
+    	 * @todo Delete physical folder on disk, seperate it from database action
+    	 */
+    	if ($event_object instanceof UserPostDeleteEvent)
+    	{
+    		
     	}
     	
 		if ($event_object instanceof UserRenameEvent)

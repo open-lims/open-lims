@@ -28,6 +28,10 @@ require_once("interfaces/group.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/group.exception.class.php");
+	require_once("exceptions/group_not_found.exception.class.php");
+	require_once("exceptions/group_id_missing.exception.class.php");
+	
 	/**
 	 * @deprecated redefinde exceptions
 	 */
@@ -104,10 +108,7 @@ class Group implements GroupInterface
 
 				if (self::exist_name($name) == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new GroupAlreadyExistException("",4);
 				}
 				
@@ -120,10 +121,7 @@ class Group implements GroupInterface
 					
 					if ($event_handler->get_success() == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new GroupCreationFailedException("",1);
 					}
 					else
@@ -135,10 +133,7 @@ class Group implements GroupInterface
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new GroupCreationFailedException("",3);
 				}
 			}
@@ -164,16 +159,12 @@ class Group implements GroupInterface
 		
 		if ($this->group)
 		{
-		
 			$transaction_id = $transaction->begin();
-		
+			
 			// User-Connection
 			if (GroupHasUser_Access::delete_by_group_id($this->group_id) == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			
@@ -182,20 +173,14 @@ class Group implements GroupInterface
 			
 			if ($event_handler->get_success() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 								
 			// Group
 			if ($this->group->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 				
@@ -204,18 +189,12 @@ class Group implements GroupInterface
 			
 			if ($event_handler->get_success() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
 		}
@@ -377,27 +356,18 @@ class Group implements GroupInterface
 				
 				if ($event_handler->get_success() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}

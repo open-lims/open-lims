@@ -155,18 +155,12 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     			
     			if (self::create($project_id, $item_id, $gid, null, null) == false)
     			{
-    				if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
     			}
     			else
     			{
-    				if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
     			}
     		}
     	}
@@ -210,10 +204,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 		    					{
 		    						if (self::create($get_array['project_id'], $sub_item_value, null, null, null, $event_object->get_item_id()) == false)
 					    			{
-					    				if ($transaction_id != null)
-						    			{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 					    				return false;
 					    			}
 					    			
@@ -245,10 +236,7 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
 	    							{
 	    								if (self::create($get_array['project_id'], $sub_item_value, null, null, null, $event_object->get_item_id(), $value['status_id']) == false)
 						    			{
-						    				if ($transaction_id != null)
-							    			{
-												$transaction->rollback($transaction_id);
-											}
+											$transaction->rollback($transaction_id);
 						    				return false;
 						    			}
 						    			
@@ -274,18 +262,12 @@ class ProjectItemFactory implements ProjectItemFactoryInterface, EventListenerIn
     			
     			if (self::create($get_array['project_id'], $event_object->get_item_id(), $get_array['key'], $post_array['keywords'], $post_array['description']) == false)
     			{
-    				if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
     				return false;
     			}
     			else
     			{
-    				if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
     			}
     		}
     	} 

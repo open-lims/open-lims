@@ -95,26 +95,17 @@ class ProjectPermissionOrganisationUnit extends ProjectPermission implements Pro
     				$virtual_folder = new VirtualFolder($virtual_folder_id);
     				if ($virtual_folder->link_folder($project_folder_id) == false)
     				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 			    		throw new ProjectPermissionOrganisationUnitCreateVirtualFolderException();
     				}
     			}
     			
-    			if ($transaction_id != null)
-	    		{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 	    		return $permission_id;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-	    		{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			throw new ProjectPermissionOrganisationUnitCreateException();
     		}
     	}
@@ -165,10 +156,7 @@ class ProjectPermissionOrganisationUnit extends ProjectPermission implements Pro
 	    			$virtual_folder = new VirtualFolder($virtual_folder_id);
 	    			if ($virtual_folder->unlink_folder($project_folder_id) == false)
 	    			{
-	    				if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 			    		throw new ProjectPermissionOrganisationUnitDeleteVirtualFolderException();
 	    			}
 	    		}
@@ -176,18 +164,12 @@ class ProjectPermissionOrganisationUnit extends ProjectPermission implements Pro
     		
     		if (parent::delete() == true)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 			    throw new ProjectPermissionOrganisationUnitDeleteException();
     		}
     	}

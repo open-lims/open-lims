@@ -94,10 +94,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 				$project_has_item = new ProjectHasItem_Access(null);
 	    		if ($project_has_item->create($this->project_id, $this->item_id, null) == null)
 	    		{
-	    			if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectItemLinkException(true, "Database entry failed");
 	    		}
 	    		
@@ -105,10 +102,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	    		{
 	    			if ($project_has_item->set_parent_item_id($this->parent_item_id) == false)
 	    			{
-	    				if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ProjectItemLinkException(true, "Parent Item-ID link failed");
 	    			}
 	    		}
@@ -118,27 +112,18 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 				
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectItemLinkException(true, "Event failed");
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-  				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ProjectItemLinkException(true, "No Project-Folder were found");
 			}
     	}
@@ -210,19 +195,13 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 
     		if (Project_Wrapper::delete_data_entity_sub_item_links($this->item_id) == false)
     		{
-    			if ($transaction_id != null)
-  				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			throw new ProjectItemUnlinkException(true, "Data-Entity Sub-Item delete failed");
     		}
     		
     		if (ProjectHasItem_Access::delete_sub_items($this->item_id) == false)
     		{
-    			if ($transaction_id != null)
-  				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			throw new ProjectItemUnlinkException(true, "Sub-Item delete failed");
     		}
 
@@ -237,18 +216,12 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	  					$project_has_item = new ProjectHasItem_Access($value);
 	  					if ($project_has_item->delete() == false)
 	  					{
-	  						if ($transaction_id != null)
-	  						{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw new ProjectItemUnlinkExecption(true, "Database delete failed");
 	  					}
 	  				} 
-	  				
-	  				if ($transaction_id != null)
-	  				{
-						$transaction->commit($transaction_id);
-					}
+
+					$transaction->commit($transaction_id);
 	  				return true;
   				}
   				else
@@ -499,28 +472,19 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 			{
 				if ($project_has_item->set_gid($this->gid) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			
     		if ($project_has_item->set_project_status_id($this->status_id) == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
     	}
@@ -610,10 +574,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	    		$item_class = new ItemClass(null);
 	    		if (($item_class_id = $item_class->create($class_name, $user->get_user_id())) == null)
 	    		{
-    				if ($transaction_id != null)
-    				{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 	    		}
 	    	}
@@ -626,18 +587,12 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 	    	
 	    	if ($item_class->link_item($this->item_id) == true)
 	    	{
-	    		if ($transaction_id != null)
-	    		{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 	    	}
 	    	else
 	    	{
-	    		if ($transaction_id != null)
-	    		{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 	    		return false;
 	    	}
     	}
@@ -687,27 +642,18 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 		    			$item_information->link_class($this->item_class_id);
 		    		}
 		    		
-		    		if ($transaction_id != null)
-		    		{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 	    			return true;
     			}
     			else
     			{
-    				if ($transaction_id != null)
-    				{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 	    			return false;
     			}
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			return false;
     		}
     	}
@@ -1044,10 +990,7 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
     			$project_log = new ProjectLog(null);
 				if (($project_log_id = $project_log->create($this->project_id, null, false, false, md5(rand(0,32768)))) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
     			$this->project_log_id = $project_log_id;
@@ -1056,18 +999,12 @@ class ProjectItem implements ProjectItemInterface, EventListenerInterface
 			$project_log_has_item = new ProjectLogHasItem($project_log_id);
 			if ($project_log_has_item->link_item($this->item_id) == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
     	}

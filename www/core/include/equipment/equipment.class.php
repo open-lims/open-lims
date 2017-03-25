@@ -41,6 +41,9 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	private $equipment_id;
 	private $equipment;
 	
+	private $ci_type_id;
+	private $ci_owner_id;
+	
 	/**
 	 * @see EquipmentInterface::__construct()
 	 * @param integer $equipment_id
@@ -79,24 +82,22 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 	
 	/**
 	 * @see EquipmentInterface::create()
-	 * @param integer $type_id
-	 * @param integer $owner_id
 	 * @return integer
 	 * @throws EquipmentCreateFailedException
 	 * @throws EquipmentCreateAsItemException
 	 * @throws EquipmentCreateIDMissingException
 	 */
-	public function create($type_id, $owner_id)
+	public function create()
 	{
 		global $transaction;
 		
-		if (is_numeric($type_id) and is_numeric($owner_id))
+		if (is_numeric($this->ci_type_id) and is_numeric($this->ci_owner_id))
 		{		
 			$transaction_id = $transaction->begin();
 			
 			try
 			{
-				if (($equipment_id = $this->equipment->create($type_id, $owner_id)) == null)
+				if (($equipment_id = $this->equipment->create($this->ci_type_id, $this->ci_owner_id)) == null)
 				{
 					throw new EquipmentCreateFailedException();
 				}
@@ -111,26 +112,36 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
-			
+			$transaction->commit($transaction_id);			
 			self::__construct($equipment_id);
-			
 			return $equipment_id;
 		}
 		else
 		{
 			throw new EquipmentCreateIDMissingException();
 		}
+	}
+	
+	/**
+	 * Injects $type_id into create()
+	 * @param integer $type_id
+	 */
+	public function ci_set_type_id($type_id)
+	{
+		$this->ci_type_id = $type_id;
+	}
+	
+	/**
+	 * Injects $owner_id into create()
+	 * @param integer $owner_id
+	 */
+	public function ci_set_owner_id($owner_id)
+	{
+		$this->ci_owner_id = $owner_id;
 	}
 	
 	/**
@@ -165,17 +176,11 @@ class Equipment extends Item implements EquipmentInterface, EventListenerInterfa
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			return true;
 		}
 		else

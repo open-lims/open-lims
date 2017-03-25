@@ -751,10 +751,7 @@ class SampleCreateAjax
 		}
 		catch(BaseException $e)
 		{
-			if ($transaction_id != null)
-			{
-				$transaction->rollback($transaction_id);
-			}
+			$transaction->rollback($transaction_id);
 			throw $e;
 		}
 		
@@ -783,10 +780,7 @@ class SampleCreateAjax
 		
 		if ($sample_add_role == "item" or $sample_add_role == "item_parent")
 		{
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			
 			if ($sample_item_retrace)
 			{
@@ -804,10 +798,7 @@ class SampleCreateAjax
 		}
 		else
 		{
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			
 			$paramquery = array();
 			$paramquery['username'] = $username;

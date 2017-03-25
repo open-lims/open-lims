@@ -124,37 +124,25 @@ class ProjectLog implements ProjectLogInterface, EventListenerInterface
 				$project_log_has_status = new ProjectLogHasProjectStatus_Access($project_log_has_status_pk);
 				if ($project_log_has_status->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw ProjectLogDeleteException();
 				}
 			}
 
 			if (ProjectLogHasItem::delete_by_log_id($this->log_id) == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw ProjectLogDeleteException();
 			}
 			
 			if ($this->log->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw ProjectLogDeleteException();
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				$this->__destruct();
 				return true;
 			}

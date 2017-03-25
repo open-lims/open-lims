@@ -620,7 +620,7 @@ function data_browser()
 			url : url,
 			data : additional_params,
 			success : function(data) 
-			{
+			{				
 				var json = $.parseJSON(data);
 				var click_handler = json["handler"];
 				var click_handler_caption = json["handler_caption"];

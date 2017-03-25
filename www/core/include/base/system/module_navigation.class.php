@@ -86,36 +86,24 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 					$change_navigation = new BaseModuleNavigation_Access($id);
 					if ($change_navigation->set_position(null) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
 					if ($this->navigation->set_position($upper_position) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
 					if ($change_navigation->set_position($current_position) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}	
 				}
@@ -158,36 +146,24 @@ class ModuleNavigation implements ModuleNavigationInterface, EventListenerInterf
 					$change_navigation = new BaseModuleNavigation_Access($id);
 					if ($change_navigation->set_position(null) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
 					if ($this->navigation->set_position($lower_position) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
 					if ($change_navigation->set_position($current_position) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}	
 				}

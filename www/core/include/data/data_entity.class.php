@@ -334,21 +334,12 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-	
-	   		if ($transaction_id != null)
-	   		{
-				$transaction->commit($transaction_id);
-			}
-	   		
+			$transaction->commit($transaction_id);	   		
 			self::__construct($data_entity_id);
-			
 	   		return $data_entity_id;
 		}
 		else
@@ -413,17 +404,11 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
-			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+
+			$transaction->commit($transaction_id);
 			return true;
 		}
 		else

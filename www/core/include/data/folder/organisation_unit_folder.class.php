@@ -54,7 +54,7 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
   			parent::__construct($folder_id);
   			$this->organisation_unit_folder = new FolderIsOrganisationUnitFolder_Access($folder_id);
   			$this->organisation_unit_id = $this->organisation_unit_folder->get_organisation_unit_id();
-  			
+ 
   			$organisation_unit = new OrganisationUnit($this->organisation_unit_id);
 			if ($organisation_unit->is_user_in_organisation_unit($user->get_user_id()) == true or 
 				$organisation_unit->is_leader_in_organisation_unit($user->get_user_id()) == true or 
@@ -235,27 +235,18 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 			{
 				if (parent::delete() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -311,25 +302,38 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
     		if ($event_object->get_stores_data() == true)
     		{
     			$organisation_unit_folder = new OrganisationUnitFolder(null);
-	    		if ($organisation_unit_folder->create($event_object->get_organisation_unit_id()) == false)
+    			$organisation_unit_folder->ci_set_organisation_unit_id($event_object->get_organisation_unit_id());
+	    		if ($organisation_unit_folder->create() == false)
 	    		{
 					return false;
 	    		}
     		}	
     	}
     	
-		if ($event_object instanceof OrganisationUnitPostDeleteEvent)
+		if ($event_object instanceof OrganisationUnitDeleteEvent)
     	{
     		if ($event_object->get_stores_data() == true)
     		{
 	    		$folder_id = OrganisationUnitFolder::get_folder_by_organisation_unit_id($event_object->get_organisation_unit_id());
-	    		$organisation_unit_folder = new OrganisationUnitFolder($folder_id);
-				
-				if ($organisation_unit_folder->delete(true, true) == false)
-				{
-					return false;
-				}
+	    		if ($folder_id)
+	    		{
+		    		$organisation_unit_folder = new OrganisationUnitFolder($folder_id);
+		    		$organisation_unit_folder->di_set_content(true);
+		    		$organisation_unit_folder->di_set_recursive(true);
+					if ($organisation_unit_folder->delete() == false)
+					{
+						return false;
+					}
+	    		}
     		}
+    	}
+    	
+    	/**
+    	 * @todo Delete physical folder on disk, seperate it from database action
+    	 */
+    	if ($event_object instanceof OrganisationUnitPostDeleteEvent)
+    	{
+    	
     	}
     	
 		if ($event_object instanceof OrganisationUnitRenameEvent)

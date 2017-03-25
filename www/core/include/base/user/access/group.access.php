@@ -318,14 +318,10 @@ class Group_Access
    	 */
    	public static function exist_group($group_id)
    	{
-		
 		global $db;
 		
 		if (is_numeric($group_id))
-		{
-		
-			$return_array = array();	
-												
+		{	
 			$sql = "SELECT id FROM ".constant("GROUP_TABLE")." WHERE id = :id";
 			$res = $db->prepare($sql);
 			$db->bind_value($res, ":id", $group_id, PDO::PARAM_INT);
@@ -338,7 +334,7 @@ class Group_Access
 			}
 			else
 			{
-				return false;
+					return false;
 			}
 		}
 		else

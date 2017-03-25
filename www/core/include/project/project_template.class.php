@@ -151,27 +151,18 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$oldl = new Oldl(null);
 				if (($oldl_id = $oldl->create($data_entity_id)) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectTemplateCreateOLDLCreateException();
 				}
 		
 				if ($this->project_template->create($id, $title, $category_id, $parent_template, $oldl_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectTemplateCreateException("DB Failed");
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}	
 			}
@@ -214,27 +205,18 @@ class ProjectTemplate implements ProjectTemplateInterface
 			
 			if ($this->project_template->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ProjectTemplateDeleteException("DB delete failed");
 			}
 			
 			if ($oldl->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ProjectTemplateDeleteOLDLDeleteException();
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
 		}

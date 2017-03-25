@@ -289,10 +289,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->unlink_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
@@ -313,28 +310,19 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->link_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
     		
     		if ($this->project_permission->set_user_id($user_id) == false)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     	}
@@ -379,10 +367,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->unlink_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
@@ -403,28 +388,19 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->link_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
     		
     		if ($this->project_permission->set_organisation_unit_id($organisation_unit_id) == false)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     	}
@@ -469,10 +445,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->unlink_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
@@ -493,28 +466,19 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->link_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
     		
     		if ($this->project_permission->set_group_id($group_id) == false)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     	}
@@ -561,10 +525,6 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
 	    				if ($virtual_folder->link_folder($project_folder_id) == false)
 	    				{
-	    					if ($transaction_id != null)
-	    					{
-								$transaction->rollback($transaction_id);
-							}
 				    		return null;
 	    				}
     			}

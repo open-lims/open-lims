@@ -333,7 +333,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 	 * Injects $sample_id into create()
 	 * @param integer $sample_id
 	 */
-	public function ci_set_project_id($sample_id)
+	public function ci_set_sample_id($sample_id)
 	{
 		$this->ci_sample_id = $sample_id;
 	}
@@ -354,27 +354,18 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
 			{
 				if (parent::delete() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}

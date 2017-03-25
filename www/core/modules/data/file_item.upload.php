@@ -41,10 +41,10 @@
 	require_once("../../db/db.php");
 	
 	$database = SystemConfig::get_database();
-	
-	$db = new Database($database['type']);
-	$db->db_connect($database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
-	
+			
+	$db = new Database();
+	@$connection_result = $db->connect($database['type'],$database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
+					
 	require_once("../../include/base/system/transaction.class.php");
 	
 	require_once("../../include/base/system/events/event.class.php");

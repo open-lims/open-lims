@@ -80,6 +80,7 @@ class ProjectVirtualFolder extends VirtualFolder implements ProjectVirtualFolder
 	}
 	
 	/**
+	 * @todo language in name
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
@@ -91,10 +92,13 @@ class ProjectVirtualFolder extends VirtualFolder implements ProjectVirtualFolder
    			$event_object instanceof OrganisationUnitFolderCreateEvent)
     	{
     		$project_virtual_folder = new ProjectVirtualFolder(null);
-			if (($virtual_folder_id = $project_virtual_folder->create($event_object->get_folder_id(), "projects")) == null)
+    		$project_virtual_folder->ci_set_folder_id($event_object->get_folder_id());
+    		$project_virtual_folder->ci_set_name("projects");
+			if (($virtual_folder_id = $project_virtual_folder->create()) == null)
 			{
 				return false;
 			}
+			
 			$project_virtual_folder = new ProjectVirtualFolder($virtual_folder_id);
 			if ($project_virtual_folder->set_project_vfolder() == false)
 			{

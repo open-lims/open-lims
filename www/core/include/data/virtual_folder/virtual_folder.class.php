@@ -126,20 +126,12 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
-			
+			$transaction->commit($transaction_id);			
 			self::__construct($vfolder_id);
-			
 			return $vfolder_id;	
 		}
 		else
@@ -163,7 +155,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 	 */
 	public function ci_set_name($name)
 	{
-		$this->name = $name;
+		$this->ci_name = $name;
 	}
 	
 	/**
@@ -180,10 +172,7 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 			
 			if ($this->unset_children() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			} 
 
@@ -192,36 +181,24 @@ class VirtualFolder extends DataEntity implements VirtualFolderInterface
 			
 			if ($event_handler->get_success() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			
-			if (parent::delete() == false)
+			if ($this->virtual_folder->delete() === false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			
-			if ($this->virtual_folder->delete() == true)
+			if (parent::delete() === true)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
