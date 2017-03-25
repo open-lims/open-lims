@@ -483,7 +483,9 @@ class EquipmentAjax
 			$transaction_id = $transaction->begin();
 			
 			$equipment = new Equipment(null);
-			$equipment_add_successful = $equipment->create($type_id, $user->get_user_id());
+			$equipment->ci_set_type_id($type_id);
+			$equipment->ci_set_owner_id($user->get_user_id());
+			$equipment_add_successful = $equipment->create();
 	
 			if ($equipment_add_successful)
 			{

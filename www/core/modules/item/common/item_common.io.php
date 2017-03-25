@@ -209,9 +209,11 @@ class ItemCommonIO
 									$result[$counter]['type'] = "ajax";
 									$ajax_handling_array = $item_handling_cass::get_item_add_script_handling_class($sub_sub_item_value['type']);
 									require_once("core/modules/".$ajax_handling_array[0]);
-									
+																
 									$item_holder = Item::get_holder_handling_class_by_name($element_array['type']); // Type of the ItemHolder
-									$ajax_init_array = $ajax_handling_array[1]::$ajax_handling_array[2]($sub_sub_item_value['pos_id'], $paramquery, $sub_sub_item_value['type_id'],  $sub_sub_item_value['category_id'], $item_holder, $element_array['fulfilled'][$sub_item_key]['id']);
+									
+									$method = $ajax_handling_array[2];
+									$ajax_init_array = $ajax_handling_array[1]::$method($sub_sub_item_value['pos_id'], $paramquery, $sub_sub_item_value['type_id'],  $sub_sub_item_value['category_id'], $item_holder, $element_array['fulfilled'][$sub_item_key]['id']);
 									
 									$result[$counter]['script'] = $ajax_init_array['script'];
 									$result[$counter]['window_title'] = $ajax_init_array['window_title'];
