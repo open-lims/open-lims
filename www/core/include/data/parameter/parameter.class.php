@@ -62,7 +62,7 @@ class Parameter extends DataEntity implements ParameterInterface, EventListenerI
     	{
     		if (Parameter_Access::exist_parameter_by_parameter_id($id) == true)
     		{
-    			$this->parameter_id = $parameter_id;
+    			$this->parameter_id = $id;
 				$this->parameter = new Parameter_Access($id);
 				
 				$this->parameter_version_id = ParameterVersion_Access::get_current_entry_by_parameter_id($id);

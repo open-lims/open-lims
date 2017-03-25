@@ -40,6 +40,7 @@ class Transaction implements TransactionInterface
 	private $unique_id = null;
 	private $in_transaction = false;
 	
+	private static $counter = 0;
 	private static $exist_instance = false;
 
 	/**
@@ -74,7 +75,8 @@ class Transaction implements TransactionInterface
     {
     	global $db;
     	
-    	$unique_id = uniqid();
+    	$unique_id = uniqid(self::$counter, true);
+    	self::$counter++;
     	
     	if ($this->unique_id === null and $this->in_transaction === false)
     	{

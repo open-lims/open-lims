@@ -220,7 +220,12 @@ class ParameterAjax
 			$parameter_array = json_decode($parameter_array, true);
 
 			$parameter = ParameterTemplateParameter::get_instance(null);
-			$parameter_add_successful = $parameter->create($folder_id, $user->get_user_id(), $type_id, $limit_id, $parameter_array);
+			$parameter->ci_set_folder_id($folder_id);
+			$parameter->ci_set_owner_id($user->get_user_id());
+			$parameter->ci_set_template_id($type_id);
+			$parameter->ci_set_limit_id($limit_id);
+			$parameter->ci_set_parameter_array($parameter_array);
+			$parameter_add_successful = $parameter->create();
 			
 			if ($parameter_add_successful)
 			{				

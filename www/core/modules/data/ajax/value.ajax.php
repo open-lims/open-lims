@@ -266,7 +266,11 @@ class ValueAjax
 		{
 			$value_array = json_decode($value_array, true);
 			$value = Value::get_instance(null);
-			if ($value->create($folder_id, $user->get_user_id(), $type_id, $value_array) != Null)
+			$value->ci_set_folder_id($folder_id);
+			$value->ci_set_owner_id($user->get_user_id());
+			$value->ci_set_type_id($type_id);
+			$value->ci_set_value($value_array);
+			if ($value->create() != Null)
 			{
 				return 1;
 			}
@@ -302,7 +306,11 @@ class ValueAjax
 			$value_array = json_decode($value_array, true);
 
 			$value = Value::get_instance(null);
-			$value_add_successful = $value->create($folder_id, $user->get_user_id(), $type_id, $value_array);
+			$value->ci_set_folder_id($folder_id);
+			$value->ci_set_owner_id($user->get_user_id());
+			$value->ci_set_type_id($type_id);
+			$value->ci_set_value($value_array);
+			$value_add_successful = $value->create();
 			
 			if ($value_add_successful)
 			{

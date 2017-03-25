@@ -24,7 +24,6 @@
 /**
  * 
  */
-require_once("interfaces/project_permission_user.interface.php");
 require_once("interfaces/project_permission_case.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
@@ -36,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project User Permission Management Class
  * @package project
  */
-class ProjectPermissionUser extends ProjectPermission implements ProjectPermissionUserInterface, ProjectPermissionCaseInterface
+class ProjectPermissionUser extends ProjectPermission implements ProjectPermissionCaseInterface
 {
 	function __construct($permission_id)
 	{
@@ -61,7 +60,7 @@ class ProjectPermissionUser extends ProjectPermission implements ProjectPermissi
 	 * @throws ProjectPermissionUserCreateException
 	 * @throws ProjectPermissionUserCreateVirtualFolderException
 	 */
-	public function create($user_id, $project_id, $permission, $owner_id, $intention)
+	public function create($user_id, $organisation_unit_id, $group_id,  $project_id, $permission, $owner_id, $intention)
     {
     	global $transaction;
 

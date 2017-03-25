@@ -527,7 +527,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     			try
     			{
     				$project_permission = new ProjectPermissionOrganisationUnit(null);
-    				$return_value = $project_permission->create($organisation_unit_id, $this->project_id, (int)Registry::get_value("project_organisation_unit_default_permission"), null, 3);
+    				$return_value = $project_permission->create(null, $organisation_unit_id, null, $this->project_id, (int)Registry::get_value("project_organisation_unit_default_permission"), null, 3);
     			}
     			catch(ProjectPermissionOrganisationUnitException $e)
     			{
@@ -545,7 +545,7 @@ class ProjectSecurity implements ProjectSecurityInterface
 					try
 					{
 						$project_permission = new ProjectPermissionGroup(null);
-						$project_permission->create($value, $this->project_id, (int)Registry::get_value("project_group_default_permission"), null, 4);
+						$project_permission->create(null, null, $value, $this->project_id, (int)Registry::get_value("project_group_default_permission"), null, 4);
 					}
 	    			catch(ProjectPermissionGroupException $e)
 	    			{

@@ -68,39 +68,32 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 	 * @throws ParameterCreateTemplateLinkFailedException
 	 * @throws ParameterCreateIDMissingException
 	 */
-	public function create($folder_id, $owner_id, $template_id, $limit_id, $parameter_array)
+	public function create()
 	{
 		global $transaction;
 		
-		if (is_numeric($this->ci_folder_id) and is_numeric($this->owner_id) and is_numeric($this->template_id) and is_numeric($this->limit_id) and $this->parameter_array)
+		if (is_numeric($this->ci_folder_id) and is_numeric($this->ci_owner_id) and is_numeric($this->ci_template_id) and is_numeric($this->ci_limit_id) and is_array($this->ci_parameter_array))
 		{			
-			if (is_array($this->parameter_array))
+			$transaction_id = $transaction->begin();
+			
+			try
 			{
-				$transaction_id = $transaction->begin();
+				$parameter_id = parent::create();
 				
-				try
+				$parameter_has_template = new ParameterHasTemplate_Access(null, null);
+				if ($parameter_has_template->create($parameter_id, $this->ci_template_id) == null)
 				{
-					$parameter_id = parent::create();
-					
-					$parameter_has_template = new ParameterHasTemplate_Access(null, null);
-					if ($parameter_has_template->create($parameter_id, $this->template_id) == null)
-					{
-						throw new ParameterCreateTemplateLinkFailedException();
-					}
+					throw new ParameterCreateTemplateLinkFailedException();
 				}
-				catch(BaseException $e)
-				{
-					$transaction->rollback($transaction_id);
-					throw $e;
-				}
-				
-				$transaction->commit($transaction_id);
-				return $parameter_id;
 			}
-			else
+			catch(BaseException $e)
 			{
-				throw new ParameterCreateIDMissingException();
+				$transaction->rollback($transaction_id);
+				throw $e;
 			}
+			
+			$transaction->commit($transaction_id);
+			return $parameter_id;
 		}
 		else
 		{

@@ -322,8 +322,15 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					}			
 					
 					// Create Project Description
+					/**
+					 * @todo remove fixed id
+					 */
 					$value = Value::get_instance(null);
-					if ($value->create($folder_id, $owner_id, 2, $description) == null)
+					$value->ci_set_folder_id($folder_id);
+					$value->ci_set_owner_id($owner_id);
+					$value->ci_set_type_id(2);
+					$value->ci_set_value($description);
+					if ($value->create() == null)
 					{
 						$project_folder->di_set_content(true);
 						$project_folder->di_set_recursive(true);
@@ -359,8 +366,11 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					if ($this->template_data_array and is_numeric($this->template_data_type_id))
 					{
 						$value = Value::get_instance(null);				
-						
-						if ($value->create($folder_id, $owner_id, $this->template_data_type_id, $this->template_data_array) == null)
+						$value->ci_set_folder_id($folder_id);
+						$value->ci_set_owner_id($owner_id);
+						$value->ci_set_type_id($this->template_data_type_id);
+						$value->ci_set_value($this->template_data_array);
+						if ($value->create() == null)
 						{
 							$project_folder->di_set_content(true);
 							$project_folder->di_set_recursive(true);
@@ -401,7 +411,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						try
 						{
 							$project_permission = new ProjectPermissionUser(null);
-							$project_permission->create($owner_id, $project_id, (int)Registry::get_value("project_user_default_permission"), null, 1);
+							$project_permission->create($owner_id, null, null, $project_id, (int)Registry::get_value("project_user_default_permission"), null, 1);
 						}
 						catch (ProjectPermissionUserException $e)
 						{
@@ -421,7 +431,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								try
 								{
 									$project_permission = new ProjectPermissionUser(null);
-									$project_permission->create($value, $project_id, (int)Registry::get_value("project_leader_default_permission"), null, 2);
+									$project_permission->create($value, null, null, $project_id, (int)Registry::get_value("project_leader_default_permission"), null, 2);
 								}
 								catch (ProjectPermissionUserException $e)
 								{
@@ -437,7 +447,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						try
 						{
 							$project_permission = new ProjectPermissionOrganisationUnit(null);
-							$project_permission->create($organisation_unit_id, $project_id, (int)Registry::get_value("project_organisation_unit_default_permission"), null, 3);
+							$project_permission->create(null, $organisation_unit_id, null, $project_id, (int)Registry::get_value("project_organisation_unit_default_permission"), null, 3);
 						}
 						catch (ProjectPermissionOrganisationUnitException $e)
 						{
@@ -458,7 +468,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								try
 								{
 									$project_permission = new ProjectPermissionUser(null);
-									$project_permission->create($value, $project_id, (int)Registry::get_value("project_quality_manager_default_permission"), null, 5);
+									$project_permission->create($value, null, null, $project_id, (int)Registry::get_value("project_quality_manager_default_permission"), null, 5);
 								}
 								catch (ProjectPermissionUserException $e)
 								{
@@ -480,7 +490,7 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								try
 								{
 									$project_permission = new ProjectPermissionGroup(null);
-									$project_permission->create($value, $project_id, (int)Registry::get_value("project_group_default_permission"), null, 4);
+									$project_permission->create(null, null, $value, $project_id, (int)Registry::get_value("project_group_default_permission"), null, 4);
 								}
 								catch (ProjectPermissionGroupException $e)
 								{

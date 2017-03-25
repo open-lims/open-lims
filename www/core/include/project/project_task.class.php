@@ -963,7 +963,7 @@ class ProjectTask implements ProjectTaskInterface, EventListenerInterface
 					foreach ($project_relation_array as $key => $value)
 					{
 						$project_task_has_previous_task = new ProjectTaskHasPreviousTask_Access(null, null);
-						if ($project_task_has_previous_task->create($value['next'], $value['previous']) == false
+						if ($project_task_has_previous_task->create($value['next'], $value['previous']) == false)
 						{
 							$transaction->rollback($transaction_id);
 							throw new ProjectTaskDeleteException("Could not remove task link");

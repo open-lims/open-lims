@@ -24,7 +24,6 @@
 /**
  * 
  */
-require_once("interfaces/project_permission_organisation_unit.interface.php");
 require_once("interfaces/project_permission_case.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
@@ -36,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Organisation Unit Permission Management Class
  * @package project
  */
-class ProjectPermissionOrganisationUnit extends ProjectPermission implements ProjectPermissionOrganisationUnitInterface, ProjectPermissionCaseInterface
+class ProjectPermissionOrganisationUnit extends ProjectPermission implements ProjectPermissionCaseInterface
 {
 	function __construct($permission_id)
 	{
@@ -61,7 +60,7 @@ class ProjectPermissionOrganisationUnit extends ProjectPermission implements Pro
 	 * @throws ProjectPermissionOrganisationUnitCreateException
 	 * @throws ProjectPermissionOrganisationUnitCreateVirtualFolderException
 	 */
-	public function create($organisation_unit_id, $project_id, $permission, $owner_id, $intention)
+	public function create($user_id, $organisation_unit_id, $group_id,  $project_id, $permission, $owner_id, $intention)
     {
     	global $transaction;
 

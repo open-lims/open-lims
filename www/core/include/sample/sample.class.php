@@ -339,8 +339,12 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					
 					if ($this->template_data_type == "value")
 					{
-						$value = Value::get_instance(null);				
-						if ($value->create($this->sample_folder_id, $user->get_user_id(), $this->template_data_type_id, $this->template_data_array) == null)
+						$value = Value::get_instance(null);		
+						$value->ci_set_folder_id($this->sample_folder_id);
+						$value->ci_set_owner_id($user->get_user_id());
+						$value->ci_set_type_id($this->template_data_type_id);
+						$value->ci_set_value($this->template_data_array);
+						if ($value->create() == null)
 						{
 							throw new SampleCreateItemValueException();
 						}
