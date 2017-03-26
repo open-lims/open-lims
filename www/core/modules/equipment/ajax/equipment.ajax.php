@@ -378,38 +378,40 @@ class EquipmentAjax
 				{
 					$equipment_cat_array = EquipmentType::list_entries_by_cat_id($value);
 	
-					if (is_array($equipment_cat_array) and count($equipment_cat_array) >= 1)
+					if (!is_array($equipment_cat_array))
 					{
-						if (!in_array(1, $equipment_cat_array))
-						{
-							$equipment_cat_array[] = 1;
-						}
-						
-						if (!in_array(2, $equipment_cat_array))
-						{
-							$equipment_cat_array[] = 2;
-						}
-						
-						if (!in_array(3, $equipment_cat_array))
-						{
-							$equipment_cat_array[] = 3;
-						}
-						
-						foreach ($equipment_cat_array as $key => $value)
-						{
-							if (!in_array($value, $hit_array))
-							{
-								$equipment_type = new EquipmentType($value);
-						
-								$result[$counter]['value'] = $value;
-								$result[$counter]['disabled'] = "";
-								$result[$counter]['content'] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
-								
-								$counter++;
-								array_push($hit_array, $value);
-							}
-						} 
+							$equipment_cat_array = array();
 					}
+					
+					if (!in_array(1, $equipment_cat_array))
+					{
+						$equipment_cat_array[] = 1;
+					}
+					
+					if (!in_array(2, $equipment_cat_array))
+					{
+						$equipment_cat_array[] = 2;
+					}
+					
+					if (!in_array(3, $equipment_cat_array))
+					{
+						$equipment_cat_array[] = 3;
+					}		
+						
+					foreach ($equipment_cat_array as $key => $value)
+					{
+						if (!in_array($value, $hit_array))
+						{
+							$equipment_type = new EquipmentType($value);
+					
+							$result[$counter]['value'] = $value;
+							$result[$counter]['disabled'] = "";
+							$result[$counter]['content'] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+							
+							$counter++;
+							array_push($hit_array, $value);
+						}
+					} 
 				}
 			}
 			else

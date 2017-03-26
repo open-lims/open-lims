@@ -644,7 +644,8 @@ class AdminUserIO
 				if (file_exists($value['class_path']))
 				{
 					require_once($value['class_path']);
-					$module_settings_return = $value['class']::$value['method']($user_id);
+					$method = $value['method'];
+					$module_settings_return = $value['class']::$method($user_id);
 					$module_settings_array[$module_settings_counter]['title'] = Language::get_message($value['language_address'], "dialog");
 					$module_settings_array[$module_settings_counter]['value'] = $module_settings_return['value'];
 					$module_settings_array[$module_settings_counter]['params'] = $module_settings_return['params'];
