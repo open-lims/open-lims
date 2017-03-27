@@ -53,13 +53,13 @@ class Security implements SecurityInterface
  		global $db;
  		
 		foreach ($_GET as $key => $value)
-		{
+		{			
 			$_GET[$key] = htmlentities($_GET[$key], ENT_NOQUOTES, "UTF-8", false);
 			$_GET[$key] = mb_convert_encoding($_GET[$key], "UTF-8", "auto");
 		}
  		
  		foreach ($_POST as $key => $value)
-		{			
+		{				
 			$_POST[$key] = htmlentities($_POST[$key], ENT_NOQUOTES, "UTF-8", false);
 			$_POST[$key] = mb_convert_encoding($_POST[$key], "UTF-8", "auto");	
 		}

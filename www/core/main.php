@@ -189,7 +189,7 @@ class Main
 		
 		if (!isset($GLOBALS['fatal_error']))
 		{
-			if ($_GET['session_id'])
+			if (isset($_GET['session_id']))
 			{
 				try 
 				{
