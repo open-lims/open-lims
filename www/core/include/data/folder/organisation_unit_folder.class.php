@@ -318,8 +318,6 @@ class OrganisationUnitFolder extends Folder implements ConcreteFolderCaseInterfa
 	    		if ($folder_id)
 	    		{
 		    		$organisation_unit_folder = new OrganisationUnitFolder($folder_id);
-		    		$organisation_unit_folder->di_set_content(true);
-		    		$organisation_unit_folder->di_set_recursive(true);
 					if ($organisation_unit_folder->delete() == false)
 					{
 						return false;

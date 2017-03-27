@@ -295,8 +295,6 @@ class FolderAjax
 		$folder = Folder::get_instance($folder_id);
 		if ($folder->can_command_folder())
 		{
-			$folder->di_set_content(true);
-			$folder->di_set_recursive(true);
 			$folder->delete();
 			return "1";
 		}

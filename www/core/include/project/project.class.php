@@ -215,8 +215,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$project_folder->ci_set_base_folder_id($base_folder_id);
 					if (($folder_id = $project_folder->create()) == null)
 					{
-						$project_folder->di_set_content(true);
-						$project_folder->di_set_recursive(true);
 						$project_folder->delete();
 						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateFolderException("Could not create main folder");
@@ -236,8 +234,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$supplementary_folder->ci_set_owner_id($owner_id);
 					if (($supplementary_folder->create()) == null)
 					{
-						$project_folder->di_set_content(true);
-						$project_folder->di_set_recursive(true);
 						$project_folder->delete();
 						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateSupplementaryFolderException("Could not create supplementary folder");
@@ -269,8 +265,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						$project_status_folder->ci_set_project_status_id($value);
 						if (($status_folder_id = $project_status_folder->create()) == null)
 						{
-							$project_folder->di_set_content(true);
-							$project_folder->di_set_recursive(true);
 							$project_folder->delete();
 							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreateStatusFolderException("Could not create status folder");
@@ -311,8 +305,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								$sub_folder->ci_set_owner_id($user->get_user_id());
 								if ($sub_folder->create() == null)
 								{
-									$project_folder->di_set_content(true);
-									$project_folder->di_set_recursive(true);
 									$project_folder->delete();
 									$transaction->rollback($transaction_id, false);
 									throw new ProjectCreateStatusSubFolderException("Could not create status sub folder");
@@ -332,8 +324,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					$value->ci_set_value($description);
 					if ($value->create() == null)
 					{
-						$project_folder->di_set_content(true);
-						$project_folder->di_set_recursive(true);
 						$project_folder->delete();
 						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateDescriptionException("Could not create description value");
@@ -346,8 +336,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					
 					if ($project_item->link_item() == false)
 					{
-						$project_folder->di_set_content(true);
-						$project_folder->di_set_recursive(true);
 						$project_folder->delete();
 						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateDescriptionException("Could not create description item link");
@@ -355,8 +343,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 					
 					if ($project_item->set_required(true) == false)
 					{
-						$project_folder->di_set_content();
-						$project_folder->di_set_recursive();
 						$project_folder->delete();
 						$transaction->rollback($transaction_id, false);
 						throw new ProjectCreateDescriptionException("Could not create description item role");
@@ -372,8 +358,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						$value->ci_set_value($this->template_data_array);
 						if ($value->create() == null)
 						{
-							$project_folder->di_set_content(true);
-							$project_folder->di_set_recursive(true);
 							$project_folder->delete();
 							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreateMasterDataException("Could not create master-data value");
@@ -386,8 +370,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						if ($project_item->link_item() == false)
 						{
-							$project_folder->di_set_content(true);
-							$project_folder->di_set_recursive(true);
 							$project_folder->delete();
 							$transaction->rollback($transaction_id, false);	
 							throw new ProjectCreateMasterDataException("Could not create master-data item link");
@@ -395,8 +377,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						
 						if ($project_item->set_required(true) == false)
 						{
-							$project_folder->di_set_content(true);
-							$project_folder->di_set_recursive(true);
 							$project_folder->delete();
 							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreateMasterDataException("Could not create master-data item role");
@@ -415,8 +395,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						}
 						catch (ProjectPermissionUserException $e)
 						{
-							$project_folder->di_set_content(true);
-							$project_folder->di_set_recursive(true);
 							$project_folder->delete();
 							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreatePermissionUserException("Could not create user/owner permission");
@@ -435,8 +413,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 								catch (ProjectPermissionUserException $e)
 								{
-									$project_folder->di_set_content(true);
-									$project_folder->di_set_recursive(true);
 									$project_folder->delete();
 									$transaction->rollback($transaction_id, false);
 									throw new ProjectCreatePermissionLeaderException("Could not create leader permission");
@@ -451,8 +427,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 						}
 						catch (ProjectPermissionOrganisationUnitException $e)
 						{
-							$project_folder->di_set_content(true);
-							$project_folder->di_set_recursive(true);
 							$project_folder->delete();
 							$transaction->rollback($transaction_id, false);
 							throw new ProjectCreatePermissionOrganisationUnitException("Could not create Organisation Unit permission");
@@ -472,8 +446,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 								catch (ProjectPermissionUserException $e)
 								{
-									$project_folder->di_set_content(true);
-									$project_folder->di_set_recursive(true);
 									$project_folder->delete();
 									$transaction->rollback($transaction_id, false);
 									throw new ProjectCreatePermissionQualityManagerException("Could not create quality-manager permission");
@@ -494,8 +466,6 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 								}
 								catch (ProjectPermissionGroupException $e)
 								{
-									$project_folder->di_set_content(true);
-									$project_folder->di_set_recursive(true);
 									$project_folder->delete();
 									$transaction->rollback($transaction_id, false);
 									throw new ProjectCreatePermissionGroupException("Could not create group permissions");
@@ -669,30 +639,28 @@ class Project implements ProjectInterface, EventListenerInterface, ItemHolderInt
 				throw new ProjectDeleteException("Extension delete failed");
     		}
     		
+    		$project_folder_id = ProjectFolder::get_folder_by_project_id($tmp_project_id);
+    		$project_folder = new ProjectFolder($project_folder_id);
+    		if ($project_folder->delete() == false)
+    		{
+    			$transaction->rollback($transaction_id);
+    			throw new ProjectDeleteFolderException();
+    		}
+    		
     		// Project DB Entry
     		if ($this->project->delete() == false)
     		{
 				$transaction->rollback($transaction_id);
 				throw new ProjectDeleteException("Database delete failed");
     		}
-    		else
-    		{
-    			$this->__destruct();
-	    		$project_folder_id = ProjectFolder::get_folder_by_project_id($tmp_project_id);
-	    		$project_folder = new ProjectFolder($project_folder_id);
-	    		$project_folder->di_set_content(true);
-	    		$project_folder->di_set_recursive(true);
-	    		if ($project_folder->delete() == false)
-	    		{
-					$transaction->rollback($transaction_id);
-					throw new ProjectDeleteFolderException();
-	    		}
-	    		else
-	    		{
-					$transaction->commit($transaction_id);
-					return true;
-	    		}
-    		}
+    		
+    		/**
+    		 * @todo post event for physical folder delete
+    		 */
+    		
+    		$this->__destruct();	
+			$transaction->commit($transaction_id);
+			return true;
     	}
     	else
     	{

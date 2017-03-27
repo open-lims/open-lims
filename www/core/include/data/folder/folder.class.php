@@ -55,8 +55,8 @@ class Folder extends DataEntity implements FolderInterface
 	private $ci_toid;
 	private $ci_path;
 	
-	private $di_recursive;
-	private $di_content;
+	private $di_recursive = true;
+	private $di_content = true;
 	
 	/**
 	 * Get instance via static::get_instance($folder_id)
@@ -358,8 +358,6 @@ class Folder extends DataEntity implements FolderInterface
 						foreach($subfolder_array as $key => $value)
 						{
 							$folder = Folder::get_instance($value);
-							$folder->di_content(true);
-							$folder->di_recursive(true);
 							if ($folder->delete() == false)
 							{
 								$transaction->rollback($transaction_id);

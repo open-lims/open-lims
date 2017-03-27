@@ -314,8 +314,6 @@ class GroupFolder extends Folder implements ConcreteFolderCaseInterface, EventLi
     		if ($folder_id)
     		{
 	    		$group_folder = new GroupFolder($folder_id);
-				$group_folder->di_set_content(true);
-				$group_folder->di_set_recursive(true);
 				if ($group_folder->delete() == false)
 				{
 					return false;

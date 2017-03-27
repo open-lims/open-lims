@@ -160,8 +160,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 			$sample_folder->ci_set_sample_id($sample_id);
 			if (($folder_id = $sample_folder->create()) == null)
 			{
-				$sample_folder->di_set_content(true);
-				$sample_folder->di_set_recursive(true);
 				$sample_folder->delete();
 				throw new SampleCreateFolderException("Could not create main folder");
 			}
@@ -204,8 +202,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 						$sub_folder->ci_set_owner_id($user->get_user_id());
 						if (($sub_folder_id = $sub_folder->create()) == null)
 						{
-							$sample_folder->di_set_content(true);
-							$sample_folder->di_set_recursive(true);
 							$sample_folder->delete();
 							throw new SampleCreateSubFolderException("Could not create sub folder");
 						}
@@ -899,8 +895,6 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 				{
 					throw new SampleDeleteItemException();
 				}
-				
-				parent::delete();
 	    		
 				$sample_delete_event = new SampleDeleteEvent($tmp_sample_id);
 				$event_handler = new EventHandler($sample_delete_event);
@@ -916,23 +910,25 @@ class Sample extends Item implements SampleInterface, EventListenerInterface, It
 					throw new SampleDeleteItemLinkException();
 				}
 				
+				$folder_id = SampleFolder::get_folder_by_sample_id($tmp_sample_id);
+				$folder = Folder::get_instance($folder_id);
+				if ($folder->delete() == false)
+				{
+					throw new SampleDeleteFolderException();
+				}
+				
+				parent::delete();
+				
 				if ($this->sample->delete() == false)
 				{
 					throw new SampleDeleteFailedException();
 				}
-				else
-				{
-					$this->__destruct();
-		    		$folder_id = SampleFolder::get_folder_by_sample_id($tmp_sample_id);
-		    		$folder = Folder::get_instance($folder_id);
-		    		$folder->di_set_content(true);
-		    		$folder->di_set_recursive(true);
-		    		if ($folder->delete() == false)
-		    		{
-						throw new SampleDeleteFolderException();
-		    		}
-				}
-			
+
+				/**
+				 * @todo post event for physical folder delete
+				 */
+				
+				$this->__destruct();
 			}
 			catch(BaseException $e)
 			{

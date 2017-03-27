@@ -326,8 +326,6 @@ class UserFolder extends Folder implements ConcreteFolderCaseInterface, EventLis
     		if ($folder_id)
     		{
 	    		$user_folder = new UserFolder($folder_id);
-				$user_folder->di_set_content(true);
-				$user_folder->di_set_recursive(true);
 				if ($user_folder->delete() == false)
 				{
 					return false;
