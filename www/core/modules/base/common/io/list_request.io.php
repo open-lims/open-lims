@@ -79,7 +79,7 @@ class ListRequest_IO
     			
     			foreach ($this->rows as $key => $value)
 				{
-					if (is_array($this->first_line_entry[$value[1]]))
+					if (isset($value[1]) and isset($this->first_line_entry[$value[1]]) and is_array($this->first_line_entry[$value[1]]))
 					{
 						
 						if (empty($this->first_line_entry[$value[1]]['link']) === false and empty($this->first_line_entry[$value[1]]['content']) === false)
@@ -104,9 +104,13 @@ class ListRequest_IO
 					}
 					else
 					{
-						if($this->first_line_entry[$value[1]] == "")
+						if(isset($this->first_line_entry[$value[1]]) and $this->first_line_entry[$value[1]] === "")
 						{
 							$this->first_line_entry[$value[1]] = "&nbsp;"; //we all love IE
+						}
+						elseif(!isset($this->first_line_entry[$value[1]]))
+						{
+							$this->first_line_entry[$value[1]] = "&nbsp;";
 						}
 						$return .= "<td>".$this->first_line_entry[$value[1]]."</td>";
 					}
@@ -154,7 +158,7 @@ class ListRequest_IO
 						
 						$content_string = "";
 						
-						if (is_array($content[$row_value[1]]) and empty($content[$row_value[1]]['class']) === false)
+						if (isset($row_value[1]) and isset($content[$row_value[1]]) and is_array($content[$row_value[1]]) and empty($content[$row_value[1]]['class']) === false)
 						{
 							if (empty($row_value[4]) === false)
 							{
@@ -189,7 +193,7 @@ class ListRequest_IO
 						
 						
 						// !! LABEL !!
-						if (is_array($content[$row_value[1]]))
+						if (isset($row_value[1]) and isset($content[$row_value[1]]) and is_array($content[$row_value[1]]))
 						{
 							if (empty($content[$row_value[1]]['label']) === false)
 							{
@@ -217,7 +221,7 @@ class ListRequest_IO
 								$content_string .= "</span>";
 							}
 						}
-						else
+						elseif(isset($row_value[1]) and isset($content[$row_value[1]]))
 						{
 							$content_string .= $content[$row_value[1]];
 						}

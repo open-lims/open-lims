@@ -97,7 +97,7 @@ class DataEntity extends Item implements DataEntityInterface, EventListenerInter
 		{	
 			$this->data_entity_permission = new DataEntityPermission($this->data_entity->get_permission(), $this->data_entity->get_automatic(), $this->data_entity->get_owner_id(), $this->data_entity->get_owner_group_id());
 			
-			if (!self::$data_entity_object_array[$entity_id])
+			if (!isset(self::$data_entity_object_array[$entity_id]))
 			{
 				self::$data_entity_object_array[$entity_id] = $this;
 			}

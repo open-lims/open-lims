@@ -42,9 +42,9 @@ class ExtensionRequest
 	 */
 	public static function io_handler($alias)
 	{
-		if ($_GET['extension'])
+		if (System::get_get("extension"))
 		{
-			$extension = new Extension($_GET['extension']);
+			$extension = new Extension(System::get_get("extension"));
 
 			$main_file = constant("EXTENSION_DIR")."/".$extension->get_folder()."/".$extension->get_main_file();
 			$main_class = $extension->get_class();

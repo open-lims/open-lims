@@ -32,54 +32,56 @@ class EquipmentRequest
 	 */
 	public static function ajax_handler($alias)
 	{
-		switch($_GET['run']):
+		switch(System::get_get("run")):
 			
 			case "list_equipment_items":
 				require_once("ajax/equipment.ajax.php");
 				echo EquipmentAjax::list_equipment_items(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_equipment_items":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::count_equipment_items($_POST['argument_array']);
+				echo EquipmentAjax::count_equipment_items(System::get_post("argument_array"));
 			break;
 			
 			case "list_organisation_unit_related_equipment":
 				require_once("ajax/equipment.ajax.php");
 				echo EquipmentAjax::list_organisation_unit_related_equipment(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_organisation_unit_related_equipment":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::count_organisation_unit_related_equipment($_POST['argument_array']);
+				echo EquipmentAjax::count_organisation_unit_related_equipment(System::get_post("argument_array"));
 			break;
 			
 			case "equipment_add_as_item_window":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::add_as_item_window($_POST['get_array'], $_POST['type_array'], $_POST['category_array']);
+				echo EquipmentAjax::add_as_item_window(System::get_post("get_array"), 
+														System::get_post("type_array"), 
+														System::get_post("category_array"));
 			break;
 			
 			case "equipment_add_as_item":
 				require_once("ajax/equipment.ajax.php");
-				echo EquipmentAjax::add_as_item($_POST['get_array'], $_POST['type_id']);
+				echo EquipmentAjax::add_as_item(System::get_post("get_array"), System::get_post("type_id"));
 			break;
 				
 		endswitch;

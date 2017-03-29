@@ -36,7 +36,7 @@ class DataIO
 		
 		$data_browser = new DataBrowser();
 		
-		if ($_GET['vfolder_id'])
+		if (isset($_GET['vfolder_id']))
 		{
 			$virtual_folder = new VirtualFolder($_GET['vfolder_id']);
 			
@@ -44,7 +44,7 @@ class DataIO
 			$folder_id = null;
 			$data_path = new DataPath(null, $_GET['vfolder_id']);
 		}
-		elseif ($_GET['folder_id'])
+		elseif (isset($_GET['folder_id']))
 		{
 			$folder = Folder::get_instance($_GET['folder_id']);
 			

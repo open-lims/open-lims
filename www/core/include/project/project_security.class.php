@@ -46,7 +46,7 @@ class ProjectSecurity implements ProjectSecurityInterface
     	if (is_numeric($project_id))
     	{
     		$project = new Project($project_id);
-			if ($_GET['project_id'] != ($master_project_id = $project->get_master_project_id())) {
+			if ($project_id != ($master_project_id = $project->get_master_project_id())) {
 				$project = new Project($master_project_id);
 				$current_project_id = $master_project_id;
 			}else{

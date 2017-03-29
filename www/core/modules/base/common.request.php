@@ -35,9 +35,9 @@ class CommonRequest
 	 */
 	public static function common_dialog()
 	{
-		if ($_GET['dialog'])
+		if (System::get_get("dialog"))
 		{
-			$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", $_GET['dialog']);
+			$module_dialog = ModuleDialog::get_by_type_and_internal_name("common_dialog", System::get_get("dialog"));
 			
 			if (file_exists($module_dialog['class_path']))
 			{

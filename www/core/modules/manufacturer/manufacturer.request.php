@@ -32,44 +32,46 @@ class ManufacturerRequest
 	 */
 	public static function ajax_handler($alias)
 	{
-		switch($_GET['run']):
+		switch(System::get_get("run")):
 	
 			case "exist_name":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::exist_name($_POST['name']);
+				echo ManufacturerAjax::exist_name(System::get_post("name"));
 			break;
 			
 			case "add_entry":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::add_entry($_POST['name']);
+				echo ManufacturerAjax::add_entry(System::get_post("name"));
 			break;
 		
 			case "get_number_of_entries":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::get_number_of_entries($_POST['string']);
+				echo ManufacturerAjax::get_number_of_entries(System::get_post("string"));
 			break;
 			
 			case "get_name":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::get_name($_POST['id']);
+				echo ManufacturerAjax::get_name(System::get_post("id"));
 			break;
 			
 			case "get_next_entries":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::get_next_entries($_POST['number'], $_POST['start'], $_POST['string']);
+				echo ManufacturerAjax::get_next_entries(System::get_post("number"), 
+														System::get_post("start"), 
+														System::get_post("string"));
 			break;
 			
 			case "list_manufacturers":
 				require_once("ajax/manufacturer.ajax.php");
 				echo ManufacturerAjax::list_manufacturers(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['css_page_id'],  
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("css_page_id"),  
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
@@ -80,7 +82,7 @@ class ManufacturerRequest
 			
 			case "delete":
 				require_once("ajax/manufacturer.ajax.php");
-				echo ManufacturerAjax::delete($_POST['id']);
+				echo ManufacturerAjax::delete(System::get_post("id"));
 			break;
 				
 		endswitch;

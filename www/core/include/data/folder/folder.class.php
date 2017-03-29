@@ -1049,7 +1049,7 @@ class Folder extends DataEntity implements FolderInterface
     {    	
     	if (is_numeric($folder_id) and $folder_id > 0)
     	{
-			if (self::$folder_object_array[$folder_id])
+			if (isset(self::$folder_object_array[$folder_id]))
 			{
 				return self::$folder_object_array[$folder_id];
 			}
