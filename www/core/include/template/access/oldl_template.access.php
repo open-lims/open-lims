@@ -45,13 +45,15 @@ class OldlTemplate_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id='".$oldl_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $oldl_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
 			{
-				$this->oldl_id		= $oldl_id;
+				$this->oldl_id			= $oldl_id;
 				$this->data_entity_id	= $data['data_entity_id'];
 			}
 			else
@@ -81,17 +83,26 @@ class OldlTemplate_Access
 		if (is_numeric($data_entity_id))
 		{
 			$sql_write = "INSERT INTO ".constant("OLDL_TEMPLATE_TABLE")." (id,data_entity_id) " .
-					"VALUES (nextval('".self::OLDL_TEMPLATE_PK_SEQUENCE."'::regclass),".$data_entity_id.")";
+					"VALUES (nextval('".self::OLDL_TEMPLATE_PK_SEQUENCE."'::regclass),:data_entity_id)";
 					
-			$db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":data_entity_id", $data_entity_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
-			$sql_read = "SELECT id FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id = currval('".self::OLDL_TEMPLATE_PK_SEQUENCE."'::regclass)";
-			$res_read = $db->db_query($sql_read);
-			$data_read = $db->fetch($res_read);
-								
-			self::__construct($data_read['id']);
-			
-			return $data_read['id'];	
+			if ($db->row_count($res_write) == 1)
+			{
+				$sql_read = "SELECT id FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id = currval('".self::OLDL_TEMPLATE_PK_SEQUENCE."'::regclass)";
+				$res_read = $db->db_query($sql_read);
+				$data_read = $db->fetch($res_read);
+									
+				self::__construct($data_read['id']);
+				
+				return $data_read['id'];
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{
@@ -108,12 +119,14 @@ class OldlTemplate_Access
 
 		if ($this->oldl_id)
 		{
-			$oldl_id_tmp = $this->oldl_id;
+			$id_tmp = $this->oldl_id;
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id = ".$oldl_id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -155,8 +168,11 @@ class OldlTemplate_Access
 			
 		if ($this->oldl_id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".constant("OLDL_TEMPLATE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->oldl_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("OLDL_TEMPLATE_TABLE")." SET data_entity_id = :data_entity_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->oldl_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":data_entity_id", $data_entity_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -185,8 +201,10 @@ class OldlTemplate_Access
 		
 		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT * FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE data_entity_id='".$data_entity_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("OLDL_TEMPLATE_TABLE")." WHERE data_entity_id = :data_entity_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_id", $data_entity_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])

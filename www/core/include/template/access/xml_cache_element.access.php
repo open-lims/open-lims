@@ -49,15 +49,29 @@ class XmlCacheElement_Access
 			$field_3 = serialize($field_3);
 			
 			$sql_write = "INSERT INTO ".constant("XML_CACHE_ELEMENT_TABLE")." (primary_key,toid,field_0,field_1,field_2,field_3) " .
-					"VALUES (nextval('".self::XML_CACHE_ELEMENT_PK_SEQUENCE."'::regclass),".$toid.",'".$field_0."','".$field_1."','".$field_2."','".$field_3."')";
+					"VALUES (nextval('".self::XML_CACHE_ELEMENT_PK_SEQUENCE."'::regclass), :toid, :field_0, :field_1, :field_2, :field_3)";
 					
-			$db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":toid", $toid, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":field_0", $field_0, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":field_1", $field_1, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":field_2", $field_2, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":field_3", $field_3, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
-			$sql_read = "SELECT primary_key FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE primary_key = currval('".self::XML_CACHE_ELEMENT_PK_SEQUENCE."'::regclass)";
-			$res_read = $db->db_query($sql_read);
-			$data_read = $db->fetch($res_read);
-			
-			return $data_read['id'];
+			if ($db->row_count($res_write) == 1)
+			{
+				$sql_read = "SELECT primary_key FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE primary_key = currval('".self::XML_CACHE_ELEMENT_PK_SEQUENCE."'::regclass)";
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
+				$data_read = $db->fetch($res_read);
+				
+				return $data_read['primary_key'];
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{
@@ -75,8 +89,10 @@ class XmlCacheElement_Access
 		
 		if (is_numeric($toid))
 		{	
-			$sql = "DELETE FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE toid = ".$toid."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE toid = :toid";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":toid", $toid, PDO::PARAM_INT);
+			$db->execute($res);
 						
 			if ($db->row_count($res))
 			{
@@ -103,8 +119,10 @@ class XmlCacheElement_Access
 		
 		if (is_numeric($toid))
 		{	
-			$sql = "SELECT * FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE toid = ".$toid." ORDER BY primary_key ASC";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("XML_CACHE_ELEMENT_TABLE")." WHERE toid = :toid ORDER BY primary_key ASC";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":toid", $toid, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			$result_array = array();
 			
