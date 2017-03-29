@@ -49,8 +49,10 @@ class SampleHasUser_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -59,24 +61,8 @@ class SampleHasUser_Access
 				
 				$this->sample_id		= $data['sample_id'];
 				$this->user_id			= $data['user_id'];
-
-				if ($data['read'] == "t")
-				{
-					$this->read		= true;
-				}
-				else
-				{
-					$this->read		= false;
-				}
-				
-				if ($data['write'] == "t")
-				{
-					$this->write	= true;
-				}
-				else
-				{
-					$this->write	= false;
-				}
+				$this->read				= $data['read'];
+				$this->write			= $data['write'];
 			}
 			else
 			{
@@ -110,33 +96,21 @@ class SampleHasUser_Access
 		global $db;
 		
 		if (is_numeric($sample_id) and is_numeric($user_id) and isset($read) and isset($write))
-		{
-			if ($read == true)
-			{
-				$read_insert = "t";
-			}
-			else
-			{
-				$read_insert = "f";
-			}
-			
-			if ($write == true)
-			{
-				$write_insert = "t";
-			}
-			else
-			{
-				$write_insert = "f";
-			}
-			
+		{			
 			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_USER_TABLE")." (primary_key,sample_id,user_id,read,write) " .
-					"VALUES (nextval('".self::SAMPLE_HAS_USER_PK_SEQUENCE."'::regclass),".$sample_id.",".$user_id.",'".$read_insert."','".$write_insert."')";
-			$res_write = $db->db_query($sql_write);
+					"VALUES (nextval('".self::SAMPLE_HAS_USER_PK_SEQUENCE."'::regclass), :sample_id, :user_id, :read, :write)";
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":read", $read, PDO::PARAM_BOOL);
+			$db->bind_value($res_write, ":write", $write, PDO::PARAM_BOOL);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_USER_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -167,8 +141,10 @@ class SampleHasUser_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -255,8 +231,11 @@ class SampleHasUser_Access
 			
 		if ($this->primary_key and is_numeric($sample_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET sample_id = :sample_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -284,8 +263,11 @@ class SampleHasUser_Access
 
 		if ($this->primary_key and is_numeric($user_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET user_id = '".$user_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET user_id = :user_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -312,18 +294,12 @@ class SampleHasUser_Access
 		global $db;
 
 		if ($this->primary_key and isset($read))
-		{
-			if ($read == true)
-			{
-				$read_insert = "t";
-			}
-			else
-			{
-				$read_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET read = '".$read_insert."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET read = :read WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":read", $read, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -350,18 +326,12 @@ class SampleHasUser_Access
 		global $db;
 	
 		if ($this->primary_key and isset($write))
-		{
-			if ($write == true)
-			{
-				$write_insert = "t";
-			}
-			else
-			{
-				$write_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET write = '".$write_insert."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("SAMPLE_HAS_USER_TABLE")." SET write = :write WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":write", $write, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -393,8 +363,11 @@ class SampleHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = ".$sample_id." AND user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = :sample_id AND user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 
 			if ($data['primary_key'])
@@ -424,8 +397,10 @@ class SampleHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = ".$sample_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = :sample_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -459,8 +434,10 @@ class SampleHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT DISTINCT user_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = ".$sample_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT DISTINCT user_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE sample_id = :sample_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -494,8 +471,10 @@ class SampleHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -529,8 +508,10 @@ class SampleHasUser_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT DISTINCT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT DISTINCT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -562,7 +543,8 @@ class SampleHasUser_Access
 		$return_array = array();
 		
 		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_USER_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -589,7 +571,10 @@ class SampleHasUser_Access
 		
 		if (is_numeric($user_id))
 		{
-			$sql = "DELETE FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = ".$user_id."";
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$res = $db->db_query($sql);
 			
 			return true;

@@ -56,8 +56,10 @@ class Sample_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SAMPLE_TABLE")." WHERE id='".$sample_id."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("SAMPLE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);			
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -73,24 +75,8 @@ class Sample_Access
 				$this->date_of_expiry	= $data['date_of_expiry'];
 				$this->expiry_warning	= $data['expiry_warning'];
 				$this->manufacturer_id	= $data['manufacturer_id'];
-				
-				if ($data['deleted'] == "t")
-				{
-					$this->deleted	= true;
-				}
-				else
-				{
-					$this->deleted	= false;
-				}
-				
-				if ($data['available'] == "t")
-				{
-					$this->available	= true;
-				}
-				else
-				{
-					$this->available	= false;
-				}
+				$this->deleted			= $data['deleted'];
+				$this->available		= $data['available'];
 			}
 			else
 			{
@@ -136,54 +122,63 @@ class Sample_Access
 		
 		if ($name and is_numeric($owner_id) and is_numeric($template_id))
 		{
-			if (!is_numeric($manufacturer_id))
-			{
-				$manufacturer_id_insert = "NULL";
-			}
-			else
-			{
-				$manufacturer_id_insert = $manufacturer_id;
-			}
-			
-			if (!$comment)
-			{
-				$comment_insert = "NULL";
-			}
-			else
-			{
-				$comment_insert = "'".$comment."'";
-			}
-			
-			if (is_numeric($language_id))
-			{
-				$language_id_insert = $language_id;
-			}
-			else
-			{
-				$language_id_insert = "1";
-			}
-			
-			if (!$date_of_expiry or !$expiry_warning)
-			{
-				$date_of_expiry_insert = "NULL";
-				$expiry_warning_insert = "NULL";
-			}
-			else
-			{
-				$date_of_expiry_insert = "'".$date_of_expiry."'";
-				$expiry_warning_insert = "'".$expiry_warning."'";
-			}
-			
+
 			$datetime = date("Y-m-d H:i:s");
 			
 			$sql_write = "INSERT INTO ".constant("SAMPLE_TABLE")." (id, name, datetime, owner_id, template_id, available, deleted, comment, language_id, date_of_expiry, expiry_warning, manufacturer_id) " .
-					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), '".$name."','".$datetime."',".$owner_id.",".$template_id.",'t','f',".$comment_insert.",".$language_id_insert.",".$date_of_expiry_insert.",".$expiry_warning_insert.",".$manufacturer_id_insert.")";
-			$res_write = $db->db_query($sql_write);
+					"VALUES (nextval('".self::SAMPLE_PK_SEQUENCE."'::regclass), :name, :datetime, :owner_id, :template_id, 't', 'f', :comment, :language_id, :date_of_expiry, :expiry_warning, :manufacturer_id)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":datetime", $datetime, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":owner_id", $owner_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":template_id", $template_id, PDO::PARAM_INT);
+				
+			if (isset($comment))
+			{
+				$db->bind_value($res_write, ":comment", $comment, PDO::PARAM_STR);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":comment", null, PDO::PARAM_NULL);
+			}
+				
+			if (is_numeric($language_id))
+			{
+				$db->bind_value($res_write, ":language_id", $language_id, PDO::PARAM_INT);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":language_id", 1, PDO::PARAM_INT);
+			}
+				
+			if (isset($date_of_expiry) and isset($expiry_warning))
+			{
+				$db->bind_value($res_write, ":date_of_expiry", $date_of_expiry, PDO::PARAM_STR);
+				$db->bind_value($res_write, ":expiry_warning", $expiry_warning, PDO::PARAM_INT);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":date_of_expiry", null, PDO::PARAM_NULL);
+				$db->bind_value($res_write, ":expiry_warning", null, PDO::PARAM_NULL);
+			}
+			
+			if (is_numeric($manufacturer_id))
+			{
+				$db->bind_value($res_write, ":manufacturer_id", $manufacturer_id, PDO::PARAM_INT);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":manufacturer_id", null, PDO::PARAM_NULL);
+			}
+			
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE id = currval('".self::SAMPLE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -214,8 +209,10 @@ class Sample_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("SAMPLE_TABLE")." WHERE id = ".$tmp_sample_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $tmp_sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -407,8 +404,11 @@ class Sample_Access
 			
 		if ($this->sample_id and $name)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET name = '".$name."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -436,8 +436,11 @@ class Sample_Access
 			
 		if ($this->sample_id and $datetime)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET datetime = :datetime WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -465,8 +468,11 @@ class Sample_Access
 			
 		if ($this->sample_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET owner_id = :owner_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":owner_id", $owner_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -495,8 +501,11 @@ class Sample_Access
 			
 		if ($this->sample_id and is_numeric($template_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET template_id = '".$template_id."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET template_id = :template_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":template_id", $template_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -523,18 +532,12 @@ class Sample_Access
 		global $db;
 			
 		if ($this->sample_id and isset($available))
-		{
-			if ($available == true)
-			{
-				$available_insert = "t";
-			}
-			else
-			{
-				$available_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET available = '".$available_insert."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+		{		
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET available = :available WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":available", $available, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -561,18 +564,12 @@ class Sample_Access
 		global $db;
 			
 		if ($this->sample_id and isset($deleted))
-		{
-			if ($deleted == true)
-			{
-				$deleted_insert = "t";
-			}
-			else
-			{
-				$deleted_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET deleted = '".$deleted_insert."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET deleted = :deleted WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":deleted", $deleted, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -600,8 +597,11 @@ class Sample_Access
 			
 		if ($this->sample_id and $comment)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET comment = '".$comment."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET comment = :comment WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":comment", $comment, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -630,17 +630,21 @@ class Sample_Access
 			
 		if ($this->sample_id and $string)
 		{
-			if ($language_name == null)
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET comment_text_search_vector = to_tsvector(:language_name,:string) WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":string", $string, PDO::PARAM_STR);
+			
+			if (isset($language_name))
 			{
-				$language_name_insert = "default";
+				$db->bind_value($res, ":language_name", $language_name, PDO::PARAM_STR);
 			}
 			else
 			{
-				$language_name_insert = $language_name;
+				$db->bind_value($res, ":language_name", "default", PDO::PARAM_STR);
 			}
 			
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET comment_text_search_vector = to_tsvector('".$language_name_insert."','".$string."') WHERE id = ".$this->sample_id."";
-			$res = $db->db_query($sql);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -667,8 +671,11 @@ class Sample_Access
 			
 		if ($this->sample_id and is_numeric($language_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET language_id = '".$language_id."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET language_id = :language_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":language_id", $language_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -696,8 +703,11 @@ class Sample_Access
 			
 		if ($this->sample_id and $date_of_expiry)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET date_of_expiry = '".$date_of_expiry."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET date_of_expiry = :date_of_expiry WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":date_of_expiry", $date_of_expiry, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -725,8 +735,11 @@ class Sample_Access
 			
 		if ($this->sample_id and is_numeric($expiry_warning))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET expiry_warning = '".$expiry_warning."' WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET expiry_warning = ':expiry_warning WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":expiry_warning", $expiry_warning, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -754,8 +767,11 @@ class Sample_Access
 
 		if ($this->sample_id and $manufacturer_id)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET manufacturer_id = ".$manufacturer_id." WHERE id = '".$this->sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TABLE")." SET manufacturer_id = :manufacturer_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":manufacturer_id", $manufacturer_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -786,8 +802,10 @@ class Sample_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE owner_id = ".$owner_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE owner_id = :owner_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":owner_id", $owner_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -821,8 +839,10 @@ class Sample_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE template_id = ".$template_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE template_id = :template_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":template_id", $template_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -854,7 +874,8 @@ class Sample_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -882,8 +903,10 @@ class Sample_Access
 		if (is_numeric($sample_id))
 		{
 			
-			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE id = ".$sample_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SAMPLE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])

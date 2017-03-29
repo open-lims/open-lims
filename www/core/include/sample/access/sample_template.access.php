@@ -46,8 +46,10 @@ class SampleTemplate_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SAMPLE_TEMPLATE_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("SAMPLE_TEMPLATE_TABLE")." WHERE id=:id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);		
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -90,8 +92,13 @@ class SampleTemplate_Access
 		if (is_numeric($id) and $name and is_numeric($cat_id) and is_numeric($template_id))
 		{	
 			$sql_write = "INSERT INTO ".constant("SAMPLE_TEMPLATE_TABLE")." (id, name, cat_id, template_id) " .
-							"VALUES (".$id.",'".$name."',".$cat_id.",".$template_id.")";
-			$res = $db->db_query($sql_write);
+							"VALUES (:id, :name, :cat_id, :template_id)";
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":cat_id", $cat_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":template_id", $template_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res) == 1)
 			{				
@@ -122,8 +129,10 @@ class SampleTemplate_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("SAMPLE_TEMPLATE_TABLE")." WHERE id = ".$tmp_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_TEMPLATE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $tmp_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -195,8 +204,11 @@ class SampleTemplate_Access
 
 		if ($this->id and $name)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TEMPLATE_TABLE")." SET name = '".$name."' WHERE id = '".$this->id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TEMPLATE_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -224,8 +236,11 @@ class SampleTemplate_Access
 					
 		if ($this->id and is_numeric($cat_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TEMPLATE_TABLE")." SET cat_id = '".$cat_id."' WHERE id = '".$this->id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TEMPLATE_TABLE")." SET cat_id = :cat_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":cat_id", $cat_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -253,8 +268,11 @@ class SampleTemplate_Access
 			
 		if ($this->id and is_numeric($template_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_TEMPLATE_TABLE")." SET template_id = '".$template_id."' WHERE id = '".$this->id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_TEMPLATE_TABLE")." SET template_id = :template_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":template_id", $template_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -285,8 +303,10 @@ class SampleTemplate_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("SAMPLE_TEMPLATE_TABLE")." WHERE id=".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SAMPLE_TEMPLATE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -314,7 +334,8 @@ class SampleTemplate_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("SAMPLE_TEMPLATE_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -343,8 +364,10 @@ class SampleTemplate_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("SAMPLE_TEMPLATE_TABLE")." WHERE cat_id = ".$cat_id." ORDER BY id";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("SAMPLE_TEMPLATE_TABLE")." WHERE cat_id = :cat_id ORDER BY id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":cat_id", $cat_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{

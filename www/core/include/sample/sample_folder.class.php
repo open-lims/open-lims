@@ -59,7 +59,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
   			{
   				$sample_security = new SampleSecurity($this->sample_id);
   				
-  				if ($this->get_automatic == false)
+  				if ($this->get_automatic() === false)
   				{
   					$permission_bin = decbin($this->get_permission());
 					$permission_bin = str_pad($permission_bin, 16, "0", STR_PAD_LEFT);
@@ -68,7 +68,7 @@ class SampleFolder extends Folder implements ConcreteFolderCaseInterface
   				
 				
   				// Read-Access
-  				if ($this->get_automatic() == true)
+  				if ($this->get_automatic() === true)
   				{
   					if ($sample_security->is_access(1, false))
 					{

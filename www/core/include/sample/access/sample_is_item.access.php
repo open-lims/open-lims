@@ -43,8 +43,10 @@ class SampleIsItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE sample_id='".$sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE sample_id= :sample_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['sample_id'])
@@ -78,9 +80,12 @@ class SampleIsItem_Access
 		if (is_numeric($sample_id) and is_numeric($item_id))
 		{	
 			$sql_write = "INSERT INTO ".constant("SAMPLE_IS_ITEM_TABLE")." (sample_id,item_id) " .
-					"VALUES (".$sample_id.",".$item_id.")";
+					"VALUES (:sample_id, :item_id)";
 					
-			$res_write = $db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{	
@@ -106,8 +111,11 @@ class SampleIsItem_Access
 			
 		if ($this->sample_id and $this->item_id)
 		{
-			$sql = "DELETE FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE sample_id = ".$this->sample_id." AND item_id = ".$this->item_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE sample_id = :sample_id AND item_id = :item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":item_id", $this->item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -166,8 +174,10 @@ class SampleIsItem_Access
 		
 		if (is_numeric($item_id))
 		{	
-			$sql = "SELECT sample_id FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE item_id='".$item_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT sample_id FROM ".constant("SAMPLE_IS_ITEM_TABLE")." WHERE item_id= :item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['sample_id'])
@@ -189,7 +199,7 @@ class SampleIsItem_Access
 	 * @param string $sql
 	 * @return array
 	 */
-	public static function list_samples_by_item_sql_list($sql)
+	public static function list_samples_by_item_sql_list($sql, $prepared_statement_array = null)
 	{
 		global $db;
 
@@ -197,11 +207,16 @@ class SampleIsItem_Access
    		{
    			$return_array = array();
    			
-   			$sql_read = "SELECT sample_id " .
+   			/**
+   			 * @todo $sql and prepared statements?
+   			 */
+   			
+   			$sql = "SELECT sample_id " .
 						"FROM ".constant("SAMPLE_IS_ITEM_TABLE")." " .
 						"WHERE item_id IN (".$sql.")";
 			
-   			$res = $db->db_query($sql_read);
+   			$res = $db->prepare($sql);
+			$db->execute($res);
 
 			while ($data = $db->fetch($res))
 			{
