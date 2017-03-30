@@ -208,7 +208,9 @@ class Navigation_IO
 				{
 					if (method_exists($dialog_array[0]['class'], $dialog_array[0]['method']))
 					{
-						$dialog_array[0]['class']::$dialog_array[0]['method']();
+						$class = $dialog_array[0]['class'];
+						$method = $dialog_array[0]['method'];
+						$class::$method();
 					}
 					else
 					{
@@ -251,7 +253,8 @@ class Navigation_IO
 							if (file_exists($navigation_array['class_path']))
 							{
 								require_once($navigation_array['class_path']);
-								$navigation_array['class']::$navigation_array['method']();
+								$method = $navigation_array['method'];
+								$navigation_array['class']::$method();
 							}
 							else
 							{

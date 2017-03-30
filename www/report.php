@@ -40,8 +40,8 @@
 	$database = SystemConfig::get_database();
 		
 	$db = new Database();
-	$db->connect($database['type'],$database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
-	
+	@$connection_result = $db->connect($database['type'],$database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
+
 	require_once("core/include/base/system/transaction.class.php");
 	require_once("core/include/base/system/events/event.class.php");
 	require_once("core/include/base/system/events/delete_event.class.php");
@@ -103,7 +103,8 @@
 						{
 							if (method_exists($module_dialog['class'], $module_dialog['method']))
 							{
-								$pdf = $module_dialog['class']::$module_dialog['method']();
+								$method = $module_dialog['method'];
+								$pdf = $module_dialog['class']::$method();
 								if (is_object($pdf))
 								{
 									$pdf->Output();

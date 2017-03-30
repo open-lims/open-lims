@@ -54,7 +54,7 @@ $mail[0]['smtp']['password'] 					= "";
 $ldap['enable']									= false;
 
 
-$server['imagick']['enable']					= true;	
+$server['imagick']['enable']					= false;	
 
 
 $server['behaviour']['debug_mode']				= true;

@@ -50,8 +50,10 @@ class SampleHasItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -62,15 +64,7 @@ class SampleHasItem_Access
 				$this->item_id			= $data['item_id'];
 				$this->gid				= $data['gid'];
 				$this->parent_item_id	= $data['parent_item_id'];
-				
-				if ($data['parent'] == 't')
-				{
-					$this->parent = true;
-				}
-				else
-				{
-					$this->parent = false;
-				}
+				$this->parent 			= $data['parent'];
 			}
 			else
 			{
@@ -103,23 +97,29 @@ class SampleHasItem_Access
 		
 		if (is_numeric($sample_id) and is_numeric($item_id))
 		{
+			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_ITEM_TABLE")." (primary_key,sample_id,item_id,gid,parent,parent_item_id) " .
+					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass), :sample_id, :item_id, :gid,'f',NULL)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":item_id", $item_id, PDO::PARAM_INT);
+			
 			if (is_numeric($gid))
 			{
-				$gid_insert = $gid;	
+				$db->bind_value($res_write, ":gid", $gid, PDO::PARAM_INT);
 			}
 			else
 			{
-				$gid_insert = "NULL";
+				$db->bind_value($res_write, ":gid", null, PDO::PARAM_NULL);
 			}
 			
-			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_ITEM_TABLE")." (primary_key,sample_id,item_id,gid,parent,parent_item_id) " .
-					"VALUES (nextval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass),".$sample_id.",".$item_id.",".$gid_insert.",'f',NULL)";
-			$res_write = $db->db_query($sql_write);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_ITEM_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -150,8 +150,10 @@ class SampleHasItem_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -253,8 +255,11 @@ class SampleHasItem_Access
 			
 		if ($this->primary_key and is_numeric($sample_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET sample_id = :sample_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -282,8 +287,11 @@ class SampleHasItem_Access
 
 		if ($this->primary_key and is_numeric($item_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET item_id = '".$item_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET item_id = :item_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -311,8 +319,11 @@ class SampleHasItem_Access
 
 		if ($this->primary_key and is_numeric($gid))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET gid = :gid WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":gid", $gid, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -339,18 +350,12 @@ class SampleHasItem_Access
 		global $db;
 
 		if ($this->primary_key and isset($parent))
-		{
-			if ($parent == true)
-			{
-				$parent_insert = "t";
-			}
-			else
-			{
-				$parent_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET parent = '".$parent_insert."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET parent = :parent WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":parent", $parent, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -378,8 +383,11 @@ class SampleHasItem_Access
 
 		if ($this->primary_key and is_numeric($parent_item_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET parent_item_id = '".$parent_item_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ITEM_TABLE")." SET parent_item_id = :parent_item_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -412,8 +420,11 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = :item_id AND sample_id = :sample_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 				
 			if ($data['primary_key'])
@@ -446,8 +457,11 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND sample_id = ".$sample_id." AND parent='f' AND parent_item_id IS NULL";
-			$res = $db->db_query($sql);
+			$sql = "SELECT gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = :item_id AND sample_id = :sample_id AND parent='f' AND parent_item_id IS NULL";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 				
 			if (is_numeric($data['gid']))
@@ -478,8 +492,11 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id." AND sample_id = ".$sample_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE parent_item_id = :parent_item_id AND sample_id = :sample_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -513,8 +530,10 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE parent_item_id = :parent_item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -550,8 +569,11 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND gid = ".$gid." AND parent = 't'  AND parent_item_id IS NULL";
-			$res = $db->db_query($sql);
+			$sql = "SELECT sample_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = :item_id AND gid = :gid AND parent = 't'  AND parent_item_id IS NULL";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":gid", $gid, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -586,8 +608,10 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = :item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -622,16 +646,20 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			if ($sub_items == true)
+			if ($sub_items === true)
 			{
-				$sql = "SELECT sample_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
+				$sql = "SELECT sample_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = :item_id";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
 			else
 			{
-				$sql = "SELECT sample_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND parent_item_id IS NULL";
+				$sql = "SELECT sample_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE item_id = :item_id AND parent_item_id IS NULL";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
-			
-			$res = $db->db_query($sql);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -669,8 +697,10 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id." AND (parent = 'f' OR parent IS NULL) AND parent_item_id IS NULL";
-			$res = $db->db_query($sql);
+			$sql = "SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = :sample_id AND (parent = 'f' OR parent IS NULL) AND parent_item_id IS NULL";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -705,8 +735,10 @@ class SampleHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT item_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id." AND (parent = 'f' OR parent IS NULL) AND parent_item_id IS NULL";
-			$res = $db->db_query($sql);
+			$sql = "SELECT item_id, gid FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = :sample_id AND (parent = 'f' OR parent IS NULL) AND parent_item_id IS NULL";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -744,14 +776,19 @@ class SampleHasItem_Access
 			
 			if (is_numeric($gid))
 			{
-				$sql = "SELECT DISTINCT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id." AND gid= ".$gid." AND parent_item_id IS NULL";
+				$sql = "SELECT DISTINCT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = :sample_id AND gid= :gid AND parent_item_id IS NULL";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+				$db->bind_value($res, ":gid", $gid, PDO::PARAM_INT);
+				$db->execute($res);
 			}
 			else
 			{
-				$sql = "SELECT DISTINCT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$sample_id." AND gid IS NOT NULL AND parent_item_id IS NULL";
+				$sql = "SELECT DISTINCT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = :sample_id AND gid IS NOT NULL AND parent_item_id IS NULL";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
-			
-			$res = $db->db_query($sql);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -783,7 +820,8 @@ class SampleHasItem_Access
 		$return_array = array();
 		
 		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ITEM_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -815,16 +853,21 @@ class SampleHasItem_Access
 			{
 				$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
 					" WHERE " .
-					" ".constant("SAMPLE_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id." AND ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id = ".$sample_id."";
+					" ".constant("SAMPLE_HAS_ITEM_TABLE").".parent_item_id = :parent_item_id AND ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id = :sample_id";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+				$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
 			else
 			{
-					$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
+				$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
 					" WHERE " .
-					" ".constant("SAMPLE_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id."";
+					" ".constant("SAMPLE_HAS_ITEM_TABLE").".parent_item_id = :parent_item_id";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
-			
-			$res = $db->db_query($sql);
 			
 			if ($res !== false)
 			{
@@ -853,9 +896,11 @@ class SampleHasItem_Access
 		{
 			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
 				" WHERE " .
-				" ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id = ".$sample_id."";
+				" ".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id = :sample_id";
 
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($res !== false)
 			{

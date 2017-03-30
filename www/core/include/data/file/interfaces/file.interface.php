@@ -26,38 +26,14 @@
  * @package data
  */
 interface FileInterface
-{
-	/**
-	 * @param integer $file_id
-	 */
-	function __construct($file_id);
-	
-	function __destruct();
-	
+{	
 	/**
 	 * Opens another version of the file with internal revision id
 	 * @param integer $internal_revision
 	 * @return bool
 	 */
 	public function open_internal_revision($internal_revision);
-	
-	/**
-	 * Creates a new file
-	 * @param string $name
-	 * @param integer $folder_id
-	 * @param string $path
-	 * @param integer $owner_id
-	 * @param bool $premature
-	 * @return integer
-	 */
-	public function create($name, $folder_id, $path, $owner_id);
-	
-	/**
-	 * Deletes a file, including all versions
-	 * @return bool
-	 */
-	public function delete($recursive, $content);
-	
+		
 	/**
 	 * Deletes a specific file version
 	 * @param integer $internal_revision

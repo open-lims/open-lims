@@ -37,23 +37,26 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class Transaction implements TransactionInterface
 {
-	private $unique_id;
-	private $is_copy;
+	private $unique_id = null;
+	private $in_transaction = false;
+	
+	private static $counter = 0;
+	private static $exist_instance = false;
 
 	/**
 	 * @see TransactionInterface::__construct()
 	 */
     function __construct()
     {
-    	if (!$GLOBALS['transaction'] or $GLOBALS['transaction'] == false)
+    	if (self::$exist_instance === false)
     	{
     		$this->unique_id = null;
-    		$this->is_copy = false;
     		$GLOBALS['transaction'] = true;
+    		self::$exist_instance = true;
     	}
     	else
     	{
-    		$this->is_copy = true;
+    		exit("You cannot run transaction twice");
     	}
     }
     
@@ -61,7 +64,7 @@ class Transaction implements TransactionInterface
     {
     	unset($GLOBALS['transaction']);
     	unset($this->unique_id);
-    	unset($this->is_copy);
+    	unset($this->in_transaction);
     }
     
     /**
@@ -72,16 +75,20 @@ class Transaction implements TransactionInterface
     {
     	global $db;
     	
-    	if ($this->unique_id == null and $this->is_copy == false)
+    	$unique_id = uniqid(self::$counter, true);
+    	self::$counter++;
+    	
+    	if ($this->unique_id === null and $this->in_transaction === false)
     	{
-    		$this->unique_id = uniqid();
+    		$this->unique_id = $unique_id;
+    		$this->in_transaction = true;
     		$db->query_log_start();
     		Transaction_Access::begin();
     		return $this->unique_id;
     	}
     	else
     	{
-    		return null;
+    		return $unique_id;
     	}
     }
     
@@ -94,14 +101,15 @@ class Transaction implements TransactionInterface
     {
     	global $db;
     	
-    	if ($unique_id != null and $this->unique_id != null and $this->is_copy == false)
+    	if (isset($unique_id) and isset($this->unique_id))
     	{
-    		if ($unique_id == $this->unique_id)
+    		if ($unique_id === $this->unique_id)
     		{
     			Transaction_Access::commit();
     			$db->query_log_end();
     			$this->unique_id = null;
-    			if (constant("ENABLE_DB_LOG_ON_COMMIT") == true and $write_log == true)
+    			$this->in_transaction = false;
+    			if (constant("ENABLE_DB_LOG_ON_COMMIT") == true or $write_log == true)
     			{
 	    			if (is_writable(constant("LOG_DIR")))
 	    			{
@@ -129,18 +137,19 @@ class Transaction implements TransactionInterface
      * @param string $unique_id
      * @return bool
      */
-    public function rollback($unique_id, $write_log = true)
+    public function rollback($unique_id, $write_log = false)
     {
     	global $db;
     	
-    	if ($unique_id != null and $this->unique_id != null and $this->is_copy == false)
+    	if (isset($unique_id) and isset($this->unique_id))
     	{
-    		if ($unique_id == $this->unique_id)
+    		if ($unique_id === $this->unique_id)
     		{
     			Transaction_Access::rollback();
     			$db->query_log_end();
     			$this->unique_id = null;
-    			if (constant("ENABLE_DB_LOG_ON_ROLLBACK") == true and $write_log == true)
+    			$this->in_transaction = false;
+    			if (constant("ENABLE_DB_LOG_ON_ROLLBACK") == true or $write_log == true)
     			{
 	    			if (is_writable(constant("LOG_DIR")))
 	    			{
@@ -172,13 +181,14 @@ class Transaction implements TransactionInterface
     {
     	global $db;
     	
-    	if ($unique_id != null and $this->unique_id != null and $this->is_copy == false)
+    	if (isset($unique_id) and isset($this->unique_id))
     	{
-    		if ($unique_id == $this->unique_id)
+    		if ($unique_id === $this->unique_id)
     		{
     			Transaction_Access::rollback();
     			$db->query_log_end();
     			$this->unique_id = null;
+    			$this->in_transaction = false;
     			if (constant("ENABLE_DB_LOG_ON_EXP_ROLLBACK") == true and $write_log == true)
     			{
 	    			if (is_writable(constant("LOG_DIR")))
@@ -210,7 +220,7 @@ class Transaction implements TransactionInterface
     {
     	global $db;
     	
-    	if ($this->unique_id != null)
+    	if ($this->unique_id !== null)
     	{
     		Transaction_Access::rollback();
 	    	$db->query_log_end();
@@ -239,7 +249,7 @@ class Transaction implements TransactionInterface
      */
     public function is_in_transction()
     {
-    	if ($this->unique_id != null)
+    	if ($this->unique_id !== null)
     	{
     		return true;
     	}

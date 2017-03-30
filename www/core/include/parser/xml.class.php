@@ -140,47 +140,50 @@ class Xml implements XmlInterface
 
 						for ($j=0;$j<=$xml_parameters_string_length;$j++)
 						{
-							if ($xml_parameters_string{$j} != " " and $in_value == false)
+							if (isset($xml_parameters_string{$j}))
 							{
-								if ($xml_parameters_string{$j} == "=")
+								if ($xml_parameters_string{$j} != " " and $in_value == false)
 								{
-									$value_found = true;
-									$value_begin = $j;
-								}
-								
-								if ($value_found == false)
-								{
-									$key = $key."".$xml_parameters_string{$j};
-								}
-							}	
+									if ($xml_parameters_string{$j} == "=")
+									{
+										$value_found = true;
+										$value_begin = $j;
+									}
+									
+									if ($value_found == false)
+									{
+										$key = $key."".$xml_parameters_string{$j};
+									}
+								}	
 							
-							if ($value_found == true and $value_begin != $j)
-							{
-								if ($xml_parameters_string{$j} == "\"")
+								if ($value_found == true and $value_begin != $j)
 								{
-									if ($in_value == true)
+									if ($xml_parameters_string{$j} == "\"")
 									{
-										$in_value = false;
+										if ($in_value == true)
+										{
+											$in_value = false;
+										}
+										else
+										{
+											$in_value = true;
+											$in_value_begin = $j;
+										}
 									}
-									else
+									
+									if ($in_value == true and $in_value_begin != $j)
 									{
-										$in_value = true;
-										$in_value_begin = $j;
+										$value=$value."".$xml_parameters_string{$j};
 									}
-								}
-								
-								if ($in_value == true and $in_value_begin != $j)
-								{
-									$value=$value."".$xml_parameters_string{$j};
-								}
-								elseif ($in_value == false and $in_value_begin != $j)
-								{
-									$xml_parameters_array[$key] = $value;
-									$value_found = false;
-									unset($key);
-									unset($value);
-								}
-							}						
+									elseif ($in_value == false and $in_value_begin != $j)
+									{
+										$xml_parameters_array[$key] = $value;
+										$value_found = false;
+										$key = "";
+										$value = "";
+									}
+								}		
+							}
 						}
 						$return_array[$return_array_count][3] = $xml_parameters_array;
 					}
@@ -245,47 +248,50 @@ class Xml implements XmlInterface
 
 					for ($j=0;$j<=$xml_parameters_string_length;$j++)
 					{
-						if ($xml_parameters_string{$j} != " " and $in_value == false)
+						if (isset($xml_parameters_string{$j}))
 						{
-							if ($xml_parameters_string{$j} == "=")
+							if ($xml_parameters_string{$j} != " " and $in_value == false)
 							{
-								$value_found = true;
-								$value_begin = $j;
-							}
-							
-							if ($value_found == false)
-							{
-								$key = $key."".$xml_parameters_string{$j};
-							}
-						}	
+								if ($xml_parameters_string{$j} == "=")
+								{
+									$value_found = true;
+									$value_begin = $j;
+								}
+								
+								if ($value_found == false)
+								{
+									$key = $key."".$xml_parameters_string{$j};
+								}
+							}	
 						
-						if ($value_found == true and $value_begin != $j)
-						{
-							if ($xml_parameters_string{$j} == "\"")
+							if ($value_found == true and $value_begin != $j)
 							{
-								if ($in_value == true)
+								if ($xml_parameters_string{$j} == "\"")
 								{
-									$in_value = false;
+									if ($in_value == true)
+									{
+										$in_value = false;
+									}
+									else
+									{
+										$in_value = true;
+										$in_value_begin = $j;
+									}
 								}
-								else
+								
+								if ($in_value == true and $in_value_begin != $j)
 								{
-									$in_value = true;
-									$in_value_begin = $j;
+									$value=$value."".$xml_parameters_string{$j};
 								}
-							}
-							
-							if ($in_value == true and $in_value_begin != $j)
-							{
-								$value=$value."".$xml_parameters_string{$j};
-							}
-							elseif ($in_value == false and $in_value_begin != $j)
-							{
-								$xml_parameters_array[$key] = $value;
-								$value_found = false;
-								unset($key);
-								unset($value);
-							}
-						}						
+								elseif ($in_value == false and $in_value_begin != $j)
+								{
+									$xml_parameters_array[$key] = $value;
+									$value_found = false;
+									$key = "";
+									$value = "";
+								}
+							}			
+						}
 					}
 					$return_array[$return_array_count][3] = $xml_parameters_array;
 				}

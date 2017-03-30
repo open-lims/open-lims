@@ -220,7 +220,12 @@ class ParameterAjax
 			$parameter_array = json_decode($parameter_array, true);
 
 			$parameter = ParameterTemplateParameter::get_instance(null);
-			$parameter_add_successful = $parameter->create($folder_id, $user->get_user_id(), $type_id, $limit_id, $parameter_array);
+			$parameter->ci_set_folder_id($folder_id);
+			$parameter->ci_set_owner_id($user->get_user_id());
+			$parameter->ci_set_template_id($type_id);
+			$parameter->ci_set_limit_id($limit_id);
+			$parameter->ci_set_parameter_array($parameter_array);
+			$parameter_add_successful = $parameter->create();
 			
 			if ($parameter_add_successful)
 			{				
@@ -230,27 +235,18 @@ class ParameterAjax
 				$event_handler = new EventHandler($item_add_event);
 				if ($event_handler->get_success() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return "1";
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new BaseException();
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new BaseException();
 			}
 		}

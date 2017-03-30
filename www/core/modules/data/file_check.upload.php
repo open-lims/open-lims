@@ -41,10 +41,11 @@
 	require_once("../../db/db.php");
 	
 	$database = SystemConfig::get_database();
-	
+
+			
 	$db = new Database();
-	$db->connect($database['type'],$database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
-	
+	@$connection_result = $db->connect($database['type'],$database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
+					
 	require_once("../../include/base/system/transaction.class.php");
 	
 	require_once("../../include/base/system/events/event.class.php");
@@ -89,5 +90,7 @@
 			echo "No Array";
 		}
 	}
+
+	$db->close();
 
 ?>

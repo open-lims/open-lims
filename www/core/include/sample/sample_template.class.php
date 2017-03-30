@@ -145,27 +145,18 @@ class SampleTemplate implements SampleTemplateInterface
 				$oldl = new Oldl(null);
 				if (($oldl_id = $oldl->create($data_entity_id)) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 		
 				if ($this->sample_template->create($id, $title, $category_id, $oldl_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}	
 			}
@@ -205,27 +196,18 @@ class SampleTemplate implements SampleTemplateInterface
 			
 			if ($this->sample_template->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			
 			if ($oldl->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
 		}
@@ -288,15 +270,18 @@ class SampleTemplate implements SampleTemplateInterface
 			
 					if ($value[1] == "location" or $value[1] == "manufacturer" or $value[1] == "expiry")
 					{
-			    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
-			    		{
-				    		$return_array[$value[1]]['name'] = $value[1];
-				    					    		
-				    		if ($value[3]['requirement'])
+						if (is_array($value[3]))
+						{
+				    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 				    		{
-				    			$return_array[$value[1]]['requirement']	= $value[3]['requirement'];
+					    		$return_array[$value[1]]['name'] = $value[1];
+					    					    		
+					    		if ($value[3]['requirement'])
+					    		{
+					    			$return_array[$value[1]]['requirement']	= $value[3]['requirement'];
+					    		}
 				    		}
-			    		}
+						}
 					}
 			    }
 		    }
@@ -353,41 +338,51 @@ class SampleTemplate implements SampleTemplateInterface
 		    $in_status = false;
 		    
 		    if (is_array($xml_array) and count($xml_array) >= 1)
-		    {
+		    {		    	
 			    foreach($xml_array as $key => $value)
 			    {
 			    	$value[0] = trim(strtolower($value[0]));
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			
-		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
-		    		{
-			    		$return_array[$counter]['xml_element'] 		= $value[1];
-			    		
-			    		if ($value[3]['type'])
+					if (is_array($value[3]))
+					{
+			    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
 			    		{
-			    			$return_array[$counter]['type'] 		= $value[3]['type'];
+				    		$return_array[$counter]['xml_element'] 		= $value[1];
+				    		
+				    		if ($value[3]['type'])
+				    		{
+				    			$return_array[$counter]['type'] 		= $value[3]['type'];
+				    		}
+		
+				    		if ($value[3]['id'])
+				    		{
+				    			$return_array[$counter]['id']	  		= $value[3]['id'];
+				    		}
+				    		
+				    		if ($value[3]['name'])
+				    		{
+				    			$return_array[$counter]['name']			= $value[3]['name'];
+				    		}
+				    		
+				    		$counter++;
 			    		}
-	
-			    		if ($value[3]['id'])
+			    		else
 			    		{
-			    			$return_array[$counter]['id']	  		= $value[3]['id'];
+			    			$return_array[$counter]['xml_element'] 	= $value[1];
+			    			$return_array[$counter]['close']			= "1";
+			    			
+			    			$counter++;
 			    		}
-			    		
-			    		if ($value[3]['name'])
-			    		{
-			    			$return_array[$counter]['name']			= $value[3]['name'];
-			    		}
-			    		
-			    		$counter++;
-		    		}
-		    		else
-		    		{
-		    			$return_array[$counter]['xml_element'] 	= $value[1];
-		    			$return_array[$counter]['close']			= "1";
-		    			
-		    			$counter++;
-		    		}
+					}
+					else
+					{
+						$return_array[$counter]['xml_element'] 	= $value[1];
+						$return_array[$counter]['close']			= "1";
+						
+						$counter++;
+					}
 			    } 
 		    }
 		    else
@@ -425,11 +420,20 @@ class SampleTemplate implements SampleTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			
-		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
-		    		{
-			    		$return_array[$counter] 				= $value[3];
-			    		$return_array[$counter]['xml_element'] 	= $value[1];
-			    		$counter++;
+					if (is_array($value[3]))
+					{
+			    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
+			    		{
+				    		$return_array[$counter] 				= $value[3];
+				    		$return_array[$counter]['xml_element'] 	= $value[1];
+				    		$counter++;
+			    		}
+			    		else
+			    		{
+			    			$return_array[$counter]['xml_element'] 	= $value[1];
+			    			$return_array[$counter]['close']		= "1";
+			    			$counter++;
+			    		}
 		    		}
 		    		else
 		    		{

@@ -48,8 +48,10 @@ class XmlCache_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("XML_CACHE_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("XML_CACHE_TABLE")." WHERE id= :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -90,17 +92,29 @@ class XmlCache_Access
 		if (is_numeric($data_entity_id) and $path and $checksum)
 		{
 			$sql_write = "INSERT INTO ".constant("XML_CACHE_TABLE")." (id,data_entity_id,path,checksum) " .
-					"VALUES (nextval('".self::XML_CACHE_PK_SEQUENCE."'::regclass),".$data_entity_id.",'".$path."','".$checksum."')";
-					
-			$db->db_query($sql_write);	
+					"VALUES (nextval('".self::XML_CACHE_PK_SEQUENCE."'::regclass), :data_entity_id, :path, :checksum)";
 			
-			$sql_read = "SELECT id FROM ".constant("XML_CACHE_TABLE")." WHERE id = currval('".self::XML_CACHE_PK_SEQUENCE."'::regclass)";
-			$res_read = $db->db_query($sql_read);
-			$data_read = $db->fetch($res_read);
-								
-			self::__construct($data_read['id']);
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":data_entity_id", $data_entity_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":path", $path, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":checksum", $checksum, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
-			return $data_read['id'];
+			if ($db->row_count($res_write) == 1)
+			{		
+				$sql_read = "SELECT id FROM ".constant("XML_CACHE_TABLE")." WHERE id = currval('".self::XML_CACHE_PK_SEQUENCE."'::regclass)";
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
+				$data_read = $db->fetch($res_read);
+									
+				self::__construct($data_read['id']);
+				
+				return $data_read['id'];
+			}
+			else
+			{
+				return null;
+			}
 		}
 		else
 		{
@@ -121,8 +135,10 @@ class XmlCache_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".constant("XML_CACHE_TABLE")." WHERE id = ".$id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("XML_CACHE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -193,8 +209,11 @@ class XmlCache_Access
 		
 		if ($this->id and is_numeric($data_entity_id))
 		{
-			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET data_entity_id = ".$data_entity_id." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET data_entity_id = :data_entity_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":data_entity_id", $data_entity_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -222,8 +241,11 @@ class XmlCache_Access
 
 		if ($this->id and $path)
 		{
-			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET path = ".$path." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET path = :path WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":path", $path, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -251,8 +273,11 @@ class XmlCache_Access
 			
 		if ($this->id and $checksum)
 		{
-			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET checksum = ".$checksum." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("XML_CACHE_TABLE")." SET checksum = :checksum WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":checksum", $checksum, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -281,8 +306,10 @@ class XmlCache_Access
 		
 		if (is_numeric($data_entity_id))
 		{
-			$sql = "SELECT id FROM ".constant("XML_CACHE_TABLE")." WHERE data_entity_id = ".$data_entity_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("XML_CACHE_TABLE")." WHERE data_entity_id = :data_entity_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":data_entity_id", $data_entity_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])

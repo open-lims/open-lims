@@ -28,6 +28,10 @@ require_once("interfaces/organisation_unit.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/organisation_unit.exception.class.php");
+	require_once("exceptions/organisation_unit_not_found.exception.class.php");
+	require_once("exceptions/organisation_unit_id_missing.exception.class.php");
+	
 	require_once("exceptions/organisation_unit_already_exist_exception.class.php");
 	require_once("exceptions/organisation_unit_creation_failed_exception.class.php");
 	
@@ -118,10 +122,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 
 				if (self::exist_name($name) == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					$this->in_create = false;
 					throw new OrganisationUnitAlreadyExistException("",2);
 				}
@@ -145,10 +146,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					// Create Owner
 					if ($this->create_owner_in_organisation_unit($session->get_user_id(), true) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						$this->in_create = false;
 						throw new OrganisationUnitCreationFailedException("",1);
 					}
@@ -156,10 +154,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					// Create Leader
 					if ($this->create_leader_in_organisation_unit($session->get_user_id()) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						$this->in_create = false;
 						throw new OrganisationUnitCreationFailedException("",1);
 					}
@@ -169,10 +164,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					
 					if ($event_handler->get_success() == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						$this->in_create = false;
 						throw new OrganisationUnitCreationFailedException("",1);
 					}
@@ -186,10 +178,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					$this->in_create = false;
 					throw new OrganisationUnitCreationFailedException("",1);
 				}
@@ -225,50 +214,35 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				// Owner-Connection
 				if ($this->delete_owners() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
 				// Leader-Connection
 				if ($this->delete_leaders() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
 				// User-Connection
 				if ($this->delete_members() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
 				// Quality-Manager-Connection
 				if ($this->delete_quality_managers() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
 				// Group-Connection
 				if ($this->delete_groups() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
@@ -286,10 +260,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						$next_position = $next_organisation_unit->get_position();
 						if ($next_organisation_unit->set_position($tmp_position) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 						else
@@ -309,19 +280,13 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}			
 													
 				if ($this->organisation_unit->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 
@@ -330,18 +295,12 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}	
 			}
@@ -505,27 +464,18 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					$change_organisation_unit = new OrganisationUnit_Access($id);
 					if ($change_organisation_unit->set_position($this->organisation_unit->get_position()) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
 					if ($this->organisation_unit->set_position($upper_position) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}	
 				}
@@ -575,27 +525,18 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					$change_organisation_unit = new OrganisationUnit_Access($id);
 					if ($change_organisation_unit->set_position($this->organisation_unit->get_position()) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
 					if ($this->organisation_unit->set_position($lower_position) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 				}
@@ -768,36 +709,24 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					
 					if ($event_handler->get_success() == true)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -831,36 +760,24 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					
 					if ($event_handler->get_success() == true)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -936,10 +853,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						{
 							if($group->create_user_in_group($leader_id) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -954,36 +868,24 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					
 					if ($event_handler->get_success() == true)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -1027,46 +929,31 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 								{
 									if($group->delete_user_from_group($leader_id) == false)
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										return false;
 									}
 								}
 							}
 						}
 						
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -1140,10 +1027,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					{
 						if ($organisation_unit_has_owner->set_master_owner(true) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 						else
@@ -1155,27 +1039,18 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 								
 								if ($event_handler->get_success() == true)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->commit($transaction_id);
-									}
+									$transaction->commit($transaction_id);
 									return true;
 								}
 								else
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return false;
 								}
 							}
 							else
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->commit($transaction_id);
-								}
+								$transaction->commit($transaction_id);
 								return true;
 							}
 						}
@@ -1191,20 +1066,14 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 								
 								if ($current_master_owner->set_master_owner(false) == false)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return false;
 								}
 								else
 								{
 									if ($organisation_unit_has_owner->set_master_owner(true) == false)
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										return false;
 									}
 									else
@@ -1214,18 +1083,12 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 										
 										if ($event_handler->get_success() == true)
 										{
-											if ($transaction_id != null)
-											{
-												$transaction->commit($transaction_id);
-											}
+											$transaction->commit($transaction_id);
 											return true;
 										}
 										else
 										{
-											if ($transaction_id != null)
-											{
-												$transaction->rollback($transaction_id);
-											}
+											$transaction->rollback($transaction_id);
 											return false;
 										}
 									}
@@ -1235,10 +1098,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 							{
 								if ($organisation_unit_has_owner->set_master_owner(true) == false)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return false;
 								}
 								else
@@ -1248,18 +1108,12 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 									
 									if ($event_handler->get_success() == true)
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->commit($transaction_id);
-										}
+										$transaction->commit($transaction_id);
 										return true;
 									}
 									else
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										return false;
 									}
 								}
@@ -1267,10 +1121,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						}
 						else
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->commit($transaction_id);
-							}
+							$transaction->commit($transaction_id);
 							return true;
 						}
 					}
@@ -1321,10 +1172,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				{
 					if ($master_owner == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
@@ -1336,18 +1184,12 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 							
 							if ($event_handler->get_success() == true)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->commit($transaction_id);
-								}
+								$transaction->commit($transaction_id);
 								return true;
 							}
 							else
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -1359,10 +1201,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 							
 							if ($organisation_unit_has_owner->set_master_owner(true) == false)
 							{
-								if ($transaction_id != null)
-								{
 									$transaction->rollback($transaction_id);
-								}
 								return false;
 							}
 							else
@@ -1372,18 +1211,12 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 								
 								if ($event_handler->get_success() == true)
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->commit($transaction_id);
-									}
+									$transaction->commit($transaction_id);
 									return true;
 								}
 								else
 								{
-									if ($transaction_id != null)
-									{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return false;
 								}
 							}
@@ -1392,10 +1225,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
@@ -1476,10 +1306,7 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 						{
 							if($group->create_user_in_group($quality_manager_id) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -1494,36 +1321,24 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 					
 					if ($event_handler->get_success() == true)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -1567,46 +1382,31 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 								{
 									if($group->delete_user_from_group($quality_manager_id) == false)
 									{
-										if ($transaction_id != null)
-										{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 										return false;
 									}
 								}
 							}
 						}
 						
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 						return true;
 					}
 					else
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}
@@ -1876,27 +1676,18 @@ class OrganisationUnit implements OrganisationUnitInterface, EventListenerInterf
 				
 				if ($event_handler->get_success() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}

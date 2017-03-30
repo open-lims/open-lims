@@ -70,5 +70,34 @@ class System implements SystemInterface
     {
     	return disk_free_space(constant("BASE_DIR"));
     }
+    
+    public static function get_array_value($array, $key)
+    {
+    	if (isset($array) and isset($key) and is_array($array))
+    	{
+	    	if (isset($array[$key]))
+	    	{
+	    		return $array[$key];
+	    	}
+	    	else
+	    	{
+	    		return null;
+	    	}
+    	}
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    public static function get_get($key)
+    {
+    	return self::get_array_value($_GET, $key);
+    }
+    
+    public static function get_post($key)
+    {
+    	return self::get_array_value($_POST, $key);
+    }
 }
 ?>

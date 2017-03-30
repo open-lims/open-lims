@@ -27,14 +27,7 @@
  * @package sample
  */ 		 
 interface SampleInterface
-{
-	/**
-	 * @param integer $sample_id Sample-ID
-	 */
-	function __construct($sample_id);
-	
-	function __destruct();
-	
+{	
 	/**
      * Sets tempalte-date before sample creation
      * @param string $type
@@ -43,26 +36,7 @@ interface SampleInterface
      * @return bool
      */
 	public function set_template_data($type, $type_id, $array);
-	
-	/**
-     * Creates a new sample
-     * @param integer $organisation_unit_id
-     * @param integer $template_id
-     * @param string $name
-     * @param string $supplier
-     * @param integer $location_id
-     * @param string $desc
-     * @return integer Sample-ID
-     * @throws SampleCreationFailedException
-     */
-	public function create($organisation_unit_id, $template_id, $name, $manufacturer_id, $location_id, $desc, $language_id, $date_of_expiry, $expiry_warning);
-	
-	/**
-	 * Deletes a sample
-	 * @return bool
-	 */
-	public function delete();
-	
+		
 	/**
 	 * Returns all requirements
 	 * @param boolean $get_fulfilled

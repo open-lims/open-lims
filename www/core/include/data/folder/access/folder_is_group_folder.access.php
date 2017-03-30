@@ -49,12 +49,12 @@ class FolderIsGroupFolder_Access
 			
 			if ($data['group_id'])
 			{
-				$this->group_id	= $data['group_id'];
+				$this->group_id		= $data['group_id'];
 				$this->folder_id	= $folder_id;
 			}
 			else
 			{
-				$this->group_id	= null;
+				$this->group_id		= null;
 				$this->folder_id	= null;
 			}
 		}	

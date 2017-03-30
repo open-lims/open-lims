@@ -378,38 +378,40 @@ class EquipmentAjax
 				{
 					$equipment_cat_array = EquipmentType::list_entries_by_cat_id($value);
 	
-					if (is_array($equipment_cat_array) and count($equipment_cat_array) >= 1)
+					if (!is_array($equipment_cat_array))
 					{
-						if (!in_array(1, $equipment_cat_array))
-						{
-							$equipment_cat_array[] = 1;
-						}
-						
-						if (!in_array(2, $equipment_cat_array))
-						{
-							$equipment_cat_array[] = 2;
-						}
-						
-						if (!in_array(3, $equipment_cat_array))
-						{
-							$equipment_cat_array[] = 3;
-						}
-						
-						foreach ($equipment_cat_array as $key => $value)
-						{
-							if (!in_array($value, $hit_array))
-							{
-								$equipment_type = new EquipmentType($value);
-						
-								$result[$counter]['value'] = $value;
-								$result[$counter]['disabled'] = "";
-								$result[$counter]['content'] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
-								
-								$counter++;
-								array_push($hit_array, $value);
-							}
-						} 
+							$equipment_cat_array = array();
 					}
+					
+					if (!in_array(1, $equipment_cat_array))
+					{
+						$equipment_cat_array[] = 1;
+					}
+					
+					if (!in_array(2, $equipment_cat_array))
+					{
+						$equipment_cat_array[] = 2;
+					}
+					
+					if (!in_array(3, $equipment_cat_array))
+					{
+						$equipment_cat_array[] = 3;
+					}		
+						
+					foreach ($equipment_cat_array as $key => $value)
+					{
+						if (!in_array($value, $hit_array))
+						{
+							$equipment_type = new EquipmentType($value);
+					
+							$result[$counter]['value'] = $value;
+							$result[$counter]['disabled'] = "";
+							$result[$counter]['content'] = $equipment_type->get_name()." (".$equipment_type->get_cat_name().")";
+							
+							$counter++;
+							array_push($hit_array, $value);
+						}
+					} 
 				}
 			}
 			else
@@ -483,7 +485,9 @@ class EquipmentAjax
 			$transaction_id = $transaction->begin();
 			
 			$equipment = new Equipment(null);
-			$equipment_add_successful = $equipment->create($type_id, $user->get_user_id());
+			$equipment->ci_set_type_id($type_id);
+			$equipment->ci_set_owner_id($user->get_user_id());
+			$equipment_add_successful = $equipment->create();
 	
 			if ($equipment_add_successful)
 			{
@@ -493,27 +497,18 @@ class EquipmentAjax
 				$event_handler = new EventHandler($item_add_event);
 				if ($event_handler->get_success() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return "1";
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new EquipmentCreateException();
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new EquipmentCreateException();
 			}
 		}

@@ -30,15 +30,7 @@ interface ConcreteFolderCaseInterface
 {
 	function __construct($folder_id);
 	function __destruct();
-	
-	/**
-	 * @param bool $recursive
-	 * @param bool $content
-	 * @return bool
-	 * Called from Folder directly. No direct call necessary
-	 */
-	public function delete($recursive, $content);
-	
+		
 	/**
 	 * Checks if $folder_id is a case of User Folder
 	 * @param integer $folder_id

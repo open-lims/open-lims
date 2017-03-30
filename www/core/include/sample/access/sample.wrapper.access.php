@@ -93,7 +93,8 @@ class Sample_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -130,7 +131,8 @@ class Sample_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("SAMPLE_TEMPLATE_TABLE").".id) AS result " .
 					"FROM ".constant("SAMPLE_TEMPLATE_TABLE")."";
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -180,7 +182,8 @@ class Sample_Wrapper_Access
 		
 		$return_array = array();
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		if (is_numeric($start) and is_numeric($end))
 		{
@@ -217,7 +220,8 @@ class Sample_Wrapper_Access
 		$sql = "SELECT COUNT(".constant("SAMPLE_TEMPLATE_CAT_TABLE").".id) AS result " .
 					"FROM ".constant("SAMPLE_TEMPLATE_CAT_TABLE")."";
 		
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 
 		return $data['result'];
@@ -295,8 +299,8 @@ class Sample_Wrapper_Access
 						"LEFT JOIN ".constant("LOCATION_TABLE")." 				ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
 						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
 						"WHERE " .
-							"(".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE ".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND ".constant("SAMPLE_HAS_USER_TABLE").".user_id = ".$user_id.") " .
-							"OR ".constant("SAMPLE_TABLE").".owner_id = ".$user_id.") " .
+							"(".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE ".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND ".constant("SAMPLE_HAS_USER_TABLE").".user_id = :user_id) " .
+							"OR ".constant("SAMPLE_TABLE").".owner_id = :user_id) " .
 							"AND " .
 								"(".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
@@ -312,7 +316,9 @@ class Sample_Wrapper_Access
 
 			$return_array = array();
 		
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -357,10 +363,12 @@ class Sample_Wrapper_Access
 			$sql = "SELECT COUNT(DISTINCT ".constant("SAMPLE_TABLE").".id) AS result " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
 						"LEFT JOIN ".constant("SAMPLE_HAS_USER_TABLE")." ON ".constant("SAMPLE_TABLE").".id = ".constant("SAMPLE_HAS_USER_TABLE").".sample_id " .
-						"WHERE ".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE ".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND ".constant("SAMPLE_HAS_USER_TABLE").".user_id = ".$user_id.") " .
-							"OR owner_id = ".$user_id."";
+						"WHERE ".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_USER_TABLE")." WHERE ".constant("SAMPLE_HAS_USER_TABLE").".write = 't' AND ".constant("SAMPLE_HAS_USER_TABLE").".user_id = :user_id) " .
+							"OR owner_id = :user_id";
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -465,7 +473,8 @@ class Sample_Wrapper_Access
 			
 			$return_array = array();
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->execute($res);
 			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -512,7 +521,8 @@ class Sample_Wrapper_Access
 						"WHERE ".constant("SAMPLE_IS_ITEM_TABLE").".item_id IN (".$item_sql.") " .
 						"".$sql_order_by."";
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->execute($res);
 			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -601,7 +611,7 @@ class Sample_Wrapper_Access
 						"LEFT JOIN ".constant("LOCATION_TABLE")." 				ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
 						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
 						"LEFT JOIN ".constant("USER_PROFILE_TABLE")." 			ON ".constant("SAMPLE_TABLE").".owner_id					= ".constant("USER_PROFILE_TABLE").".id " .
-						"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
+						"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = :item_id " .
 						"AND (".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
 									"SELECT primary_key " .
@@ -616,7 +626,9 @@ class Sample_Wrapper_Access
 			
 			$return_array = array();
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -660,10 +672,12 @@ class Sample_Wrapper_Access
 		{	
 			$sql = "SELECT COUNT (".constant("SAMPLE_HAS_ITEM_TABLE").".sample_id) AS result " .
 						"FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." " .
-						"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = ".$item_id." " .
+						"WHERE ".constant("SAMPLE_HAS_ITEM_TABLE").".item_id = :item_id " .
 						"".$sql_order_by."";
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -746,7 +760,7 @@ class Sample_Wrapper_Access
 						"LEFT JOIN ".constant("LOCATION_TABLE")." 				ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
 						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 			ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
 						"WHERE " .
-							"".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".organisation_unit_id = ".$organisation_unit_id.") " .
+							"".constant("SAMPLE_TABLE").".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".organisation_unit_id = :organisation_unit_id) " .
 							"AND " .
 								"(".constant("SAMPLE_HAS_LOCATION_TABLE").".primary_key IN " .
 									"( " .
@@ -762,7 +776,9 @@ class Sample_Wrapper_Access
 			
 			$return_array = array();
 		
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -807,9 +823,11 @@ class Sample_Wrapper_Access
 			$sql = "SELECT COUNT(".constant("SAMPLE_TABLE").".id) AS result " .
 						"FROM ".constant("SAMPLE_TABLE")." " .
 						"LEFT JOIN ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." ON ".constant("SAMPLE_TABLE").".id = ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".sample_id " .
-						"WHERE organisation_unit_id = ".$organisation_unit_id." ";
+						"WHERE organisation_unit_id = :organisation_unit_id ";
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -878,12 +896,14 @@ class Sample_Wrapper_Access
 						"LEFT JOIN ".constant("LOCATION_TABLE")." 		ON ".constant("SAMPLE_HAS_LOCATION_TABLE").".location_id 	= ".constant("LOCATION_TABLE").".id " .
 						"LEFT JOIN ".constant("LOCATION_TYPE_TABLE")." 	ON ".constant("LOCATION_TABLE").".type_id 					= ".constant("LOCATION_TYPE_TABLE").".id " .
 						"WHERE " .
-							"".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id = ".$sample_id." " .
+							"".constant("SAMPLE_HAS_LOCATION_TABLE").".sample_id = :sample_id " .
 							"".$sql_order_by."";
 			
 			$return_array = array();
 		
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -927,9 +947,11 @@ class Sample_Wrapper_Access
 		{	
 			$sql = "SELECT COUNT(primary_key) AS result " .
 						"FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." " .
-						"WHERE sample_id = ".$sample_id." ";
+						"WHERE sample_id = :sample_id ";
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -1001,12 +1023,14 @@ class Sample_Wrapper_Access
 						"JOIN ".constant("USER_PROFILE_TABLE")." 	ON ".constant("SAMPLE_HAS_USER_TABLE").".user_id 	= ".constant("USER_PROFILE_TABLE").".id " .
 						"JOIN ".constant("USER_TABLE")." 			ON ".constant("SAMPLE_HAS_USER_TABLE").".user_id 	= ".constant("USER_TABLE").".id " .
 						"WHERE " .
-							"".constant("SAMPLE_HAS_USER_TABLE").".sample_id = ".$sample_id." " .
+							"".constant("SAMPLE_HAS_USER_TABLE").".sample_id = :sample_id " .
 							"".$sql_order_by."";
 			
 			$return_array = array();
 		
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -1050,9 +1074,11 @@ class Sample_Wrapper_Access
 		{	
 			$sql = "SELECT COUNT(primary_key) AS result " .
 						"FROM ".constant("SAMPLE_HAS_USER_TABLE")." " .
-						"WHERE sample_id = ".$sample_id." ";
+						"WHERE sample_id = :sample_id ";
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -1109,12 +1135,14 @@ class Sample_Wrapper_Access
 						"FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." " .
 						"JOIN ".constant("ORGANISATION_UNIT_TABLE")." ON ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".organisation_unit_id = ".constant("ORGANISATION_UNIT_TABLE").".id " .
 						"WHERE " .
-							"".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".sample_id = ".$sample_id." " .
+							"".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE").".sample_id = :sample_id " .
 							"".$sql_order_by."";
 			
 			$return_array = array();
 		
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -1158,9 +1186,11 @@ class Sample_Wrapper_Access
 		{	
 			$sql = "SELECT COUNT(primary_key) AS result " .
 						"FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." " .
-						"WHERE sample_id = ".$sample_id." ";
+						"WHERE sample_id = :sample_id ";
 			
-			$res = $db->db_query($sql);
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -1256,38 +1286,22 @@ class Sample_Wrapper_Access
    			
    			if ($id)
    			{
-   				$id = str_replace("*","%",$id);
-   				$id_string = "";
-   				$id_length = strlen($id);
-   				for($i=0;$i<=($id_length-1);$i++)
-   				{
-   					if (is_numeric($id{$i}))
-   					{
-   						$id_string .= $id{$i};
-   					}
-   				}
-   				
-   				$id_string = (int)$id_string;
-   				if ($id_string)
-   				{
-   					$add_sql = " CAST(".constant('SAMPLE_TABLE').".id AS TEXT) LIKE '".$id_string."'";
-   				}
+   				$add_sql = " CAST(".constant('SAMPLE_TABLE').".id AS TEXT) LIKE :id_string";
    			}
    			else
    			{
-   				$add_sql .= "";
+   				$add_sql = "";
    			}
    			
    			if ($name)
    			{
-   				$name = str_replace("*","%",$name);
    				if ($add_sql)
    				{
-					$add_sql .= " OR LOWER(".constant('SAMPLE_TABLE').".name) LIKE '".$name."'";
+					$add_sql .= " OR LOWER(".constant('SAMPLE_TABLE').".name) LIKE :name";
 				}
 				else
 				{
-					$add_sql = " LOWER(".constant('SAMPLE_TABLE').".name) LIKE '".$name."'";
+					$add_sql = " LOWER(".constant('SAMPLE_TABLE').".name) LIKE :name";
 				}
    			}
    			else
@@ -1312,11 +1326,11 @@ class Sample_Wrapper_Access
    				{
    					if ($template_sql)
    					{
-   						$template_sql .= " OR ".constant('SAMPLE_TABLE').".template_id = '".$value."'";
+   						$template_sql .= " OR ".constant('SAMPLE_TABLE').".template_id = :".$key."template_id";
    					}
    					else
    					{
-   						$template_sql .= "".constant('SAMPLE_TABLE').".template_id = '".$value."'";
+   						$template_sql .= "".constant('SAMPLE_TABLE').".template_id = :".$key."template_id";
    					}
    				}
    				$add_sql .= $template_sql.")";
@@ -1333,15 +1347,18 @@ class Sample_Wrapper_Access
 			
 			$organisation_unit_sql = "";
 			
-			foreach($organisation_unit_array as $key => $value)
+			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
 			{
-				if ($organisation_unit_sql)
+				foreach($organisation_unit_array as $key => $value)
 				{
-					$organisation_unit_sql .= " OR ".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$value.")";
-				}
-				else
-				{
-					$organisation_unit_sql .= "".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$value.")";
+					if ($organisation_unit_sql)
+					{
+						$organisation_unit_sql .= " OR ".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = :".$key."organisation_unit_id)";
+					}
+					else
+					{
+						$organisation_unit_sql .= "".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = :".$key."organisation_unit_id)";
+					}
 				}
 			}
 			
@@ -1363,7 +1380,48 @@ class Sample_Wrapper_Access
    			
    			$return_array = array();
    			
-   			$res = $db->db_query($sql);
+   			$res = $db->prepare($sql);
+   			
+   			if ($id)
+   			{
+   				$id = str_replace("*","%",$id);
+   				$id_string = "";
+   				$id_length = strlen($id);
+   				for($i=0;$i<=($id_length-1);$i++)
+   				{
+   					if (is_numeric($id{$i}))
+   					{
+   						$id_string .= $id{$i};
+   					}
+   				}
+   					
+   				$id_string = (int)$id_string;
+   				$db->bind_value($res, ":id_string", $id_string, PDO::PARAM_INT);
+   			}
+   			
+   			if ($name)
+   			{
+   				$name = str_replace("*","%",$name);
+   				$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+   			}
+   			
+   			if (is_array($template_array) and count($template_array) >= 1)
+   			{
+   				foreach($template_array as $key => $value)
+   				{
+   					$db->bind_value($res, ":".$key."template_id", $value, PDO::PARAM_INT);
+   				}
+   			}
+   			
+   			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+   			{
+   				foreach($organisation_unit_array as $key => $value)
+   				{
+   					$db->bind_value($res, ":".$key."organisation_unit_id", $value, PDO::PARAM_INT);
+   				}
+   			}
+   			
+   			$db->execute($res);
    			
 			if (is_numeric($start) and is_numeric($end))
 			{
@@ -1419,38 +1477,22 @@ class Sample_Wrapper_Access
    			
    			if ($id)
    			{
-   				$id = str_replace("*","%",$id);
-   				$id_string = "";
-   				$id_length = strlen($id);
-   				for($i=0;$i<=($id_length-1);$i++)
-   				{
-   					if (is_numeric($id{$i}))
-   					{
-   						$id_string .= $id{$i};
-   					}
-   				}
-   				
-   				$id_string = (int)$id_string;
-   				if ($id_string)
-   				{
-   					$add_sql = " CAST(".constant('SAMPLE_TABLE').".id AS TEXT) LIKE '".$id_string."'";
-   				}
+   				$add_sql = " CAST(".constant('SAMPLE_TABLE').".id AS TEXT) LIKE :id_string";
    			}
    			else
    			{
-   				$add_sql .= "";
+   				$add_sql = "";
    			}
    			
    			if ($name)
    			{
-   				$name = str_replace("*","%",$name);
    				if ($add_sql)
    				{
-					$add_sql .= " OR LOWER(".constant('SAMPLE_TABLE').".name) LIKE '".$name."'";
+					$add_sql .= " OR LOWER(".constant('SAMPLE_TABLE').".name) LIKE :name";
 				}
 				else
 				{
-					$add_sql = " LOWER(".constant('SAMPLE_TABLE').".name) LIKE '".$name."'";
+					$add_sql = " LOWER(".constant('SAMPLE_TABLE').".name) LIKE :name";
 				}
    			}
    			else
@@ -1475,11 +1517,11 @@ class Sample_Wrapper_Access
    				{
    					if ($template_sql)
    					{
-   						$template_sql .= " OR ".constant('SAMPLE_TABLE').".template_id = '".$value."'";
+   						$template_sql .= " OR ".constant('SAMPLE_TABLE').".template_id = :".$key."template_id";
    					}
    					else
    					{
-   						$template_sql .= "".constant('SAMPLE_TABLE').".template_id = '".$value."'";
+   						$template_sql .= "".constant('SAMPLE_TABLE').".template_id = :".$key."template_id";
    					}
    				}
    				$add_sql .= $template_sql.")";
@@ -1496,24 +1538,66 @@ class Sample_Wrapper_Access
 			
 			$organisation_unit_sql = "";
 			
-			foreach($organisation_unit_array as $key => $value)
+			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
 			{
-				if ($organisation_unit_sql)
+				foreach($organisation_unit_array as $key => $value)
 				{
-					$organisation_unit_sql .= " OR ".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$value.")";
-				}
-				else
-				{
-					$organisation_unit_sql .= "".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$value.")";
+					if ($organisation_unit_sql)
+					{
+						$organisation_unit_sql .= " OR ".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = :".$key."organisation_unit_id)";
+					}
+					else
+					{
+						$organisation_unit_sql .= "".constant('SAMPLE_TABLE').".id IN (SELECT sample_id FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = :".$key."organisation_unit_id)";
+					}
 				}
 			}
 			
 			$add_sql .= $organisation_unit_sql.")";
 			
-			
-   			$sql = $base_sql."".$add_sql."";
-   			   			
-   			$res = $db->db_query($sql);
+   			$sql = $base_sql."".$add_sql."";   			
+   			$res = $db->prepare($sql);
+   			
+   			if ($id)
+   			{
+   				$id = str_replace("*","%",$id);
+   				$id_string = "";
+   				$id_length = strlen($id);
+   				for($i=0;$i<=($id_length-1);$i++)
+   				{
+   					if (is_numeric($id{$i}))
+   					{
+   						$id_string .= $id{$i};
+   					}
+   				}
+   					
+   				$id_string = (int)$id_string;
+   				$db->bind_value($res, ":id_string", $id_string, PDO::PARAM_INT);
+   			}
+   			
+   			if ($name)
+   			{
+   				$name = str_replace("*","%",$name);
+   				$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+   			}
+   			
+   			if (is_array($template_array) and count($template_array) >= 1)
+   			{
+   				foreach($template_array as $key => $value)
+   				{
+   					$db->bind_value($res, ":".$key."template_id", $value, PDO::PARAM_INT);
+   				}
+   			}
+   			
+   			if (is_array($organisation_unit_array) and count($organisation_unit_array) >= 1)
+   			{
+   				foreach($organisation_unit_array as $key => $value)
+   				{
+   					$db->bind_value($res, ":".$key."organisation_unit_id", $value, PDO::PARAM_INT);
+   				}
+   			}
+   			
+   			$db->execute($res);
    			$data = $db->fetch($res);
 	
 			return $data['result'];
@@ -1526,7 +1610,7 @@ class Sample_Wrapper_Access
 	
 	/**
 	 * @param string $string
-	 * @param array �sample_id_array
+	 * @param array $sample_id_array
 	 * @param array $item_select_sql_array
 	 * @param string $item_join_sql
 	 * @param string $item_where_sql
@@ -1689,7 +1773,7 @@ class Sample_Wrapper_Access
 	
    	/**
 	 * @param string $string
-	 * @param array �sample_id_array
+	 * @param array $sample_id_array
 	 * @param array $item_select_sql_array
 	 * @param string $item_join_sql
 	 * @param string $item_where_sql

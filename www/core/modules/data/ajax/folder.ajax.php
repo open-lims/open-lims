@@ -247,7 +247,11 @@ class FolderAjax
 			$path = new Path($base_folder->get_path());
 			$path->add_element($internal_name);
 			$folder = Folder::get_instance(null);
-			if (($folder_id = $folder->create($folder_name, $folder_id, $path->get_path_string(), $session->get_user_id(), null)) == null)
+			$folder->ci_set_name($folder_name);
+			$folder->ci_set_toid($folder_id);
+			$folder->ci_set_path($path->get_path_string());
+			$folder->ci_set_owner_id($session->get_user_id());
+			if (($folder_id = $folder->create()) == null)
 			{
 			 	return "1";
 			}
@@ -291,7 +295,7 @@ class FolderAjax
 		$folder = Folder::get_instance($folder_id);
 		if ($folder->can_command_folder())
 		{
-			$folder->delete(true, true);
+			$folder->delete();
 			return "1";
 		}
 		else

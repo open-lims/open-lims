@@ -308,27 +308,18 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 		    				$virtual_folder = new VirtualFolder($virtual_folder_id);
 		    				if ($virtual_folder->link_folder($sample_folder_id) == false)
 		    				{
-		    					if ($transaction_id != null)
-		    					{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return null;
 		    				}
 		    			}
 	    			}
 	    			
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 	    			return $sample_has_user_pk;	
 	    		}
 	    		else
 	    		{
-	    			if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 	    			return null;
 	    		}
     		}
@@ -383,10 +374,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     				$virtual_folder = new VirtualFolder($virtual_folder_id);
     				if ($virtual_folder->link_folder($sample_folder_id) == false)
     				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return null;
     				}
     			}
@@ -420,29 +408,19 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 		    				$virtual_folder = new VirtualFolder($virtual_folder_id);
 		    				if ($virtual_folder->link_folder($sample_folder_id) == false)
 		    				{
-		    					if ($transaction_id != null)
-		    					{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 					    		return null;
 		    				}
 		    			}
 					}
 				}
     			
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
-    			return $sample_has_organisation_unit_pk;
-    			
+				$transaction->commit($transaction_id);
+    			return $sample_has_organisation_unit_pk;	
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			return null;
     		}
     	}
@@ -495,27 +473,18 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
 	    				if ($virtual_folder->unlink_folder($sample_folder_id) == false)
 	    				{
-	    					if ($transaction_id != null)
-	    					{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 	    					return false;
 	    				}
 	    			}
     			}
     				
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
     			return true;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			return false;
     		}
     	}
@@ -565,10 +534,7 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
     				$virtual_folder = new VirtualFolder($virtual_folder_id);
     				if ($virtual_folder->unlink_folder($sample_folder_id) == false)
     				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
     					return false;
     				}
     			}
@@ -599,28 +565,19 @@ class SampleSecurity implements SampleSecurityInterface, EventListenerInterface
 		    				$virtual_folder = new VirtualFolder($virtual_folder_id);
 		    				if ($virtual_folder->unlink_folder($sample_folder_id) == false)
 		    				{
-		    					if ($transaction_id != null)
-		    					{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 					    		return false;
 		    				}
 		    			}
 					}
 				}
     			
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
     			return true;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			return false;
     		}
     	}

@@ -38,10 +38,10 @@
 	require_once("core/db/db.php");
 		
 	$database = SystemConfig::get_database();
-	
+			
 	$db = new Database();
-	$db->connect($database['type'],$database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
-	
+	@$connection_result = $db->connect($database['type'],$database[0]['server'],$database[0]['port'],$database['user'],$database['password'],$database['database']);
+					
 	require_once("core/include/base/system/transaction.class.php");
 	require_once("core/include/base/system/events/event.class.php");
 	require_once("core/include/base/system/events/delete_event.class.php");

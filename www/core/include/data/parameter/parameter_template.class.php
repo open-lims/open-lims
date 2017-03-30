@@ -97,10 +97,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 			$parameter_template = new ParameterTemplate_Access(null);
 			if (($parameter_template_id = $parameter_template->create($internal_name, $name, $user->get_user_id())) === null)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ParameterTemplateCreateFailedException();
 			}
 		
@@ -112,10 +109,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				$parameter_limit = new ParameterLimit_Access(null);
 				if (($parameter_limit_id_array[$i] = $parameter_limit->create($limit_array[$i]['name'])) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ParameterTemplateCreateLimitCreateFailedException();
 				}
 			}
@@ -168,20 +162,14 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				$parameter_field = new ParameterField_Access(null);
 				if (($parameter_field_id = $parameter_field->create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent, $measuring_unit_ratio_id)) === null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ParameterTemplateCreateFieldCreateFailedException();
 				}
 				
 				$parameter_template_has_field = new ParameterTemplateHasField_Access(null, null);
 				if ($parameter_template_has_field->create($parameter_template_id, $parameter_field_id) === false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ParameterTemplateCreateFieldLinkFailedException();
 				}
 				
@@ -192,10 +180,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						$parameter_field_limit = new ParameterFieldLimit_Access(null, null);
 						if ($parameter_field_limit->create($parameter_limit_id_array[$i], $parameter_field_id, $limit_array[$i]['usl'][$key], $limit_array[$i]['lsl'][$key]) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							throw new ParameterTemplateCreateFieldLimitCreateFailedException();
 						}
 					}
@@ -209,10 +194,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				unset($measuring_unit_ratio_id);
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			return $parameter_template_id;
 		}
 		else
@@ -250,20 +232,14 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				{
 					if (ParameterFieldLimit_Access::delete_limits_by_parameter_limit_id($value) === false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ParameterTemplateDeleteFieldLimitDeleteFailedException();
 					}
 					
 					$parameter_limit = new ParameterLimit_Access($value);
 					if ($parameter_limit->delete() === false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ParameterTemplateDeleteLimitDeleteFailedException();
 					}
 				}
@@ -276,30 +252,21 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 				{	
 					if (ParameterFieldFieldHasMethod_Access::delete_by_field_id($value) === false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ParameterTemplateDeleteFieldMethodFailedException();
 					}
 					
 					$parameter_template_field = new ParameterTemplateHasField_Access($this->parameter_template_id, $value);
 					if ($parameter_template_field->delete() === false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ParameterTemplateDeleteFieldLinkFailedException();
 					}
 					
 					$parameter_field = new ParameterField_Access($value);
 					if ($parameter_field->delete() === false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new ParameterTemplateDeleteFieldDeleteFailedException();
 					}
 				}
@@ -308,18 +275,12 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 			// Delete Template
 			if ($this->parameter_template->delete() === true)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ParameterTemplateDeleteFailedException();
 			}
 		}
@@ -506,10 +467,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 			
 			if ($this->parameter_template->set_name($name) == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 						
@@ -532,10 +490,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						$parameter_limit = new ParameterLimit_Access($limit_array[$i]['pk']);
 						if ($parameter_limit->set_name($limit_array[$i]['name']) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 					}
@@ -544,10 +499,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						$parameter_limit = new ParameterLimit_Access(null);
 						if (($parameter_limit_id_array[$i] = $parameter_limit->create($limit_array[$i]['name'])) == null)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 					}
@@ -615,10 +567,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						
 						if ($parameter_field->set_name($name) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 						
@@ -626,28 +575,19 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							if ($parameter_field->set_measuring_unit_id($measuring_unit_id) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 							
 							if ($parameter_field->set_measuring_unit_exponent($measuring_unit_exponent) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 							
 							if ($parameter_field->set_measuring_unit_ratio_id(null) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -655,28 +595,19 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							if ($parameter_field->set_measuring_unit_id(null) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 							
 							if ($parameter_field->set_measuring_unit_exponent(null) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 							
 							if ($parameter_field->set_measuring_unit_ratio_id($measuring_unit_ratio_id) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -685,10 +616,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							if ($parameter_field->set_min_value($min_value) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -697,10 +625,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							if ($parameter_field->set_max_value($max_value) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -708,10 +633,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					else
 					{
 						// Exception: Security 
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
@@ -721,20 +643,14 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					$parameter_field = new ParameterField_Access(null);
 					if (($parameter_field_id = $parameter_field->create($name, $min_value, $max_value, $measuring_unit_id, $measuring_unit_exponent, $measuring_unit_ratio_id)) === null)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
 					$parameter_template_has_field = new ParameterTemplateHasField_Access(null, null);
 					if ($parameter_template_has_field->create($this->parameter_template_id, $parameter_field_id) === false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
@@ -753,10 +669,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							if ($parameter_field_limit->set_lower_specification_limit($limit_array[$i]['lsl'][$key]) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -765,10 +678,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 						{
 							if ($parameter_field_limit->set_upper_specification_limit($limit_array[$i]['usl'][$key]) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -780,10 +690,7 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 							$parameter_field_limit = new ParameterFieldLimit_Access(null, null);
 							if ($parameter_field_limit->create($parameter_limit_id_array[$i], $parameter_field_id, $limit_array[$i]['usl'][$key], $limit_array[$i]['lsl'][$key]) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 							
@@ -812,30 +719,21 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					{
 						if (ParameterFieldLimit_Access::delete_limits_by_parameter_field_id($value) === false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 						
 						$parameter_template_field = new ParameterTemplateHasField_Access($this->parameter_template_id, $value);
 						if ($parameter_template_field->delete() === false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 						
 						$parameter_field = new ParameterField_Access($value);
 						if ($parameter_field->delete() === false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 					}
@@ -856,31 +754,21 @@ class ParameterTemplate implements ParameterTemplateInterface, EventListenerInte
 					{
 						if (ParameterFieldLimit_Access::delete_limits_by_parameter_limit_id($value) === false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 						
 						$parameter_limit = new ParameterLimit_Access($value);
 						if ($parameter_limit->delete() === false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 					}
 				}
 			}
 			
-			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			return true;
 		}
 		else

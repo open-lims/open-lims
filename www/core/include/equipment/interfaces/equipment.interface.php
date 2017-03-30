@@ -27,26 +27,7 @@
  * @package equipment
  */ 		 
 interface EquipmentInterface
-{
-	/**
-	 * @param integer $equipment_id
-	 */
-	function __construct($equipment_id);
-	
-	/**
-	 * Creates a new equipment
-	 * @param integer $type_id
-	 * @param integer $owner_id
-	 * @return integer
-	 */
-	public function create($type_id, $owner_id);
-	
-	/**
-	 * Deletes a equipment
-	 * @return bool
-	 */
-	public function delete();
-	
+{	
 	/**
 	 * @return integer
 	 */

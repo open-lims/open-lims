@@ -151,27 +151,18 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$oldl = new Oldl(null);
 				if (($oldl_id = $oldl->create($data_entity_id)) == null)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectTemplateCreateOLDLCreateException();
 				}
 		
 				if ($this->project_template->create($id, $title, $category_id, $parent_template, $oldl_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new ProjectTemplateCreateException("DB Failed");
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}	
 			}
@@ -214,27 +205,18 @@ class ProjectTemplate implements ProjectTemplateInterface
 			
 			if ($this->project_template->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ProjectTemplateDeleteException("DB delete failed");
 			}
 			
 			if ($oldl->delete() == false)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw new ProjectTemplateDeleteOLDLDeleteException();
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
 		}
@@ -325,11 +307,20 @@ class ProjectTemplate implements ProjectTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			
-		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
-		    		{
-		    			$return_array[$counter]					= $value[3];
-			    		$return_array[$counter]['xml_element'] 	= $value[1];
-			    		$counter++;
+					if (is_array($value[3]))
+					{
+			    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
+			    		{
+			    			$return_array[$counter]					= $value[3];
+				    		$return_array[$counter]['xml_element'] 	= $value[1];
+				    		$counter++;
+			    		}
+			    		else
+			    		{
+			    			$return_array[$counter]['xml_element'] 	= $value[1];
+			    			$return_array[$counter]['close']		= "1";
+			    			$counter++;
+			    		}
 		    		}
 		    		else
 		    		{
@@ -380,12 +371,21 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    	
 		    	if ($in_status == true)
 		    	{
-		    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
+		    		if (is_array($value[3]))
 		    		{
-			    		$return_array[$counter] 				= $value[3];
-			    		$return_array[$counter]['xml_element'] 	= $value[1];
-			    		$counter++;
-		    		}
+			    		if ($value[3]['id'] != "#" and $value[3]['type'] != "#")
+			    		{
+				    		$return_array[$counter] 				= $value[3];
+				    		$return_array[$counter]['xml_element'] 	= $value[1];
+				    		$counter++;
+			    		}
+			    		else
+			    		{
+			    			$return_array[$counter]['xml_element'] 	= $value[1];
+			    			$return_array[$counter]['close']		= "1";
+			    			$counter++;
+			    		}
+			    		}
 		    		else
 		    		{
 		    			$return_array[$counter]['xml_element'] 	= $value[1];
@@ -394,9 +394,12 @@ class ProjectTemplate implements ProjectTemplateInterface
 		    		}
 		    	}
 		    	
-		    	if ($value[1] == "status" and $value[3]['id'] == $status_id)
+		    	if (is_array($value[3]))
 		    	{
-					$in_status = true;
+			    	if ($value[1] == "status" and $value[3]['id'] == $status_id)
+			    	{
+						$in_status = true;
+			    	}
 		    	}
 		    }
 			return $return_array;
@@ -426,10 +429,13 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$value[1] = trim(strtolower($value[1]));
 				$value[2] = trim(strtolower($value[2]));
 		    	
-		    	if ($value[1] == "status" and is_numeric($value[3]['id']))
-		    	{
-		    		array_push($return_array, $value[3]['id']);
-		    	}
+				if (is_array($value[3]))
+				{
+			    	if ($value[1] == "status" and is_numeric($value[3]['id']))
+			    	{
+			    		array_push($return_array, $value[3]['id']);
+			    	}
+				}
 		    }
 			return $return_array;
 		
@@ -463,20 +469,23 @@ class ProjectTemplate implements ProjectTemplateInterface
 					$value[1] = trim(strtolower($value[1]));
 					$value[2] = trim(strtolower($value[2]));
 			    	
-		    		if ($value[1] == "status" and is_numeric($value[3]['id']))
-		    		{
-			    		if ($status_found == false)
+					if (is_array($value[3]))
+					{
+			    		if ($value[1] == "status" and is_numeric($value[3]['id']))
 			    		{
-			    			if ($value[3]['id'] == $status_id)
-			    			{
-			    				$status_found = true;
-			    			}
-			    		}
-			    		else
-			    		{
-			    			return $value[3]['id'];
-			    		}
-			    	}
+				    		if ($status_found == false)
+				    		{
+				    			if ($value[3]['id'] == $status_id)
+				    			{
+				    				$status_found = true;
+				    			}
+				    		}
+				    		else
+				    		{
+				    			return $value[3]['id'];
+				    		}
+				    	}
+					}
 			    }
 		    }
 		    return 2;
@@ -587,17 +596,20 @@ class ProjectTemplate implements ProjectTemplateInterface
 				$value[1] = trim(strtolower($value[1]));
 				$value[2] = trim(strtolower($value[2]));
 		    	
-		    	if ($value[1] == "status" and $value[3]['id'] == $status_id and $value[3]['id'] != "#" and $value[3]['type'] != "#")
-		    	{ 				    		
-		    		if ($value[3]['id'])
-		    		{
-		    			$return_array['id']	  			= $value[3]['id'];
-		    		}
-		    		if ($value[3]['requirement'])
-		    		{
-		    			$return_array['requirement']	= $value[3]['requirement'];
-		    		}
-		    	}
+				if (is_array($value[3]))
+				{
+			    	if ($value[1] == "status" and $value[3]['id'] == $status_id and $value[3]['id'] != "#" and $value[3]['type'] != "#")
+			    	{ 				    		
+			    		if ($value[3]['id'])
+			    		{
+			    			$return_array['id']	  			= $value[3]['id'];
+			    		}
+			    		if ($value[3]['requirement'])
+			    		{
+			    			$return_array['requirement']	= $value[3]['requirement'];
+			    		}
+			    	}
+				}
 		    }
 			return $return_array;
 		}

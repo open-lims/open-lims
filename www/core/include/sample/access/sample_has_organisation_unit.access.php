@@ -47,8 +47,10 @@ class SampleHasOrganisationUnit_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);		
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -88,13 +90,17 @@ class SampleHasOrganisationUnit_Access
 		if (is_numeric($sample_id) and is_numeric($organisation_unit_id))
 		{
 			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." (primary_key,sample_id,organisation_unit_id) " .
-					"VALUES (nextval('".self::SAMPLE_HAS_ORGANISATION_UNIT_PK_SEQUENCE."'::regclass),".$sample_id.",".$organisation_unit_id.")";
-			$res_write = $db->db_query($sql_write);
+					"VALUES (nextval('".self::SAMPLE_HAS_ORGANISATION_UNIT_PK_SEQUENCE."'::regclass), :sample_id, :organisation_unit_id)";
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":organisation_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_ORGANISATION_UNIT_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -125,8 +131,10 @@ class SampleHasOrganisationUnit_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -183,8 +191,11 @@ class SampleHasOrganisationUnit_Access
 
 		if ($this->primary_key and is_numeric($sample_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." SET sample_id = :sample_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -212,8 +223,11 @@ class SampleHasOrganisationUnit_Access
 
 		if ($this->primary_key and is_numeric($organisation_unit_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." SET organisation_unit_id = :organisation_unit_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -246,8 +260,11 @@ class SampleHasOrganisationUnit_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE sample_id = ".$sample_id." AND organisation_unit_id = ".$organisation_unit_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE sample_id = :sample_id AND organisation_unit_id = :organisation_unit_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 
 			if ($data['primary_key'])
@@ -277,8 +294,10 @@ class SampleHasOrganisationUnit_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE sample_id = ".$sample_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE sample_id = :sample_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -312,8 +331,10 @@ class SampleHasOrganisationUnit_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = :organisation_unit_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -345,7 +366,8 @@ class SampleHasOrganisationUnit_Access
 		$return_array = array();
 		
 		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -372,8 +394,10 @@ class SampleHasOrganisationUnit_Access
 		
 		if (is_numeric($organisation_unit_id))
 		{
-			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_ORGANISATION_UNIT_TABLE")." WHERE organisation_unit_id = :organisation_unit_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			return true;
 		}

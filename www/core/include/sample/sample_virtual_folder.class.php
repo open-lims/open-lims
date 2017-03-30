@@ -80,6 +80,7 @@ class SampleVirtualFolder extends VirtualFolder implements SampleVirtualFolderIn
 	}
 	
 	/**
+	 * @todo language in name
 	 * @see EventListenerInterface::listen_events()
      * @param object $event_object
      * @return bool
@@ -93,7 +94,9 @@ class SampleVirtualFolder extends VirtualFolder implements SampleVirtualFolderIn
    			$event_object instanceof ProjectFolderCreateEvent)
     	{
     		$sample_virtual_folder = new SampleVirtualFolder(null);
-			if (($virtual_folder_id = $sample_virtual_folder->create($event_object->get_folder_id(), "samples")) == null)
+    		$sample_virtual_folder->ci_set_folder_id($event_object->get_folder_id());
+    		$sample_virtual_folder->ci_set_name("samples");
+			if (($virtual_folder_id = $sample_virtual_folder->create()) == null)
 			{
 				return false;
 			}

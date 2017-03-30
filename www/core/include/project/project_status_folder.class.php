@@ -38,6 +38,9 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
   	private $project_status_folder;
 	private $project_status_id;
 	private $project_id;
+	
+	private $ci_project_id;
+	private $ci_project_status_id;
   	
   	/**
   	 * @param integer $folder_id
@@ -117,27 +120,30 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
-	 * Creates a new Project Folder including Folder
-	 * @param integer $project_id
+	 * Creates a new Project Status Folder including Folder
 	 * @return integer
 	 */
-	public function create($project_id, $project_status_id)
+	public function create()
 	{
-		if (is_numeric($project_id) and is_numeric($project_status_id))
+		if (is_numeric($this->ci_project_id) and is_numeric($this->ci_project_status_id))
 		{			
-			$project_status = new ProjectStatus($project_status_id);
-			$project = new Project($project_id);
+			$project_status = new ProjectStatus($this->ci_project_status_id);
+			$project = new Project($this->ci_project_id);
 			
-			$project_folder_id = ProjectFolder::get_folder_by_project_id($project_id);
+			$project_folder_id = ProjectFolder::get_folder_by_project_id($this->ci_project_id);
 			$folder = new Folder($project_folder_id);
 
 			$path = new Path($folder->get_path());
-			$path->add_element("status-".$project_status_id);
+			$path->add_element("status-".$this->ci_project_status_id);
 			
-			if (($folder_id = parent::create($project_status->get_name(), $project_folder_id, $path->get_path_string(), $project->get_owner_id(), null)) != null)
+			parent::ci_set_name($project_status->get_name());
+			parent::ci_set_toid($project_folder_id);
+			parent::ci_set_path($path->get_path_string());
+			parent::ci_set_owner_id($project->get_owner_id());
+			if (($folder_id = parent::create()) != null)
 			{
 				$project_status_has_folder_access = new ProjectStatusHasFolder_Access(null);
-				if ($project_status_has_folder_access->create($project_id, $project_status_id, $folder_id) == null)
+				if ($project_status_has_folder_access->create($this->ci_project_id, $this->ci_project_status_id, $folder_id) == null)
 				{
 					return null;
 				}
@@ -156,12 +162,28 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 	}
 	
 	/**
+	 * Injects $project_id into create()
+	 * @param integer $project_id
+	 */
+	public function ci_set_project_id($project_id)
+	{
+		$this->ci_project_id = $project_id;
+	}
+	
+	/**
+	 * Injects $project_status_id into create()
+	 * @param integer $project_status_id
+	 */
+	public function ci_set_project_status_id($project_status_id)
+	{
+		$this->ci_project_status_id = $project_status_id;
+	}
+	
+	/**
 	 * @see ConcreteFolderCaseInterface::delete()
-	 * @param bool $recursive
-	 * @param bool $content
 	 * @return bool
 	 */
-	public function delete($recursive, $content)
+	public function delete()
 	{
 		global $transaction;
 		
@@ -171,29 +193,20 @@ class ProjectStatusFolder extends Folder implements ConcreteFolderCaseInterface
 			
 			if ($this->project_status_folder->delete() == true)
 			{
-				if (parent::delete($recursive, $content) == true)
+				if (parent::delete() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}

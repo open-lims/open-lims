@@ -47,21 +47,21 @@ class Item implements ItemInterface, EventListenerInterface
 	/**
 	 * @param integer $item_id
 	 */
-	protected function __construct($item_id)
+	function __construct($id)
 	{
-		if ($item_id == null)
+		if ($id == null)
 		{
 			$this->item_id = null;
 			$this->item = new Item_Access(null);
 		}
 		else
 		{
-			$this->item_id = $item_id;
-			$this->item = new Item_Access($item_id);
+			$this->item_id = $id;
+			$this->item = new Item_Access($id);
 		}
 	}
 	
-	protected function __destruct()
+	function __destruct()
 	{
 		if ($this->item_id)
 		{
@@ -155,17 +155,11 @@ class Item implements ItemInterface, EventListenerInterface
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			return true;
 		}
 		else

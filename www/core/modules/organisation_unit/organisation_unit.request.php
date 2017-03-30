@@ -32,126 +32,126 @@ class OrganisationUnitRequest
 	 */
 	public static function ajax_handler($alias)
 	{
-		switch($_GET['run']):
+		switch(System::get_get("run")):
 	
 			case "list_members":
 				require_once("ajax/organisation_unit.ajax.php");
 				echo OrganisationUnitAjax::list_members(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_members":
 				require_once("ajax/organisation_unit.ajax.php");
-				echo OrganisationUnitAjax::count_members($_POST['argument_array']);
+				echo OrganisationUnitAjax::count_members(System::get_post("argument_array"));
 			break;
 			
 			case "list_owners":
 				require_once("ajax/organisation_unit.ajax.php");
 				echo OrganisationUnitAjax::list_owners(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_owners":
 				require_once("ajax/organisation_unit.ajax.php");
-				echo OrganisationUnitAjax::count_owners($_POST['argument_array']);
+				echo OrganisationUnitAjax::count_owners(System::get_post("argument_array"));
 			break;
 			
 			case "list_leaders":
 				require_once("ajax/organisation_unit.ajax.php");
 				echo OrganisationUnitAjax::list_leaders(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_leaders":
 				require_once("ajax/organisation_unit.ajax.php");
-				echo OrganisationUnitAjax::count_leaders($_POST['argument_array']);
+				echo OrganisationUnitAjax::count_leaders(System::get_post("argument_array"));
 			break;
 			
 			case "list_quality_managers":
 				require_once("ajax/organisation_unit.ajax.php");
 				echo OrganisationUnitAjax::list_quality_managers(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_quality_managers":
 				require_once("ajax/organisation_unit.ajax.php");
-				echo OrganisationUnitAjax::count_quality_managers($_POST['argument_array']);
+				echo OrganisationUnitAjax::count_quality_managers(System::get_post("argument_array"));
 			break;
 			
 			case "list_groups":
 				require_once("ajax/organisation_unit.ajax.php");
 				echo OrganisationUnitAjax::list_groups(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_groups":
 				require_once("ajax/organisation_unit.ajax.php");
-				echo OrganisationUnitAjax::count_groups($_POST['argument_array']);
+				echo OrganisationUnitAjax::count_groups(System::get_post("argument_array"));
 			break;
 			
 			case "list_organisation_units_by_user_id":
 				require_once("ajax/organisation_unit.ajax.php");
 				echo OrganisationUnitAjax::list_organisation_units_by_user_id(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_organisation_units_by_user_id":
 				require_once("ajax/organisation_unit.ajax.php");
-				echo OrganisationUnitAjax::count_organisation_units_by_user_id($_POST['argument_array']);
+				echo OrganisationUnitAjax::count_organisation_units_by_user_id(System::get_post("argument_array"));
 			break;
 			
 			// Admin
@@ -159,150 +159,150 @@ class OrganisationUnitRequest
 			case "admin_list_members":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
 				echo AdminOrganisationUnitAjax::list_members(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "admin_count_members":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::count_members($_POST['argument_array']);
+				echo AdminOrganisationUnitAjax::count_members(System::get_post("argument_array"));
 			break;
 			
 			case "admin_delete_member":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::delete_member($_POST['organisation_unit_id'], $_POST['user_id']);
+				echo AdminOrganisationUnitAjax::delete_member(System::get_post("organisation_unit_id"), System::get_post("user_id"));
 			break;
 			
 			case "admin_add_member":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::add_member($_POST['organisation_unit_id'], $_POST['user_id']);
+				echo AdminOrganisationUnitAjax::add_member(System::get_post("organisation_unit_id"), System::get_post("user_id"));
 			break;
 			
 			case "admin_list_owners":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
 				echo AdminOrganisationUnitAjax::list_owners(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "admin_count_owners":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::count_owners($_POST['argument_array']);
+				echo AdminOrganisationUnitAjax::count_owners(System::get_post("argument_array"));
 			break;
 			
 			case "admin_delete_owner":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::delete_owner($_POST['organisation_unit_id'], $_POST['user_id']);
+				echo AdminOrganisationUnitAjax::delete_owner(System::get_post("organisation_unit_id"), System::get_post("user_id"));
 			break;
 			
 			case "admin_add_owner":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::add_owner($_POST['organisation_unit_id'], $_POST['user_id']);
+				echo AdminOrganisationUnitAjax::add_owner(System::get_post("organisation_unit_id"), System::get_post("user_id"));
 			break;
 			
 			case "admin_list_leaders":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
 				echo AdminOrganisationUnitAjax::list_leaders(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "admin_count_leaders":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::count_leaders($_POST['argument_array']);
+				echo AdminOrganisationUnitAjax::count_leaders(System::get_post("argument_array"));
 			break;
 			
 			case "admin_delete_leader":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::delete_leader($_POST['organisation_unit_id'], $_POST['user_id']);
+				echo AdminOrganisationUnitAjax::delete_leader(System::get_post("organisation_unit_id"), System::get_post("user_id"));
 			break;
 			
 			case "admin_add_leader":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::add_leader($_POST['organisation_unit_id'], $_POST['user_id']);
+				echo AdminOrganisationUnitAjax::add_leader(System::get_post("organisation_unit_id"), System::get_post("user_id"));
 			break;
 			
 			case "admin_list_quality_managers":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
 				echo AdminOrganisationUnitAjax::list_quality_managers(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "admin_count_quality_managers":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::count_quality_managers($_POST['argument_array']);
+				echo AdminOrganisationUnitAjax::count_quality_managers(System::get_post("argument_array"));
 			break;
 			
 			case "admin_delete_quality_manager":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::delete_quality_manager($_POST['organisation_unit_id'], $_POST['user_id']);
+				echo AdminOrganisationUnitAjax::delete_quality_manager(System::get_post("organisation_unit_id"), System::get_post("user_id"));
 			break;
 			
 			case "admin_add_quality_manager":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::add_quality_manager($_POST['organisation_unit_id'], $_POST['user_id']);
+				echo AdminOrganisationUnitAjax::add_quality_manager(System::get_post("organisation_unit_id"), System::get_post("user_id"));
 			break;
 			
 			case "admin_list_groups":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
 				echo AdminOrganisationUnitAjax::list_groups(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']);
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod"));
 			break;
 			
 			case "admin_count_groups":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::count_groups($_POST['argument_array']);
+				echo AdminOrganisationUnitAjax::count_groups(System::get_post("argument_array"));
 			break;
 			
 			case "admin_delete_group":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::delete_group($_POST['organisation_unit_id'], $_POST['group_id']);
+				echo AdminOrganisationUnitAjax::delete_group(System::get_post("organisation_unit_id"), System::get_post("group_id"));
 			break;
 			
 			case "admin_add_group":
 				require_once("ajax/admin/admin_organisation_unit.ajax.php");
-				echo AdminOrganisationUnitAjax::add_group($_POST['organisation_unit_id'], $_POST['group_id']);;
+				echo AdminOrganisationUnitAjax::add_group(System::get_post("organisation_unit_id"), System::get_post("group_id"));;
 			break;
 			
 			
@@ -310,7 +310,7 @@ class OrganisationUnitRequest
 			
 			case "navigation":
 				require_once("ajax/navigation/organisation_unit_navigation.ajax.php");
-				switch($_GET['action']):
+				switch(System::get_get("action")):
 
 					case "get_name":
 						echo OrganisationUnitNavigationAjax::get_name();
@@ -325,11 +325,11 @@ class OrganisationUnitRequest
 					break;
 					
 					case "set_array":
-						echo OrganisationUnitNavigationAjax::set_array($_POST['array']);
+						echo OrganisationUnitNavigationAjax::set_array(System::get_post("array"));
 					break;
 				
 					case "get_children":
-						echo OrganisationUnitNavigationAjax::get_children($_POST['id']);
+						echo OrganisationUnitNavigationAjax::get_children(System::get_post("id"));
 					break;
 					
 				endswitch;

@@ -329,7 +329,7 @@ class SampleCreateAjax
 				
 				$sample_template_obj = new SampleTemplate($sample_template);
 				$required_array = $sample_template_obj->get_required_requirements();
-				
+								
 				if (is_array($required_array) and count($required_array) >= 1)
 				{
 					$value_type_id = 0;
@@ -719,8 +719,17 @@ class SampleCreateAjax
 			$sample = new Sample(null);
 	
 			$sample->set_template_data($sample_template_data_type, $sample_template_data_type_id, $sample_template_data_array);
-	
-			$sample_id = $sample->create($sample_organ_unit, $sample_template, $sample_name, $sample_manufacturer, $sample_location, $sample_desc, null, $sample_expiry, $sample_expiry_warning);
+		
+			$sample->ci_set_organisation_unit_id($sample_organ_unit);
+			$sample->ci_set_template_id($sample_template);
+			$sample->ci_set_name($sample_name);
+			$sample->ci_set_manufacturer_id($sample_manufacturer);
+			$sample->ci_set_location_id($sample_location);
+			$sample->ci_set_desc($sample_desc);
+			$sample->ci_set_date_of_expiry($sample_expiry);
+			$sample->ci_set_expiry_warning($sample_expiry_warning);
+			
+			$sample_id = $sample->create();
 			
 			if ($sample_add_role == "item" or $sample_add_role == "item_parent")
 			{
@@ -751,10 +760,7 @@ class SampleCreateAjax
 		}
 		catch(BaseException $e)
 		{
-			if ($transaction_id != null)
-			{
-				$transaction->rollback($transaction_id);
-			}
+			$transaction->rollback($transaction_id);
 			throw $e;
 		}
 		
@@ -783,10 +789,7 @@ class SampleCreateAjax
 		
 		if ($sample_add_role == "item" or $sample_add_role == "item_parent")
 		{
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			
 			if ($sample_item_retrace)
 			{
@@ -804,10 +807,7 @@ class SampleCreateAjax
 		}
 		else
 		{
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			
 			$paramquery = array();
 			$paramquery['username'] = $username;

@@ -24,7 +24,6 @@
 /**
  * 
  */
-require_once("interfaces/project_permission_organisation_unit.interface.php");
 require_once("interfaces/project_permission_case.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
@@ -36,7 +35,7 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  * Project Organisation Unit Permission Management Class
  * @package project
  */
-class ProjectPermissionOrganisationUnit extends ProjectPermission implements ProjectPermissionOrganisationUnitInterface, ProjectPermissionCaseInterface
+class ProjectPermissionOrganisationUnit extends ProjectPermission implements ProjectPermissionCaseInterface
 {
 	function __construct($permission_id)
 	{
@@ -61,7 +60,7 @@ class ProjectPermissionOrganisationUnit extends ProjectPermission implements Pro
 	 * @throws ProjectPermissionOrganisationUnitCreateException
 	 * @throws ProjectPermissionOrganisationUnitCreateVirtualFolderException
 	 */
-	public function create($organisation_unit_id, $project_id, $permission, $owner_id, $intention)
+	public function create($user_id, $organisation_unit_id, $group_id,  $project_id, $permission, $owner_id, $intention)
     {
     	global $transaction;
 
@@ -95,26 +94,17 @@ class ProjectPermissionOrganisationUnit extends ProjectPermission implements Pro
     				$virtual_folder = new VirtualFolder($virtual_folder_id);
     				if ($virtual_folder->link_folder($project_folder_id) == false)
     				{
-    					if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 			    		throw new ProjectPermissionOrganisationUnitCreateVirtualFolderException();
     				}
     			}
     			
-    			if ($transaction_id != null)
-	    		{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 	    		return $permission_id;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-	    		{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
     			throw new ProjectPermissionOrganisationUnitCreateException();
     		}
     	}
@@ -165,10 +155,7 @@ class ProjectPermissionOrganisationUnit extends ProjectPermission implements Pro
 	    			$virtual_folder = new VirtualFolder($virtual_folder_id);
 	    			if ($virtual_folder->unlink_folder($project_folder_id) == false)
 	    			{
-	    				if ($transaction_id != null)
-    					{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 			    		throw new ProjectPermissionOrganisationUnitDeleteVirtualFolderException();
 	    			}
 	    		}
@@ -176,18 +163,12 @@ class ProjectPermissionOrganisationUnit extends ProjectPermission implements Pro
     		
     		if (parent::delete() == true)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 			    throw new ProjectPermissionOrganisationUnitDeleteException();
     		}
     	}

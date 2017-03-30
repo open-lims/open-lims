@@ -289,10 +289,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->unlink_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
@@ -313,28 +310,19 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->link_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
     		
     		if ($this->project_permission->set_user_id($user_id) == false)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     	}
@@ -379,10 +367,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->unlink_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
@@ -403,28 +388,19 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->link_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
     		
     		if ($this->project_permission->set_organisation_unit_id($organisation_unit_id) == false)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     	}
@@ -469,10 +445,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->unlink_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
@@ -493,28 +466,19 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				$virtual_folder = new VirtualFolder($virtual_folder_id);
 				if ($virtual_folder->link_folder($project_folder_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
     		
     		if ($this->project_permission->set_group_id($group_id) == false)
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
     		}
     		else
     		{
-    			if ($transaction_id != null)
-    			{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
     		}
     	}
@@ -561,10 +525,6 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 	    				$virtual_folder = new VirtualFolder($virtual_folder_id);
 	    				if ($virtual_folder->link_folder($project_folder_id) == false)
 	    				{
-	    					if ($transaction_id != null)
-	    					{
-								$transaction->rollback($transaction_id);
-							}
 				    		return null;
 	    				}
     			}
@@ -709,7 +669,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     			$project_permission = new ProjectPermissionUser(null);
     			foreach($project_array as $key => $value)
     			{
-    				if ($project_permission->create($event_object->get_leader_id(), $value, (int)Registry::get_value("project_leader_default_permission"), null, 2) == null)
+    				if ($project_permission->create($event_object->get_leader_id(), null, null, $value, (int)Registry::get_value("project_leader_default_permission"), null, 2) == null)
 					{
 						return false;
 					}
@@ -754,7 +714,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
     			$project_permission = new ProjectPermissionUser(null);
     			foreach($project_array as $key => $value)
     			{
-    				if ($project_permission->create($event_object->get_quality_manager_id(), $value, (int)Registry::get_value("project_quality_manager_default_permission"), null, 5) == null)
+    				if ($project_permission->create($event_object->get_quality_manager_id(), null, null, $value, (int)Registry::get_value("project_quality_manager_default_permission"), null, 5) == null)
 					{
 						return false;
 					}
@@ -800,7 +760,7 @@ class ProjectPermission implements ProjectPermissionInterface, EventListenerInte
 				foreach($project_array as $key => $value)
 				{
 					$project_permission = new ProjectPermissionGroup(null);
-					if ($project_permission->create($event_object->get_group_id(), $value, (int)Registry::get_value("project_group_default_permission"), null, 4) == null)
+					if ($project_permission->create(null, null, $event_object->get_group_id(), $value, (int)Registry::get_value("project_group_default_permission"), null, 4) == null)
 					{
 						return false;
 					}							

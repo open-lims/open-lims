@@ -40,7 +40,8 @@ class AdminIO
 			foreach ($module_dialog_array as $key => $value)
 			{
 				require_once($value['class_path']);
-				$content .= $value['class']::$value['method']();
+				$method = $value['method'];
+				$content .= $value['class']::$method();
 			}
 			
 			$template->set_var("content", $content);

@@ -105,6 +105,21 @@ class Database
 		return $statement->fetch(PDO::FETCH_ASSOC);
 	}
 	
+	public function begin_transaction()
+	{
+		return $this->pdo->beginTransaction();
+	}
+	
+	public function commit()
+	{
+		return $this->pdo->commit();
+	}
+	
+	public function rollback()
+	{
+		return $this->pdo->rollBack();
+	}
+	
 	public function query_log_start()
 	{
 		$this->query_log_status = true;

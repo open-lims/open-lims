@@ -152,7 +152,8 @@ class SampleReportIO
 								if (method_exists($value['class'], $value['method']))
 								{
 									$sql = " SELECT item_id FROM ".constant("SAMPLE_HAS_ITEM_TABLE")." WHERE sample_id = ".$_GET['sample_id']."";
-									$pdf = $value['class']::$value['method']($sql, $sample->get_item_id(), $pdf);
+									$method = $value['method'];
+									$pdf = $value['class']::$method($sql, $sample->get_item_id(), $pdf);
 								}
 							}
 						}

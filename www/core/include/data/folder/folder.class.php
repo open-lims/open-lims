@@ -50,19 +50,27 @@ class Folder extends DataEntity implements FolderInterface
 	private $folder_command_folder;
 	private $folder_rename_folder;
 	
+	// Creator Variables
+	private $ci_name;
+	private $ci_toid;
+	private $ci_path;
+	
+	private $di_recursive = true;
+	private $di_content = true;
+	
 	/**
 	 * Get instance via static::get_instance($folder_id)
 	 * @param integer $folder_id
 	 * @throws FolderNotFoundException
 	 */
-	function __construct($folder_id)
+	function __construct($id)
 	{	
-		if (is_numeric($folder_id))
+		if (is_numeric($id))
 		{
-			if (Folder_Access::exist_id($folder_id) == true)
+			if (Folder_Access::exist_id($id) == true)
 			{
-				$this->folder_id 			= $folder_id;
-				$this->folder				= new Folder_Access($folder_id);
+				$this->folder_id 			= $id;
+				$this->folder				= new Folder_Access($id);
 	
 				parent::__construct($this->folder->get_data_entity_id());
 					
@@ -180,48 +188,43 @@ class Folder extends DataEntity implements FolderInterface
 	
 	/**
 	 * Creates a new folder
-	 * @param string $name
-	 * @param integer $toid
-	 * @param string $path
-	 * @param integer $owner_id
-	 * @param integer $owner_group_id
 	 * @return integer
 	 * @throws FolderCreateFailedException
 	 * @throws FolderCreateFolderAlreadyExistsException
 	 * @throws FolderCreatePhysicalCreationFailedException
 	 * @throws FolderCreateIDMissingException
 	 */
-	public function create($name, $toid, $path, $owner_id, $owner_group_id)
+	public function create()
 	{
 		global $transaction;
 
-		if (is_numeric($toid))
+		if (is_numeric($this->ci_toid))
 		{
 			$transaction_id = $transaction->begin();
 			
 			try
 			{
-				$folder = new Folder($toid);
+				$folder = new Folder($this->ci_toid);
 				$parent_data_entity_id = $folder->get_data_entity_id();
 				
-				if (!$path)
+				if (!$this->ci_path)
 				{
-					$folder = new Folder($toid);
-					$folder_name = str_replace(" ","_",trim($name));
-					$path = $folder->get_path()."/".$folder_name;
+					$folder = new Folder($this->ci_toid);
+					$folder_name = str_replace(" ","_",trim($this->ci_name));
+					$this->ci_path = $folder->get_path()."/".$folder_name;
 				}
 	
-				$data_entity_id = parent::create($owner_id, $owner_group_id);
+				$data_entity_id = parent::create();
 				parent::set_as_child_of($parent_data_entity_id);
 				
-				if (($folder_id = $this->folder->create($data_entity_id, $name, $path)) == null)
+				if (($folder_id = $this->folder->create($data_entity_id, $this->ci_name, $this->ci_path)) == null)
 				{	
 					throw new FolderCreateFailedException();
 				}
 				
 				self::__construct($folder_id);
 										
-				$system_path = constant("BASE_DIR")."/".$path;
+				$system_path = constant("BASE_DIR")."/".$this->ci_path;
 					
 				if (file_exists($system_path))
 				{
@@ -236,18 +239,11 @@ class Folder extends DataEntity implements FolderInterface
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
-			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
-			
+
+			$transaction->commit($transaction_id);
 			return $folder_id;
 		}
 		else
@@ -255,7 +251,34 @@ class Folder extends DataEntity implements FolderInterface
 			throw new FolderCreateIDMissingException();
 		}
 	}
-		
+	
+	/**
+	 * Injects $name into create()
+	 * @param string $name
+	 */
+	public function ci_set_name($name)
+	{
+		$this->ci_name = $name;
+	}
+	
+	/**
+	 * Injects $toid into create()
+	 * @param integer $toid
+	 */
+	public function ci_set_toid($toid)
+	{
+		$this->ci_toid = $toid;
+	}
+	
+	/**
+	 * Injects $path into create()
+	 * @param string $path
+	 */
+	public function ci_set_path($path)
+	{
+		$this->ci_path = $path;
+	}
+	
 	/**
 	 * @see FolderInterface::exist_folder()
 	 * @return bool
@@ -310,11 +333,9 @@ class Folder extends DataEntity implements FolderInterface
 	
 	/**
 	 * @see FolderInterface::delete()
-	 * @param bool $recursive
-	 * @param bool $content
 	 * @return bool
 	 */
-	public function delete($recursive, $content)
+	public function delete()
 	{
 		global $transaction;
 
@@ -324,35 +345,29 @@ class Folder extends DataEntity implements FolderInterface
 
 			$subfolder_array = $this->get_subfolder_array();
 	
-			if ((is_array($subfolder_array) and $recursive == false) or ($content == false and $recursive == true))
+			if ((is_array($subfolder_array) and $this->di_recursive == false) or ($this->di_content == false and $this->di_recursive == true))
 			{
 				return false;
 			}
 			else
 			{
-				if ($recursive == true and $content == true)
+				if ($this->di_recursive == true and $this->di_content == true)
 				{
 					if(is_array($subfolder_array))
 					{
 						foreach($subfolder_array as $key => $value)
 						{
 							$folder = Folder::get_instance($value);
-							if ($folder->delete(true, true) == false)
+							if ($folder->delete() == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;	
 							}
 							else
 							{
-								if ($transaction_id != null)
-								{
-									// Avoids Ghost-Folders
-									$transaction->commit($transaction_id);
-									$transaction_id = $transaction->begin();
-								}
+								// Avoids Ghost-Folders
+								$transaction->commit($transaction_id);
+								$transaction_id = $transaction->begin();
 							}
 						}
 					}
@@ -373,19 +388,14 @@ class Folder extends DataEntity implements FolderInterface
 							$file_delete = $file->delete();
 							if ($file_delete == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 							else
 							{
-								if ($transaction_id != null) {
-									// Avoids Ghost-Files
-									$transaction->commit($transaction_id);
-									$transaction_id = $transaction->begin();
-								}
+								// Avoids Ghost-Files
+								$transaction->commit($transaction_id);
+								$transaction_id = $transaction->begin();
 							}
 						}
 						// Values
@@ -394,10 +404,7 @@ class Folder extends DataEntity implements FolderInterface
 							$value_obj = Value::get_instance($value_id);
 							if ($value_obj->delete() == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -407,10 +414,7 @@ class Folder extends DataEntity implements FolderInterface
 							$virtual_folder = new VirtualFolder($virtual_folder_id);
 							if ($virtual_folder->delete() == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}
 						}
@@ -427,10 +431,7 @@ class Folder extends DataEntity implements FolderInterface
 					{
 						if ($this->unset_child($value) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 					}
@@ -461,84 +462,45 @@ class Folder extends DataEntity implements FolderInterface
 					{
 						if ($this->unset_child_of($value) == false)
 						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
+							$transaction->rollback($transaction_id);
 							return false;
 						}
 					}
 				}	
-				
-				if (parent::delete() == false)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					return false;
-				}
-				
+								
 				$folder_delete_event = new FolderDeleteEvent($folder_id);
 				$event_handler = new EventHandler($folder_delete_event);
 	
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
-				if (file_exists($path))
+				if (is_dir($path))
 				{
-					if (rmdir($path))
+					if (!rmdir($path))
 					{
-						if ($this->folder->delete() == true)
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->commit($transaction_id);
-							}
-							return true;
-						}
-						else
-						{
-							if ($transaction_id != null)
-							{
-								$transaction->rollback($transaction_id);
-							}
-							return false;
-						}
-					}
-					else
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 				}
+
+				if ($this->folder->delete() === false)
+				{
+					$transaction->rollback($transaction_id);
+					return false;
+				}
+				
+				if (parent::delete() === true)
+				{
+					$transaction->commit($transaction_id);
+					return true;
+				}
 				else
 				{
-					if ($this->folder->delete() == true)
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->commit($transaction_id);
-						}
-						return true;
-					}
-					else
-					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
-						return false;
-					}
+					$transaction->rollback($transaction_id);
+					return false;
 				}
 			}	
 		}
@@ -546,6 +508,24 @@ class Folder extends DataEntity implements FolderInterface
 		{
 			return false;
 		}
+	}
+	
+	/**
+	 * Injects $recursive into delete()
+	 * @param boolean $recursive
+	 */
+	public function di_set_recursive($recursive)
+	{
+		$this->di_recursive = $recursive;
+	}
+	
+	/**
+	 * Injects $content into delete()
+	 * @param boolean $content
+	 */
+	public function di_set_content($content)
+	{
+		$this->di_content = $content;
 	}
 	
 	/**
@@ -606,40 +586,28 @@ class Folder extends DataEntity implements FolderInterface
 				// create new folder
 				if (mkdir(constant("BASE_DIR")."/".$new_path) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
 				// change database
 				if ($this->folder->set_path($new_path) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					rmdir(constant("BASE_DIR")."/".$new_path);
 					return false;
 				}
 				
 				if ($this->unset_child_of($this->get_parent_folder()) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					rmdir(constant("BASE_DIR")."/".$new_path);
 					return false;
 				}
 				
 				if ($this->set_as_child_of($destination_folder->get_data_entity_id()) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					rmdir(constant("BASE_DIR")."/".$new_path);
 					return false;
 				}
@@ -655,10 +623,7 @@ class Folder extends DataEntity implements FolderInterface
 							$folder = Folder::get_instance($value);
 							if ($folder->move_folder($this->folder_id, true) == false)
 							{
-								if ($transaction_id != null)
-								{
-									$transaction->rollback($transaction_id);
-								}
+								$transaction->rollback($transaction_id);
 								return false;
 							}			
 						}
@@ -687,10 +652,7 @@ class Folder extends DataEntity implements FolderInterface
 				// Delete Folder Stack
 				$session->delete_value("stack_array");
 				
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
+				$transaction->commit($transaction_id);
 				return true;
 			}
 			else
@@ -991,8 +953,6 @@ class Folder extends DataEntity implements FolderInterface
 			return false;
 		}
 	}
-
-	
 	
 	/**
 	 * @see FolderInterface::get_folder_by_path()
@@ -1089,7 +1049,7 @@ class Folder extends DataEntity implements FolderInterface
     {    	
     	if (is_numeric($folder_id) and $folder_id > 0)
     	{
-			if (self::$folder_object_array[$folder_id])
+			if (isset(self::$folder_object_array[$folder_id]))
 			{
 				return self::$folder_object_array[$folder_id];
 			}

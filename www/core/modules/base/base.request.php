@@ -32,7 +32,7 @@ class BaseRequest
 	 */
 	public static function ajax_handler($alias)
 	{
-		switch($_GET['run']):
+		switch(System::get_get("run")):
 
 			case "cron":
 				require_once("ajax/cron.ajax.php");
@@ -41,12 +41,14 @@ class BaseRequest
 		
 			case "login":
 				require_once("ajax/login.ajax.php");
-				echo LoginAjax::login($_POST['username'], $_POST['password'], $_POST['language']);
+				echo LoginAjax::login(System::get_post("username"), 
+										System::get_post("password"), 
+										System::get_post("language"));
 			break;
 			
 			case "forgot_password":
 				require_once("ajax/login.ajax.php");
-				echo LoginAjax::forgot_password($_POST['username'], $_POST['mail']);		
+				echo LoginAjax::forgot_password(System::get_post("username"), System::get_post("mail"));		
 			break;
 			
 			case "logout":
@@ -57,9 +59,9 @@ class BaseRequest
 			case "left_navigation":
 				require_once("ajax/navigation/left_navigation.ajax.php");
 				
-				switch($_GET['action']):
+				switch(System::get_get("action")):
 					case "set_active":
-						echo LeftNavigationAjax::set_active($_POST['id']);
+						echo LeftNavigationAjax::set_active(System::get_post("id"));
 					break;
 				endswitch;
 			break;
@@ -69,12 +71,14 @@ class BaseRequest
 			
 			case "list_get_page_information":
 				require_once("ajax/list.ajax.php");
-				echo ListAjax::get_page_information($_POST['number_of_entries'], $_POST['number_of_pages']);
+				echo ListAjax::get_page_information(System::get_post("number_of_entries"), System::get_post("number_of_pages"));
 			break;
 			
 			case "list_get_page_bar":
 				require_once("ajax/list.ajax.php");
-				echo ListAjax::get_page_bar($_POST['page'], $_POST['number_of_pages'], $_POST['css_page_id']);
+				echo ListAjax::get_page_bar(System::get_post("page"), 
+											System::get_post("number_of_pages"), 
+											System::get_post("css_page_id"));
 			break;
 			
 			
@@ -83,39 +87,39 @@ class BaseRequest
 			case "search_user_list_users":
 				require_once("ajax/user_search.ajax.php");
 				echo UserSearchAjax::list_users(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "search_user_count_users":
 				require_once("ajax/user_search.ajax.php");
-				echo UserSearchAjax::count_users($_POST['argument_array']);
+				echo UserSearchAjax::count_users(System::get_post("argument_array"));
 			break;
 			
 			case "search_user_list_groups":
 				require_once("ajax/user_search.ajax.php");
 				echo UserSearchAjax::list_groups(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "search_user_count_groups":
 				require_once("ajax/user_search.ajax.php");
-				echo UserSearchAjax::count_groups($_POST['argument_array']);
+				echo UserSearchAjax::count_groups(System::get_post("argument_array"));
 			break;
 			
 			
@@ -123,62 +127,62 @@ class BaseRequest
 
 			case "get_users_in_option":
 				require_once("common/ajax/user_common.ajax.php");
-				echo UserCommonAjax::get_users_in_option($_POST['string']);
+				echo UserCommonAjax::get_users_in_option(System::get_post("string"));
 			break;
 			
 			case "get_groups_in_option":
 				require_once("common/ajax/user_common.ajax.php");
-				echo UserCommonAjax::get_groups_in_option($_POST['string']);
+				echo UserCommonAjax::get_groups_in_option(System::get_post("string"));
 			break;
 			
 			case "user_profile_personal_data_change":
 				require_once("ajax/user.ajax.php");
-				echo UserAjax::profile_personal_data_change($_POST['gender'], 
-						$_POST['forename'], 
-						$_POST['surname'], 
-						$_POST['title'], 
-						$_POST['mail'], 
-						$_POST['institution'], 
-						$_POST['department'], 
-						$_POST['street'], 
-						$_POST['zip'], 
-						$_POST['city'], 
-						$_POST['country'], 
-						$_POST['phone'], 
-						$_POST['icq'], 
-						$_POST['msn'], 
-						$_POST['yahoo'], 
-						$_POST['aim'], 
-						$_POST['skype'], 
-						$_POST['lync'], 
-						$_POST['jabber']
+				echo UserAjax::profile_personal_data_change(System::get_post("gender"), 
+						System::get_post("forename"), 
+						System::get_post("surname"), 
+						System::get_post("title"), 
+						System::get_post("mail"), 
+						System::get_post("institution"), 
+						System::get_post("department"), 
+						System::get_post("street"), 
+						System::get_post("zip"), 
+						System::get_post("city"), 
+						System::get_post("country"), 
+						System::get_post("phone"), 
+						System::get_post("icq"), 
+						System::get_post("msn"), 
+						System::get_post("yahoo"), 
+						System::get_post("aim"), 
+						System::get_post("skype"), 
+						System::get_post("lync"), 
+						System::get_post("jabber")
 						);
 			break;
 			
 			case "user_profile_regional_settings_change":
 				require_once("ajax/user.ajax.php");
-				echo UserAjax::profile_regional_settings_change($_POST['language_id'], 
-						$_POST['country_id'], 
-						$_POST['timezone_id'], 
-						$_POST['time_display'], 
-						$_POST['time_enter'], 
-						$_POST['date_display'], 
-						$_POST['date_enter'], 
-						$_POST['system_of_units'], 
-						$_POST['currency_id'], 
-						$_POST['currency_significant_digits'], 
-						$_POST['decimal_separator'], 
-						$_POST['thousand_separator'], 
-						$_POST['name_display_format'], 
-						$_POST['system_of_paper_format']
+				echo UserAjax::profile_regional_settings_change(System::get_post("language_id"), 
+						System::get_post("country_id"), 
+						System::get_post("timezone_id"), 
+						System::get_post("time_display"), 
+						System::get_post("time_enter"), 
+						System::get_post("date_display"), 
+						System::get_post("date_enter"), 
+						System::get_post("system_of_units"), 
+						System::get_post("currency_id"), 
+						System::get_post("currency_significant_digits"), 
+						System::get_post("decimal_separator"), 
+						System::get_post("thousand_separator"), 
+						System::get_post("name_display_format"), 
+						System::get_post("system_of_paper_format")
 						);
 			break;
 			
 			case "user_password_change":
 				require_once("ajax/user.ajax.php");
-				echo UserAjax::password_change($_POST['current_password'], 
-						$_POST['new_password_1'], 
-						$_POST['new_password_2']
+				echo UserAjax::password_change(System::get_post("current_password"), 
+						System::get_post("new_password_1"), 
+						System::get_post("new_password_2")
 						);
 			break;
 			
@@ -187,21 +191,21 @@ class BaseRequest
 			case "batch_list_batches":
 				require_once("ajax/batch.ajax.php");
 				echo BatchAjax::list_batches(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "batch_count_batches":
 				require_once("ajax/batch.ajax.php");
-				echo BatchAjax::count_batches($_POST['argument_array']);
+				echo BatchAjax::count_batches(System::get_post("argument_array"));
 			break;
 			
 			case "batch_start_test":
@@ -211,7 +215,7 @@ class BaseRequest
 			
 			case "batch_start_test_handler":
 				require_once("ajax/batch.ajax.php");
-				echo BatchAjax::start_test_handler($_POST['number_of_batches']);
+				echo BatchAjax::start_test_handler(System::get_post("number_of_batches"));
 			break;
 			
 		endswitch;
@@ -228,7 +232,7 @@ class BaseRequest
 	{
 		global $user;
 		
-		if (isset($_GET['run']) and $_GET['run'] == "common_dialog" and isset($_GET['dialog']))
+		if (System::get_get("run") == "common_dialog" and System::get_get("dialog"))
 		{
 			require_once("common.request.php");
 			CommonRequest::common_dialog();
@@ -239,16 +243,16 @@ class BaseRequest
 		
 				case "search":
 					
-					switch($_GET['run']):
+					switch(System::get_get("run")):
 						
 						case("search"):
 							require_once("io/search.io.php");
-							SearchIO::search($_GET['dialog']);
+							SearchIO::search(System::get_get("dialog"));
 						break;
 								
 						case ("header_search"):
 							require_once("io/search.io.php");
-							SearchIO::header_search($_POST['string'], $_POST['current_module']);
+							SearchIO::header_search(System::get_post("string"), System::get_post("current_module"));
 						break;
 						
 						default:
@@ -261,105 +265,100 @@ class BaseRequest
 				break;
 				
 				default:
-					
-					if (isset($_GET['run']))
-					{
-						switch ($_GET['run']):
-									
-							// BASE
-							case "sysmsg":
-								require_once("io/base.io.php");
-								BaseIO::list_system_messages();
-							break;
-							
-							case "system_info":
-								require_once("io/base.io.php");
-								BaseIO::system_info();
-							break;
-							
-							case "software_info":
-								require_once("io/base.io.php");
-								BaseIO::software_info();
-							break;
-							
-							case "license":
-								require_once("io/base.io.php");
-								BaseIO::license();
-							break;
-							
-							case "base_user_lists";
-								if ($_GET['dialog'])
+
+					switch (System::get_get("run")):
+								
+						// BASE
+						case "sysmsg":
+							require_once("io/base.io.php");
+							BaseIO::list_system_messages();
+						break;
+						
+						case "system_info":
+							require_once("io/base.io.php");
+							BaseIO::system_info();
+						break;
+						
+						case "software_info":
+							require_once("io/base.io.php");
+							BaseIO::software_info();
+						break;
+						
+						case "license":
+							require_once("io/base.io.php");
+							BaseIO::license();
+						break;
+						
+						case "base_user_lists";
+							if (System::get_get("dialog"))
+							{
+								$module_dialog = ModuleDialog::get_by_type_and_internal_name("base_user_lists", System::get_get("dialog"));
+								
+								if (file_exists($module_dialog['class_path']))
 								{
-									$module_dialog = ModuleDialog::get_by_type_and_internal_name("base_user_lists", $_GET['dialog']);
+									require_once($module_dialog['class_path']);
 									
-									if (file_exists($module_dialog['class_path']))
+									if (class_exists($module_dialog['class']))
 									{
-										require_once($module_dialog['class_path']);
-										
-										if (class_exists($module_dialog['class']))
+										if(method_exists($module_dialog['class'], $module_dialog['method']))
 										{
-											if(method_exists($module_dialog['class'], $module_dialog['method']))
-											{
-												$module_dialog['class']::$module_dialog['method']();
-											}
-											else
-											{
-												throw new BaseModuleDialogMethodNotFoundException();
-											}
+											$method = $module_dialog['method'];
+											$module_dialog['class']::$method();
 										}
 										else
 										{
-											throw new BaseModuleDialogClassNotFoundException();
+											throw new BaseModuleDialogMethodNotFoundException();
 										}
 									}
 									else
 									{
-										throw new BaseModuleDialogFileNotFoundException();
+										throw new BaseModuleDialogClassNotFoundException();
 									}
 								}
 								else
 								{
-									throw new BaseModuleDialogMissingException();
+									throw new BaseModuleDialogFileNotFoundException();
 								}
-							break;
-							
-							
-							// USER
-							case "user_profile":
-								require_once("io/user.io.php");
-								UserIO::profile();
-							break;
-							
-							case ("user_details"):
-								require_once("io/user.io.php");
-								UserIO::details();
-							break;
-							
-							case("user_change_personal"):
-								require_once("io/user.io.php");
-								UserIO::change_personal();
-							break;
-							
-							case("user_change_my_settings"):
-								require_once("io/user.io.php");
-								UserIO::change_my_settings();
-							break;
-							
-							case("user_change_password"):
-								require_once("io/user.io.php");
-								UserIO::change_password();
-							break;
-										
-							default:
-								require_once("io/home.io.php");
-							break;
-							
-						endswitch;
-					}
-					else
-					{
-						require_once("io/home.io.php");
-					}
+							}
+							else
+							{
+								throw new BaseModuleDialogMissingException();
+							}
+						break;
+						
+						
+						// USER
+						case "user_profile":
+							require_once("io/user.io.php");
+							UserIO::profile();
+						break;
+						
+						case ("user_details"):
+							require_once("io/user.io.php");
+							UserIO::details();
+						break;
+						
+						case("user_change_personal"):
+							require_once("io/user.io.php");
+							UserIO::change_personal();
+						break;
+						
+						case("user_change_my_settings"):
+							require_once("io/user.io.php");
+							UserIO::change_my_settings();
+						break;
+						
+						case("user_change_password"):
+							require_once("io/user.io.php");
+							UserIO::change_password();
+						break;
+									
+						default:
+							require_once("io/home.io.php");
+						break;
+						
+					endswitch;
+						
 				break;
 				
 			endswitch;

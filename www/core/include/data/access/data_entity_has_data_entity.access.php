@@ -130,7 +130,7 @@ class DataEntityHasDataEntity_Access
 		global $db;
 		
 		if ($this->data_entity_pid and $this->data_entity_cid)
-		{
+		{			
 			$sql = "DELETE FROM ".constant("DATA_ENTITY_HAS_DATA_ENTITY_TABLE")." WHERE data_entity_pid = :data_entity_pid AND data_entity_cid = :data_entity_cid";
 			$res = $db->prepare($sql);
 			$db->bind_value($res, ":data_entity_pid", $this->data_entity_pid, PDO::PARAM_INT);

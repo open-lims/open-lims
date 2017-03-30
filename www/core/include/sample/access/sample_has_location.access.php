@@ -49,8 +49,10 @@ class SampleHasLocation_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);			
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -97,13 +99,21 @@ class SampleHasLocation_Access
 			$datetime = date("Y-m-d H:i:s");
 			
 			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_LOCATION_TABLE")." (primary_key,sample_id,location_id,datetime,user_id) " .
-					"VALUES (nextval('".self::SAMPLE_HAS_LOCATION_PK_SEQUENCE."'::regclass),".$sample_id.",".$location_id.",'".$datetime."',".$user_id.")";
+					"VALUES (nextval('".self::SAMPLE_HAS_LOCATION_PK_SEQUENCE."'::regclass), :sample_id, :location_id, :datetime, :user_id)";
 			$res_write = $db->db_query($sql_write);
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":location_id", $location_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE primary_key = currval('".self::SAMPLE_HAS_LOCATION_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -134,8 +144,10 @@ class SampleHasLocation_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -222,8 +234,11 @@ class SampleHasLocation_Access
 			
 		if ($this->primary_key and is_numeric($sample_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET sample_id = '".$sample_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET sample_id = :sample_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -251,8 +266,11 @@ class SampleHasLocation_Access
 		
 		if ($this->primary_key and is_numeric($location_id))
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET location_id = '".$location_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET location_id = :location_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":location_id", $location_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -280,8 +298,11 @@ class SampleHasLocation_Access
 			
 		if ($this->primary_key and $datetime)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET datetime = '".$datetime."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET datetime = :datetime WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -309,8 +330,11 @@ class SampleHasLocation_Access
 		
 		if ($this->primary_key and $user_id)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET user_id = '".$user_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET user_id = :user_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -337,8 +361,10 @@ class SampleHasLocation_Access
 			
 		if ($this->primary_key)
 		{
-			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET location_id = NULL WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("SAMPLE_HAS_LOCATION_TABLE")." SET location_id = NULL WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -369,8 +395,10 @@ class SampleHasLocation_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE sample_id = ".$sample_id." ORDER BY datetime ASC";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE sample_id = :sample_id ORDER BY datetime ASC";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -404,8 +432,10 @@ class SampleHasLocation_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE location_id = ".$location_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE location_id = :location_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":location_id", $location_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -437,7 +467,8 @@ class SampleHasLocation_Access
 		$return_array = array();
 		
 		$sql = "SELECT primary_key FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -464,8 +495,10 @@ class SampleHasLocation_Access
 			
 		if (is_numeric($location_id))
 		{
-			$sql = "DELETE FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE location_id = ".$location_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_LOCATION_TABLE")." WHERE location_id = :location_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":location_id", $location_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($res !== false)
 			{

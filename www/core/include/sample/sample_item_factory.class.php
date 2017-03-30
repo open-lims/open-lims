@@ -152,18 +152,12 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     			
     			if (self::create($sample_id, $item_id, $gid, null, null) == false)
     			{
-    				if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
     			}
     			else
     			{
-    				if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
     			}
     		}
     	}
@@ -216,10 +210,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 		    					{
 		    						if (self::create($get_array['sample_id'], $sub_item_value, null, null, null, $event_object->get_item_id()) == false)
 					    			{
-					    				if ($transaction_id != null)
-						    			{
-											$transaction->rollback($transaction_id);
-										}
+										$transaction->rollback($transaction_id);
 					    				return false;
 					    			}
 					    			
@@ -250,10 +241,7 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 	    							{
 	    								if (self::create($get_array['sample_id'], $sub_item_value, null, null, null, $event_object->get_item_id()) == false)
 						    			{
-						    				if ($transaction_id != null)
-							    			{
-												$transaction->rollback($transaction_id);
-											}
+											$transaction->rollback($transaction_id);
 						    				return false;
 						    			}
 						    			
@@ -279,18 +267,12 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     			
     			if (self::create($get_array['sample_id'], $event_object->get_item_id(), $get_array['key'], $post_array['keywords'], $post_array['description'], null, $parent) == false)
     			{
-    				if ($transaction_id != null)
-	    			{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
     			}
     			else
     			{
-    				if ($transaction_id != null)
-	    			{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
     			}
     		}
     		
@@ -311,18 +293,12 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
     				
 	    			if (self::create($get_array['parent_id'], $event_object->get_item_id(), $get_array['key'], null, null, null, false, $parent_sample) == false)
 	    			{
-	    				if ($transaction_id != null)
-		    			{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 	    			}
 	    			else
 	    			{
-	    				if ($transaction_id != null)
-		    			{
-							$transaction->commit($transaction_id);
-						}
+						$transaction->commit($transaction_id);
 	    			}
     			}
     			elseif($get_array['nav'])
@@ -340,18 +316,12 @@ class SampleItemFactory implements SampleItemFactoryInterface, EventListenerInte
 	    					{
 	    						if (self::create($value['id'], $event_object->get_item_id(), $get_array['key']) == false)
 				    			{
-				    				if ($transaction_id != null)
-					    			{
-										$transaction->rollback($transaction_id);
-									}
+									$transaction->rollback($transaction_id);
 									return false;
 				    			}
 	    					} 
 	    					
-		    				if ($transaction_id != null)
-			    			{
-								$transaction->commit($transaction_id);
-							}
+							$transaction->commit($transaction_id);
 	    				}
 	    			}
 	    			else

@@ -325,7 +325,7 @@ class ProjectAdminIO
 							$new_permission = $new_permission + 64;
 						}
 						
-						if ($project_permission->create($_POST['user'], $project_id, $new_permission, $user->get_user_id(), null))
+						if ($project_permission->create($_POST['user'], null, null, $project_id, $new_permission, $user->get_user_id(), null))
 						{
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
@@ -570,7 +570,7 @@ class ProjectAdminIO
 							$new_permission = $new_permission + 64;
 						}
 						
-						if ($project_permission->create($_POST['group'], $project_id, $new_permission, $user->get_user_id(), null))
+						if ($project_permission->create(null, null, $_POST['group'], $project_id, $new_permission, $user->get_user_id(), null))
 						{
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}
@@ -814,7 +814,7 @@ class ProjectAdminIO
 							$new_permission = $new_permission + 64;
 						}
 						
-						if ($project_permission->create($_POST['ou'],$project_id, $new_permission, $user->get_user_id(), null))
+						if ($project_permission->create(null, $_POST['ou'], null, $project_id, $new_permission, $user->get_user_id(), null))
 						{
 							Common_IO::step_proceed($params, "Add Permission", "Operation Successful", null);
 						}

@@ -263,7 +263,8 @@ class AdminGroupIO
 						{
 							if (method_exists($module_dialog['class'], $module_dialog['method']))
 							{
-								$module_dialog['class']::$module_dialog['method']($_GET['id']);
+								$method = $module_dialog['method'];
+								$module_dialog['class']::$method($_GET['id']);
 							}
 							else
 							{

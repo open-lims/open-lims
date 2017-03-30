@@ -31,39 +31,39 @@ class DataRequest
 	 * @param string $alias
 	 */
 	public static function ajax_handler($alias)
-	{
-		switch($_GET['run']):
+	{		
+		switch(System::get_get("run")):
 			
 			case "list_data_browser":
 				require_once("ajax/data.ajax.php");
 				echo DataAjax::list_data_browser(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("'css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "count_data_browser":
 				require_once("ajax/data.ajax.php");
-				echo DataAjax::count_data_browser($_POST['argument_array']);
+				echo DataAjax::count_data_browser(System::get_post("argument_array"));
 			break;
 			
 			case "list_file_items":
 				require_once("ajax/file.ajax.php");
 				echo FileAjax::list_file_items(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['css_page_id'],  
-						$_POST['css_row_sort_id'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("css_page_id"),  
+						System::get_post("css_row_sort_id"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
@@ -72,37 +72,39 @@ class DataRequest
 			
 			case "get_data_browser_path":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_data_browser_path($_POST['folder_id'],$_POST['virtual_folder_id']);
+				echo DataBrowserAjax::get_data_browser_path(System::get_post("folder_id"),
+															System::get_post("virtual_folder_id"));
 			break;
 			
 			case "get_data_browser_path_cleared":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_data_browser_path_cleared($_POST['folder_id'],$_POST['virtual_folder_id']);
+				echo DataBrowserAjax::get_data_browser_path_cleared(System::get_post("folder_id"),
+																	System::get_post("virtual_folder_id"));
 			break;
 			
 			case "get_context_sensitive_file_menu":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_context_sensitive_file_menu($_POST['id']);
+				echo DataBrowserAjax::get_context_sensitive_file_menu(System::get_post("id"));
 			break;
 			
 			case "get_context_sensitive_folder_menu":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_context_sensitive_folder_menu($_POST['id']);
+				echo DataBrowserAjax::get_context_sensitive_folder_menu(System::get_post("id"));
 			break;
 			
 			case "get_context_sensitive_value_menu":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_context_sensitive_value_menu($_POST['id']);
+				echo DataBrowserAjax::get_context_sensitive_value_menu(System::get_post("id"));
 			break;
 			
 			case "get_context_sensitive_parameter_menu":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_context_sensitive_parameter_menu($_POST['id']);
+				echo DataBrowserAjax::get_context_sensitive_parameter_menu(System::get_post("id"));
 			break;
 			
 			case "get_browser_menu":
 				require_once("ajax/data_browser.ajax.php");
-				echo DataBrowserAjax::get_browser_menu($_POST['folder_id']);
+				echo DataBrowserAjax::get_browser_menu(System::get_post("folder_id"));
 			break;
 			
 			case "delete_stack":
@@ -116,26 +118,26 @@ class DataRequest
 			case "file_list_versions":
 				require_once("ajax/file.ajax.php");
 				echo FileAjax::list_versions(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "file_count_versions":
 				require_once("ajax/file.ajax.php");
-				echo FileAjax::count_versions($_POST['argument_array']);
+				echo FileAjax::count_versions(System::get_post("argument_array"));
 			break;
 			
 			case "file_add":
 				require_once("ajax/file.ajax.php");
-				echo FileAjax::add_file($_POST['folder_id']);
+				echo FileAjax::add_file(System::get_post("folder_id"));
 			break;
 
 			case "file_delete":
@@ -164,21 +166,21 @@ class DataRequest
 			case "value_list_versions":
 				require_once("ajax/value.ajax.php");
 				echo ValueAjax::list_versions(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "value_count_versions":
 				require_once("ajax/value.ajax.php");
-				echo ValueAjax::count_versions($_POST['argument_array']);
+				echo ValueAjax::count_versions(System::get_post("argument_array"));
 			break;
 			
 			case "value_add":
@@ -199,24 +201,26 @@ class DataRequest
 			case "value_add_as_item":
 				require_once("ajax/value.ajax.php");
 				echo ValueAjax::add_as_item(
-						$_POST['folder_id'], 
-						$_POST['type_id'], 
-						$_POST['value_array'], 
-						$_POST['get_array']
+						System::get_post("folder_id"), 
+						System::get_post("type_id"), 
+						System::get_post("value_array"), 
+						System::get_post("get_array")
 						);
 			break;
 			
 			case "value_add_as_item_window":
 				require_once("ajax/value.ajax.php");
-				echo ValueAjax::add_as_item_window($_POST['get_array'], $_POST['type_array'], $_POST['folder_id']);
+				echo ValueAjax::add_as_item_window(System::get_post("get_array"), 
+													System::get_post("type_array"), 
+													System::get_post("folder_id"));
 			break;
 			
 			case "value_update":
 				require_once("ajax/value.ajax.php");
 				echo ValueAjax::update(
-						$_POST['value_id'], 
-						$_POST['version'], 
-						$_POST['value_array'], 
+						System::get_post("value_id"), 
+						System::get_post("version"), 
+						System::get_post("value_array"), 
 						true
 						);
 			break;
@@ -224,9 +228,9 @@ class DataRequest
 			case "value_update_minor":
 				require_once("ajax/value.ajax.php");
 				echo ValueAjax::update(
-						$_POST['value_id'], 
-						$_POST['version'], 
-						$_POST['value_array'], 
+						System::get_post("value_id"), 
+						System::get_post("version"), 
+						System::get_post("value_array"), 
 						false
 						);
 			break;
@@ -260,50 +264,50 @@ class DataRequest
 			case "parameter_list_versions":
 				require_once("ajax/parameter.ajax.php");
 				echo ParameterAjax::list_versions(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "parameter_count_versions":
 				require_once("ajax/parameter.ajax.php");
-				echo ParameterAjax::count_versions($_POST['argument_array']);
+				echo ParameterAjax::count_versions(System::get_post("argument_array"));
 			break;
 			
 			case "parameter_add_as_item":
 				require_once("ajax/parameter.ajax.php");
 				echo ParameterAjax::add_as_item(
-						$_POST['folder_id'], 
-						$_POST['type_id'], 
-						$_POST['limit_id'], 
-						$_POST['parameter_array'], 
-						$_POST['get_array']
+						System::get_post("folder_id"), 
+						System::get_post("type_id"), 
+						System::get_post("limit_id"), 
+						System::get_post("parameter_array"), 
+						System::get_post("get_array")
 						);
 			break;
 			
 			case "parameter_update":
 				require_once("ajax/parameter.ajax.php");
 				echo ParameterAjax::update(
-						$_GET['parameter_id'], 
-						$_POST['parameter_array'], 
-						$_POST['limit_id'], 
-						$_POST['major'], 
-						$_POST['current']
+						System::get_get("parameter_id"), 
+						System::get_post("parameter_array"), 
+						System::get_post("limit_id"), 
+						System::get_post("major"), 
+						System::get_post("current")
 						);
 			break;
 			
 			case "parameter_get_limits":
 				require_once("ajax/parameter.ajax.php");
 				echo ParameterAjax::get_limits(
-						$_POST['parameter_template_id'], 
-						$_POST['parameter_limit_id']
+						System::get_post("parameter_template_id"), 
+						System::get_post("parameter_limit_id")
 						);
 			break;
 			
@@ -328,20 +332,20 @@ class DataRequest
 			case "search_data_list_data":
 				require_once("ajax/data_search.ajax.php");
 				echo DataSearchAjax::list_data(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['css_page_id'],  
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("css_page_id"),  
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "search_data_count_data":
 				require_once("ajax/data_search.ajax.php");
-				echo DataSearchAjax::count_data($_POST['argument_array']);
+				echo DataSearchAjax::count_data(System::get_post("argument_array"));
 			break;
 			
 			
@@ -358,107 +362,114 @@ class DataRequest
 			case "admin_list_value_templates":
 				require_once("ajax/admin/admin_value_template.ajax.php");
 				echo AdminValueTemplateAjax::list_templates(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "admin_count_value_templates":
 				require_once("ajax/admin/admin_value_template.ajax.php");
-				echo AdminValueTemplateAjax::count_templates($_POST['argument_array']);
+				echo AdminValueTemplateAjax::count_templates(System::get_post("argument_array"));
 			break;	
 			
 			
 			case "admin_list_parameter_templates":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
 				echo AdminParameterTemplateAjax::list_templates(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "admin_count_parameter_templates":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
-				echo AdminParameterTemplateAjax::count_templates($_POST['argument_array']);
+				echo AdminParameterTemplateAjax::count_templates(System::get_post("argument_array"));
 			break;	
 			
 			case "admin_add_parameter_template":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
-				echo AdminParameterTemplateAjax::add_template($_POST['name'], $_POST['internal_name'], $_POST['json_object_string'], $_POST['json_limit_string']);
+				echo AdminParameterTemplateAjax::add_template(System::get_post("name"), 
+																System::get_post("internal_name"), 
+																System::get_post("json_object_string"), 
+																System::get_post("json_limit_string"));
 			break;
 			
 			case "admin_edit_parameter_template":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
-				echo AdminParameterTemplateAjax::edit_template($_GET['id'], $_POST['name'], $_POST['json_object_string'], $_POST['json_limit_string']);
+				echo AdminParameterTemplateAjax::edit_template(System::get_get("id"), 
+																System::get_post("name"), 
+																System::get_post("json_object_string"), 
+																System::get_post("json_limit_string"));
 			break;
 			
 			case "admin_delete_parameter_template":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
-				echo AdminParameterTemplateAjax::delete_template($_POST['id']);
+				echo AdminParameterTemplateAjax::delete_template(System::get_post("id"));
 			break;
 			
 			case "admin_parameter_template_exist_internal_name":
 				require_once("ajax/admin/admin_parameter_template.ajax.php");
-				echo AdminParameterTemplateAjax::exist_internal_name($_POST['internal_name']);
+				echo AdminParameterTemplateAjax::exist_internal_name(System::get_post("internal_name"));
 			break;
 
 			case "admin_list_parameter_methods":
 				require_once("ajax/admin/admin_parameter_method.ajax.php");
 				echo AdminParameterMethodAjax::list_methods(
-						$_POST['column_array'], 
-						$_POST['argument_array'], 
-						$_POST['get_array'], 
-						$_POST['css_page_id'], 
-						$_POST['css_row_sort_id'], 
-						$_POST['entries_per_page'], 
-						$_GET['page'], 
-						$_GET['sortvalue'], 
-						$_GET['sortmethod']
+						System::get_post("column_array"), 
+						System::get_post("argument_array"), 
+						System::get_post("get_array"), 
+						System::get_post("css_page_id"), 
+						System::get_post("css_row_sort_id"), 
+						System::get_post("entries_per_page"), 
+						System::get_get("page"), 
+						System::get_get("sortvalue"), 
+						System::get_get("sortmethod")
 						);
 			break;
 			
 			case "admin_count_parameter_methods":
 				require_once("ajax/admin/admin_parameter_method.ajax.php");
-				echo AdminParameterMethodAjax::count_methods($_POST['argument_array']);
+				echo AdminParameterMethodAjax::count_methods(System::get_post("argument_array"));
 			break;	
 			
 			case "admin_add_parameter_method":
 				require_once("ajax/admin/admin_parameter_method.ajax.php");
-				echo AdminParameterMethodAjax::add_method($_POST['name']);
+				echo AdminParameterMethodAjax::add_method(System::get_post("name"));
 			break;
 			
 			case "admin_edit_parameter_method":
 				require_once("ajax/admin/admin_parameter_method.ajax.php");
-				echo AdminParameterMethodAjax::edit_method($_POST['id'], $_POST['name']);
+				echo AdminParameterMethodAjax::edit_method(System::get_post("id"), 
+															System::get_post("name"));
 			break;
 			
 			case "admin_delete_parameter_method":
 				require_once("ajax/admin/admin_parameter_method.ajax.php");
-				echo AdminParameterMethodAjax::delete_method($_POST['id']);
+				echo AdminParameterMethodAjax::delete_method(System::get_post("id"));
 			break;
 			
 			case "admin_parameter_method_get_name":
 				require_once("ajax/admin/admin_parameter_method.ajax.php");
-				echo AdminParameterMethodAjax::get_name($_POST['id']);
+				echo AdminParameterMethodAjax::get_name(System::get_post("id"));
 			break;
 			
 			case "admin_parameter_method_exist_name":
 				require_once("ajax/admin/admin_parameter_method.ajax.php");
-				echo AdminParameterMethodAjax::exist_name($_POST['name']);
+				echo AdminParameterMethodAjax::exist_name(System::get_post("name"));
 			break;
 			
 			
@@ -466,7 +477,9 @@ class DataRequest
 			
 			case "navigation_data":
 				require_once("ajax/navigation/data_navigation.ajax.php");
-				switch($_GET['action']):
+				
+				switch(System::get_get("action")):
+				
 					case "get_name":
 						echo DataNavigationAjax::get_name();
 					break;
@@ -480,30 +493,36 @@ class DataRequest
 					break;
 					
 					case "set_array":
-						echo DataNavigationAjax::set_array($_POST['array']);
+						echo DataNavigationAjax::set_array(System::get_post("array"));
 					break;
 				
 					case "get_children":
-						echo DataNavigationAjax::get_children($_POST['id']);
+						echo DataNavigationAjax::get_children(System::get_post("id"));
 					break;
+					
 				endswitch;
+				
 			break;
 			
 			case "navigation_folder":
 				require_once("ajax/folder.ajax.php");
 				
-				switch($_GET['action']):
+				switch(System::get_get("action")):
+				
 					case "get_array":
 						echo FolderAjax::get_array();
 					break;
 					
 					case "get_children":
-						echo FolderAjax::get_children($_POST['id']);
+						echo FolderAjax::get_children(System::get_post("id"));
 					break;
+					
 				endswitch;
+				
 			break;
 					
 		endswitch;
+		
 	}
 	
 	/**
@@ -511,7 +530,7 @@ class DataRequest
 	 */
 	public static function io_handler($alias)
 	{	
-		switch($_GET['action']):
+		switch(System::get_get("action")):
 		
 			// General
 			case("permission"):
@@ -614,8 +633,9 @@ class DataRequest
 				require_once("io/data.io.php");
 				DataIO::browser();
 			break;
-			
+				
 		endswitch;	
+
 	}
 }
 ?>

@@ -125,11 +125,9 @@ class SystemFolder extends Folder implements ConcreteFolderCaseInterface
 	
 	/**
 	 * @see ConcreteFolderCaseInterface::delete()
-	 * @param bool $recursive
-	 * @param bool $content
 	 * @return bool
 	 */
-	public function delete($recursive, $content)
+	public function delete()
 	{
 		return false;
 	}

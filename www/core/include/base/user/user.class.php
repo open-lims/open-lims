@@ -28,6 +28,10 @@ require_once("interfaces/user.interface.php");
 
 if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
 {
+	require_once("exceptions/user.exception.class.php");
+	require_once("exceptions/user_not_found.exception.class.php");
+	require_once("exceptions/user_id_missing.exception.class.php");
+	
 	/**
 	 * @deprecated redefinde exceptions
 	 */
@@ -123,10 +127,7 @@ class User implements UserInterface {
 
 				if (self::exist_username($username) == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new UserAlreadyExistException("",2);
 				}
 						
@@ -136,20 +137,14 @@ class User implements UserInterface {
 					$user_admin_setting = new UserAdminSetting_Access(null);
 					if ($user_admin_setting->create($user_id) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new UserCreationFailedException("",1);
 					}
 					
 					$user_profile_setting = new UserRegionalSetting_Access(null);					
 					if ($user_profile_setting->create($user_id, 1, Registry::get_value("base_timezone_id"), true, true, "jS M Y", "dd.mm.yyyy", 1, "metric", "din", null, null, "comma", "dot", "T F S") == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new UserCreationFailedException("",1);
 					}
 					
@@ -182,10 +177,7 @@ class User implements UserInterface {
 					
 					if ($this->user_profile->create($user_id, $gender, $title, $forename, $surname, $mail) == null)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new UserCreationFailedException("",1);
 					}
 					
@@ -194,10 +186,7 @@ class User implements UserInterface {
 					$group = new Group(10);
 					if ($group->create_user_in_group($user_id) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new UserCreationFailedException("",1);
 					}
 					
@@ -206,10 +195,7 @@ class User implements UserInterface {
 					
 					if ($event_handler->get_success() == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						throw new UserCreationFailedException("",1);
 					}
 					else
@@ -221,10 +207,7 @@ class User implements UserInterface {
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					throw new UserCreationFailedException("",1);
 				}
 			
@@ -259,10 +242,7 @@ class User implements UserInterface {
 				// Sessions
 				if (Session::delete_user_sessions($this->user_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
@@ -270,50 +250,35 @@ class User implements UserInterface {
 				$user_profile = new UserProfile_Access($this->user_id);
 				if ($user_profile->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
 				$user_profile_setting = new UserRegionalSetting_Access($this->user_id);
 				if ($user_profile_setting->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
 				$user_admin_setting = new UserAdminSetting_Access($this->user_id);
 				if ($user_admin_setting->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
 				// Groups
 				if (GroupHasUser_Access::delete_by_user_id($this->user_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 
 				// System-Logs
 				if (SystemLog::set_user_id_on_null($this->user_id) == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				
@@ -322,19 +287,13 @@ class User implements UserInterface {
 				
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 
 				if ($this->user->delete() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 
@@ -343,18 +302,12 @@ class User implements UserInterface {
 				
 				if ($event_handler->get_success() == false)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 			}
@@ -746,27 +699,18 @@ class User implements UserInterface {
 				
 				if ($event_handler->get_success() == true)
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
 				$transaction->rollback($transaction_id);
-				}
 				return false;
 			}
 		}
@@ -813,35 +757,22 @@ class User implements UserInterface {
 				{
 					if ($session->write_value("must_change_password",false, true) == false)
 					{
-						if ($transaction_id != null)
-						{
-							$transaction->rollback($transaction_id);
-						}
+						$transaction->rollback($transaction_id);
 						return false;
 					}
 					
-					
-					if ($transaction_id != null)
-					{
-						$transaction->commit($transaction_id);
-					}
+					$transaction->commit($transaction_id);
 					return true;
 				}
 				else
 				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
+					$transaction->rollback($transaction_id);
 					return false;
 				}
 			}
 			else
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				return false;
 			}
 		}

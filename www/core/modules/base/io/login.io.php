@@ -34,7 +34,7 @@ class Login_IO
 		$template = new HTMLTemplate("login_header.html");
 		$template->output();
 		
-		if (is_numeric($_POST['language_id']))
+		if (isset($_POST['language_id']) and is_numeric($_POST['language_id']))
 		{
 			$template = new HTMLTemplate("base/login/login.html", null, $_POST['language_id']);
 		}
@@ -43,18 +43,18 @@ class Login_IO
 			$template = new HTMLTemplate("base/login/login.html");
 		}
 		
-		if ($_POST[username])
+		if (isset($_POST['language_id']))
 		{
-			$template->set_var("username",$_POST[username]);
+			$template->set_var("username",$_POST['username']);
 		}
 		else
 		{
 			$template->set_var("username","");
 		}
 		
-		if ($_POST[password])
+		if (isset($_POST['password']))
 		{
-			$template->set_var("password",$_POST[password]);
+			$template->set_var("password",$_POST['password']);
 		}
 		else
 		{
@@ -85,7 +85,7 @@ class Login_IO
 				$result[$counter]['option'] = $value;
 				$result[$counter]['name'] = $language->get_full_name();
 				
-				if ($_POST['language_id'] == $value)
+				if (isset($_POST['language_id']) and $_POST['language_id'] == $value)
 				{
 					$result[$counter]['selected'] = "selected='selected'";
 				}

@@ -27,38 +27,14 @@
  * @package data
  */
 interface ValueInterface
-{
-	/**
-	 * @param integer $value_id
-	 */
-	function __construct($value_id);
-	
-	function __destruct();
-	
+{	
 	/**
 	 * Opens another version of the value with internal revision id
 	 * @param integer
 	 * @return bool
 	 */
 	public function open_internal_revision($internal_revision);
-	
-	/**
-	 * Creates a new value
-	 * @param integer $folder_id
-	 * @param integer $owner_id
-	 * @param integer $type_id
-	 * @param array $value
-	 * @param bool $premature
-	 * @return integer
-	 */
-	public function create($folder_id, $owner_id, $type_id, $value);
-	
-	/**
-	 * Deletes a value
-	 * @return bool
-	 */
-	public function delete($recursive, $content);
-	
+		
 	/**
 	 * Deletes a specific value version
 	 * @param integer $internal_revision

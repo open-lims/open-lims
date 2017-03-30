@@ -38,6 +38,8 @@ if (constant("UNIT_TEST") == false or !defined("UNIT_TEST"))
  */
 class ParameterTemplateParameter extends Parameter implements ParameterTemplateParameterInterface
 {	
+	private $ci_template_id;
+	
 	/**
 	 * @see ParameterTemplateParameterInterface::__construct()
 	 * @param integer $parameter_id
@@ -66,45 +68,32 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 	 * @throws ParameterCreateTemplateLinkFailedException
 	 * @throws ParameterCreateIDMissingException
 	 */
-	public function create($folder_id, $owner_id, $template_id, $limit_id, $parameter_array)
+	public function create()
 	{
 		global $transaction;
 		
-		if (is_numeric($folder_id) and is_numeric($owner_id) and is_numeric($template_id) and is_numeric($limit_id) and $parameter_array)
+		if (is_numeric($this->ci_folder_id) and is_numeric($this->ci_owner_id) and is_numeric($this->ci_template_id) and is_numeric($this->ci_limit_id) and is_array($this->ci_parameter_array))
 		{			
-			if (is_array($parameter_array))
+			$transaction_id = $transaction->begin();
+			
+			try
 			{
-				$transaction_id = $transaction->begin();
+				$parameter_id = parent::create();
 				
-				try
+				$parameter_has_template = new ParameterHasTemplate_Access(null, null);
+				if ($parameter_has_template->create($parameter_id, $this->ci_template_id) == null)
 				{
-					$parameter_id = parent::create($folder_id, $limit_id, $parameter_array, $owner_id);
-					
-					$parameter_has_template = new ParameterHasTemplate_Access(null, null);
-					if ($parameter_has_template->create($parameter_id, $template_id) == null)
-					{
-						throw new ParameterCreateTemplateLinkFailedException();
-					}
+					throw new ParameterCreateTemplateLinkFailedException();
 				}
-				catch(BaseException $e)
-				{
-					if ($transaction_id != null)
-					{
-						$transaction->rollback($transaction_id);
-					}
-					throw $e;
-				}
-				
-				if ($transaction_id != null)
-				{
-					$transaction->commit($transaction_id);
-				}
-				return $parameter_id;
 			}
-			else
+			catch(BaseException $e)
 			{
-				throw new ParameterCreateIDMissingException();
+				$transaction->rollback($transaction_id);
+				throw $e;
 			}
+			
+			$transaction->commit($transaction_id);
+			return $parameter_id;
 		}
 		else
 		{
@@ -112,6 +101,15 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 		}
 	}
 
+	/**
+	 * Injects $template_id into create()
+	 * @param integer $template_id
+	 */
+	public function ci_set_template_id($template_id)
+	{
+		$this->ci_template_id = $template_id;
+	}
+	
 	/**
 	 * @see ParameterTemplateParameterInterface::delete()
 	 * @return bool
@@ -140,17 +138,11 @@ class ParameterTemplateParameter extends Parameter implements ParameterTemplateP
 			}
 			catch(BaseException $e)
 			{
-				if ($transaction_id != null)
-				{
-					$transaction->rollback($transaction_id);
-				}
+				$transaction->rollback($transaction_id);
 				throw $e;
 			}
 			
-			if ($transaction_id != null)
-			{
-				$transaction->commit($transaction_id);
-			}
+			$transaction->commit($transaction_id);
 			return true;
 		}
 		else

@@ -43,8 +43,10 @@ class SampleHasFolder_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE folder_id = :folder_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":folder_id", $folder_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['sample_id'])
@@ -78,9 +80,12 @@ class SampleHasFolder_Access
 		if (is_numeric($sample_id) and is_numeric($folder_id))
 		{	
 			$sql_write = "INSERT INTO ".constant("SAMPLE_HAS_FOLDER_TABLE")." (sample_id,folder_id) " .
-					"VALUES (".$sample_id.",".$folder_id.")";
+					"VALUES (:sample_id, :folder_id)";
 					
-			$res_write = $db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":folder_id", $folder_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{	
@@ -106,8 +111,11 @@ class SampleHasFolder_Access
 			
 		if ($this->sample_id and $this->folder_id)
 		{
-			$sql = "DELETE FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id = ".$this->sample_id." AND folder_id = ".$this->folder_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id = :sample_id AND folder_id = :folder_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $this->sample_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":folder_id", $this->folder_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -166,8 +174,10 @@ class SampleHasFolder_Access
 		
 		if (is_numeric($sample_id))
 		{	
-			$sql = "SELECT folder_id FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id='".$sample_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT folder_id FROM ".constant("SAMPLE_HAS_FOLDER_TABLE")." WHERE sample_id= :sample_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":sample_id", $sample_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['folder_id'])
@@ -195,8 +205,10 @@ class SampleHasFolder_Access
 		
 		if (is_numeric($folder_id))
 		{
-			$sql = "SELECT get_sample_id_by_folder_id(".$folder_id.") AS return_value";
-			$res = $db->db_query($sql);
+			$sql = "SELECT get_sample_id_by_folder_id(:folder_id) AS return_value";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":folder_id", $folder_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['return_value'])
