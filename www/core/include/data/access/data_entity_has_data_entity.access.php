@@ -136,7 +136,6 @@ class DataEntityHasDataEntity_Access
 			$db->bind_value($res, ":data_entity_pid", $this->data_entity_pid, PDO::PARAM_INT);
 			$db->bind_value($res, ":data_entity_cid", $this->data_entity_cid, PDO::PARAM_INT);
 			$db->execute($res);
-			$res = $db->db_query($sql);
 			
 			if ($res !== false)
 			{

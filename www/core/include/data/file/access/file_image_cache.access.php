@@ -50,8 +50,10 @@ class FileImageCache_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE id='".$id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE id=':id'";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -97,18 +99,23 @@ class FileImageCache_Access
 		global $db;
 		
 		if (is_numeric($file_version_id) and is_numeric($width) and is_numeric($height))
-		{
-			$datetime = date("Y-m-d H:i:s");
-			
+		{			
 			$sql_write = "INSERT INTO ".constant("FILE_IMAGE_CACHE_TABLE")." (id,file_version_id,width,height,size,last_access) " .
-					"VALUES (nextval('".self::FILE_IMAGE_CACHE_PK_SEQUENCE."'::regclass),".$file_version_id.",".$width.",".$height.",".$size.",'".$datetime."')";
+					"VALUES (nextval('".self::FILE_IMAGE_CACHE_PK_SEQUENCE."'::regclass),:file_version_id,:width,:height,:size,:datetime')";
 					
-			$res_write = $db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":file_version_id", $file_version_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":width", $width, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":height", $height, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":size", $size, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":link", date("Y-m-d H:i:s"), PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE id = currval('".self::FILE_IMAGE_CACHE_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['id']);
@@ -140,8 +147,10 @@ class FileImageCache_Access
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE id = ".$id_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id_tmp, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -243,8 +252,11 @@ class FileImageCache_Access
 		
 		if ($this->id and is_numeric($file_version_id))
 		{
-			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET file_version_id = ".$file_version_id." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET file_version_id = :file_version_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":file_version_id", $file_version_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -272,8 +284,11 @@ class FileImageCache_Access
 		
 		if ($this->id and is_numeric($width))
 		{
-			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET width = ".$width." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET width = :width WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":width", $width, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -301,8 +316,11 @@ class FileImageCache_Access
 		
 		if ($this->id and is_numeric($height))
 		{
-			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET height = ".$height." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET height = :height WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":height", $height, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -330,8 +348,11 @@ class FileImageCache_Access
 		
 		if ($this->id and is_numeric($size))
 		{
-			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET size = ".$size." WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET size = :size WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":size", $size, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -359,8 +380,11 @@ class FileImageCache_Access
 		
 		if ($this->id and $last_access)
 		{
-			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET last_access = '".$last_access."' WHERE id = ".$this->id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("FILE_IMAGE_CACHE_TABLE")." SET last_access = :last_access WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->id, PDO::PARAM_INT);
+			$db->bind_value($res, ":last_access", $last_access, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -390,8 +414,11 @@ class FileImageCache_Access
 		
 		if (is_numeric($file_version_id) and is_numeric($width))
 		{
-			$sql = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id='".$file_version_id."' AND width='".$width."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id= :file_version_id AND width= :width";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":file_version_id", $file_version_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":width", $width, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -420,8 +447,11 @@ class FileImageCache_Access
 		
 		if (is_numeric($file_version_id) and is_numeric($height))
 		{
-			$sql = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id='".$file_version_id."' AND height='".$height."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id= :file_version_id AND height= :height";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":file_version_id", $file_version_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":height", $height, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -447,7 +477,8 @@ class FileImageCache_Access
 		global $db;
 		
 		$sql = "SELECT SUM(size) AS result FROM ".constant("FILE_IMAGE_CACHE_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['result'])
@@ -468,7 +499,8 @@ class FileImageCache_Access
 		global $db;
 		
 		$sql = "SELECT COUNT(id) AS result FROM ".constant("FILE_IMAGE_CACHE_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		$data = $db->fetch($res);
 		
 		if ($data['result'])
@@ -493,8 +525,10 @@ class FileImageCache_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id,height,width FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id='".$file_version_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id,height,width FROM ".constant("FILE_IMAGE_CACHE_TABLE")." WHERE file_version_id= :file_version_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":file_version_id", $file_version_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -532,7 +566,8 @@ class FileImageCache_Access
 		if (is_numeric($number))
 		{
 			$sql_count = "SELECT COUNT(id) AS result FROM ".constant("FILE_IMAGE_CACHE_TABLE")."";
-			$res_count = $db->db_query($sql_count);
+			$res_count = $db->prepare($sql_count);
+			$db->execute($res_count);
 			$data_count = $db->fetch($res_count);
 			
 			$limit = $data_count['result']-$number;
@@ -543,7 +578,10 @@ class FileImageCache_Access
 			
 			$return_array = array();
 			
-			$sql = "SELECT id,file_version_id,width,height FROM ".constant("FILE_IMAGE_CACHE_TABLE")." ORDER BY last_access ASC LIMIT ".$limit;
+			$sql = "SELECT id,file_version_id,width,height FROM ".constant("FILE_IMAGE_CACHE_TABLE")." ORDER BY last_access ASC LIMIT :limit";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":limit", $limit, PDO::PARAM_INT);
+			$db->execute($res);
 			$res = $db->db_query($sql);
 			
 			while ($data = $db->fetch($res))

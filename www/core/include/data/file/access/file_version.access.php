@@ -57,8 +57,10 @@ class FileVersion_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("FILE_VERSION_TABLE")." WHERE id='".$file_version_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("FILE_VERSION_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $file_version_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -76,15 +78,7 @@ class FileVersion_Access
 				$this->internal_revision	= $data['internal_revision'];
 				$this->file_extension		= $data['file_extension'];
 				$this->owner_id				= $data['owner_id'];
-				
-				if ($data['current'] == 't')
-				{
-					$this->current			= true;
-				}
-				else
-				{
-					$this->current			= false;
-				}
+				$this->current				= $data['current'];
 			}
 			else
 			{
