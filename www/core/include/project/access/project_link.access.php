@@ -47,8 +47,10 @@ class ProjectLink_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_LINK_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("PROJECT_LINK_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -87,13 +89,18 @@ class ProjectLink_Access
 		if (is_numeric($to_project_id) and is_numeric($project_id))
 		{
 			$sql_write = "INSERT INTO ".constant("PROJECT_LINK_TABLE")." (primary_key,to_project_id,project_id) " .
-					"VALUES (nextval('".self::PROJECT_LINK_PK_SEQUENCE."'::regclass),".$to_project_id.",".$project_id.")";
-			$res_write = $db->db_query($sql_write);
+					"VALUES (nextval('".self::PROJECT_LINK_PK_SEQUENCE."'::regclass), :to_project_id, :project_id)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":to_project_id", $to_project_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_LINK_TABLE")." WHERE primary_key = currval('".self::PROJECT_LINK_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -124,8 +131,10 @@ class ProjectLink_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("PROJECT_LINK_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_LINK_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -182,8 +191,11 @@ class ProjectLink_Access
 
 		if ($this->primary_key and is_numeric($to_project_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_LINK_TABLE")." SET to_project_id = '".$to_project_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LINK_TABLE")." SET to_project_id = :project_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":to_project_id", $to_project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -211,8 +223,11 @@ class ProjectLink_Access
 	
 		if ($this->primary_key and is_numeric($project_id))
 		{	
-			$sql = "UPDATE ".constant("PROJECT_LINK_TABLE")." SET project_id = '".$project_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LINK_TABLE")." SET project_id = :project_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -243,8 +258,10 @@ class ProjectLink_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_LINK_TABLE")." WHERE to_project_id = ".$project_id." OR project_id = ".$project_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_LINK_TABLE")." WHERE to_project_id = :project_id OR project_id = :project_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{

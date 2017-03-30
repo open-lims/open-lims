@@ -44,8 +44,10 @@ class ProjectStatusHasFolder_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE folder_id='".$folder_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE folder_id = :folder_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":folder_id", $folder_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['project_id'])
@@ -82,9 +84,13 @@ class ProjectStatusHasFolder_Access
 		if (is_numeric($project_id) and is_numeric($project_status_id) and is_numeric($folder_id))
 		{	
 			$sql_write = "INSERT INTO ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." (project_id,project_status_id,folder_id) " .
-					"VALUES (".$project_id.",".$project_status_id.",".$folder_id.")";
+					"VALUES (:project_id, :project_status_id, :folder_id)";
 					
-			$res_write = $db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":folder_id", $folder_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{	
@@ -110,8 +116,11 @@ class ProjectStatusHasFolder_Access
 			
 		if ($this->project_id and $this->folder_id)
 		{
-			$sql = "DELETE FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id = ".$this->project_id." AND folder_id = ".$this->folder_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id = :project_id AND folder_id = :folder_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $this->project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":folder_id", $this->folder_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -186,8 +195,11 @@ class ProjectStatusHasFolder_Access
 		
 		if (is_numeric($project_id) and is_numeric($project_status_id))
 		{	
-			$sql = "SELECT folder_id FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id='".$project_id."' AND project_status_id='".$project_status_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT folder_id FROM ".constant("PROJECT_STATUS_HAS_FOLDER_TABLE")." WHERE project_id = :project_id AND project_status_id= :project_status_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['folder_id'])

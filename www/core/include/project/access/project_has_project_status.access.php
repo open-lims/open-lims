@@ -48,8 +48,10 @@ class ProjectHasProjectStatus_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -93,13 +95,19 @@ class ProjectHasProjectStatus_Access
 			$datetime = date("Y-m-d H:i:s");
 			
 			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." (primary_key,project_id,status_id,datetime) " .
-					"VALUES (nextval('".self::PROJECT_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass),".$project_id.",".$status_id.",'".$datetime."')";
-			$res_write = $db->db_query($sql_write);
+					"VALUES (nextval('".self::PROJECT_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass), :project_id, :status_id, :datetime)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":status_id", $status_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = currval('".self::PROJECT_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -130,8 +138,10 @@ class ProjectHasProjectStatus_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = :tmp_primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1) 
 			{
@@ -203,8 +213,11 @@ class ProjectHasProjectStatus_Access
 
 		if ($this->primary_key and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." SET project_id = '".$project_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." SET project_id = :project_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -232,8 +245,11 @@ class ProjectHasProjectStatus_Access
 	
 		if ($this->primary_key and is_numeric($status_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." SET status_id = '".$status_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." SET status_id = :status_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":status_id", $status_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -261,8 +277,11 @@ class ProjectHasProjectStatus_Access
 
 		if ($this->primary_key and $datetime)
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." SET datetime = '".$datetime."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." SET datetime = :datetime WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -293,8 +312,10 @@ class ProjectHasProjectStatus_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE project_id = ".$project_id." ORDER BY datetime ASC";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE project_id = :project_id ORDER BY datetime ASC";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -328,8 +349,10 @@ class ProjectHasProjectStatus_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE status_id = ".$status_id." ORDER BY datetime ASC";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")." WHERE status_id = :status_id ORDER BY datetime ASC";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":status_id", $status_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -361,7 +384,8 @@ class ProjectHasProjectStatus_Access
 		$return_array = array();
 		
 		$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_PROJECT_STATUS_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{

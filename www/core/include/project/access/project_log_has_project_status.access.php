@@ -47,8 +47,10 @@ class ProjectLogHasProjectStatus_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -76,24 +78,29 @@ class ProjectLogHasProjectStatus_Access
 	}
 	
 	/**
-	 * @param integer $log_id
-	 * @param integer $status_od
+	 * @param integer $project_log_id
+	 * @param integer $project_status_id
 	 * @return integer
 	 */
-	public function create($log_id, $status_id)
+	public function create($project_log_id, $project_status_id)
 	{
 		global $db;
 		
-		if (is_numeric($log_id) and is_numeric($status_id))
+		if (is_numeric($project_log_id) and is_numeric($project_status_id))
 		{
 			$sql_write = "INSERT INTO ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." (primary_key,log_id,status_id) " .
-					"VALUES (nextval('".self::PROJECT_LOG_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass),".$log_id.",".$status_id.")";
-			$res_write = $db->db_query($sql_write);
+					"VALUES (nextval('".self::PROJECT_LOG_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass), :project_log_id, :project_status_id)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":project_log_id", $project_log_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{	
 				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = currval('".self::PROJECT_LOG_HAS_PROJECT_STATUS_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -124,8 +131,10 @@ class ProjectLogHasProjectStatus_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -176,18 +185,21 @@ class ProjectLogHasProjectStatus_Access
 	 * @param integer $log_id
 	 * @return bool
 	 */	
-	public function set_log_id($log_id)
+	public function set_log_id($project_log_id)
 	{
 		global $db;
 	
-		if ($this->primary_key and is_numeric($log_id))
+		if ($this->primary_key and is_numeric($project_log_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." SET log_id = '".$log_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." SET log_id = :project_log_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_log_id", $project_log_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
-				$this->log_id = $log_id;
+				$this->log_id = $project_log_id;
 				return true;
 			}
 			else
@@ -202,21 +214,24 @@ class ProjectLogHasProjectStatus_Access
 	}
 	
 	/**
-	 * @param integer $status_id
+	 * @param integer $project_status_id
 	 * @return bool
 	 */
-	public function set_status_id($status_id)
+	public function set_status_id($project_status_id)
 	{
 		global $db;
 		
-		if ($this->primary_key and is_numeric($status_id))
+		if ($this->primary_key and is_numeric($project_status_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." SET status_id = '".$status_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." SET status_id = :project_status_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
-				$this->status_id = $status_id;
+				$this->status_id = $project_status_id;
 				return true;
 			}
 			else
@@ -241,7 +256,8 @@ class ProjectLogHasProjectStatus_Access
 		$return_array = array();
 		
 		$sql = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{
@@ -259,19 +275,21 @@ class ProjectLogHasProjectStatus_Access
 	}
 	
 	/**
-	 * @param integer $log_id
+	 * @param integer $project_log_id
 	 * @return integer
 	 */
-	public static function get_entry_by_log_id($log_id)
+	public static function get_entry_by_log_id($project_log_id)
 	{
 		global $db;
 	
-		if (is_numeric($log_id))
+		if (is_numeric($project_log_id))
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE log_id = '".$log_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_PROJECT_STATUS_TABLE")." WHERE log_id = :project_log_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_log_id", $project_log_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 
 			if ($data['primary_key'])

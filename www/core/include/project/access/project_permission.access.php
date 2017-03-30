@@ -52,8 +52,10 @@ class ProjectPermission_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id='".$permission_id."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $permission_id, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -107,68 +109,73 @@ class ProjectPermission_Access
 		
 		if (($user_id xor $organisation_unit_id xor $group_id) and $project_id)
 		{
-			if ($user_id)
+			$sql_write = "INSERT INTO ".constant("PROJECT_PERMISSION_TABLE")." (id,user_id,organisation_unit_id,group_id,project_id,permission,owner_id,intention) " .
+					"VALUES (nextval('".self::PROJECT_PERMISSION_PK_SEQUENCE."'::regclass), :user_id, :organisation_unit_id, :group_id, :project_id, :permission, :owner_id, :intention)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":project_id", $project_id, PDO::PARAM_INT);
+			
+			if (isset($user_id))
 			{
-				$user_id_insert = $user_id;
+				$db->bind_value($res_write, ":user_id", $user_id, PDO::PARAM_INT);
 			}
 			else
 			{
-				$user_id_insert = "NULL";
+				$db->bind_value($res_write, ":user_id", null, PDO::PARAM_NULL);
 			}
-			
-			if ($organisation_unit_id)
+				
+			if (isset($organisation_unit_id))
 			{
-				$organisation_unit_id_insert = $organisation_unit_id;
+				$db->bind_value($res_write, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
 			}
 			else
 			{
-				$organisation_unit_id_insert = "NULL";
+				$db->bind_value($res_write, ":organisation_unit_id", null, PDO::PARAM_NULL);
 			}
-			
+				
 			if ($group_id)
 			{
-				$group_id_insert = $group_id;
+				$db->bind_value($res_write, ":group_id", $group_id, PDO::PARAM_INT);
 			}
 			else
 			{
-				$group_id_insert = "NULL";
+				$db->bind_value($res_write, ":group_id", null, PDO::PARAM_NULL);
 			}
-			
+				
 			if ($permission)
 			{
-				$permission_insert = $permission;
+				$db->bind_value($res_write, ":permission", $permission, PDO::PARAM_INT);
 			}
 			else
 			{
-				$permission_insert = "0";
+				$db->bind_value($res_write, ":permission", 0, PDO::PARAM_INT);
 			}
-			
+				
 			if ($owner_id)
 			{
-				$owner_id_insert = $owner_id;
+				$db->bind_value($res_write, ":owner_id", $owner_id, PDO::PARAM_INT);			
 			}
 			else
 			{
-				$owner_id_insert = "NULL";
+				$db->bind_value($res_write, ":owner_id", null, PDO::PARAM_NULL);
 			}
-			
+				
 			if ($intention)
 			{
-				$intention_insert = $intention;
+				$db->bind_value($res_write, ":intention", $intention, PDO::PARAM_INT);	
 			}
 			else
 			{
-				$intention_insert = "0";
+				$db->bind_value($res_write, ":intention", 0, PDO::PARAM_INT);
 			}
 			
-			$sql_write = "INSERT INTO ".constant("PROJECT_PERMISSION_TABLE")." (id,user_id,organisation_unit_id,group_id,project_id,permission,owner_id,intention) " .
-					"VALUES (nextval('".self::PROJECT_PERMISSION_PK_SEQUENCE."'::regclass),".$user_id_insert.",".$organisation_unit_id_insert.",".$group_id_insert.",".$project_id.",".$permission_insert.",".$owner_id_insert.",".$intention_insert.")";
-			$res_write = $db->db_query($sql_write);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = currval('".self::PROJECT_PERMISSION_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -199,8 +206,10 @@ class ProjectPermission_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = ".$tmp_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $tmp_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -332,8 +341,11 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($user_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET user_id = '".$user_id."' WHERE id = '".$this->permission_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET user_id = :user_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->permission_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -361,8 +373,11 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($organisation_unit_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET organisation_unit_id = '".$organisation_unit_id."' WHERE id = '".$this->permission_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET organisation_unit_id = :organisation_unit_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->permission_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -390,8 +405,11 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($group_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET group_id = '".$group_id."' WHERE id = '".$this->permission_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET group_id = :group_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->permission_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -419,8 +437,11 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET project_id = '".$project_id."' WHERE id = '".$this->permission_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET project_id = :project_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->permission_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -448,8 +469,11 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($permission))
 		{
-			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET permission = '".$permission."' WHERE id = '".$this->permission_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET permission = :permission WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->permission_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":permission", $permission, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -477,8 +501,11 @@ class ProjectPermission_Access
 
 		if ($this->permission_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->permission_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET owner_id = :owner_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->permission_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":owner_id", $owner_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -507,8 +534,10 @@ class ProjectPermission_Access
 		
 		if (is_numeric($id))
 		{			
-			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -538,8 +567,10 @@ class ProjectPermission_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." ORDER BY intention DESC";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = :project_id ORDER BY intention DESC";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -574,8 +605,11 @@ class ProjectPermission_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = :project_id AND intention = :intention AND intention IS NOT NULL";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":intention", $intention, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -611,8 +645,12 @@ class ProjectPermission_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL AND group_id = ".$group_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = :project_id AND intention = :intention AND intention IS NOT NULL AND group_id = :group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":intention", $intention, PDO::PARAM_INT);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -648,8 +686,12 @@ class ProjectPermission_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL AND user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = :project_id AND intention = :intention AND intention IS NOT NULL AND user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":intention", $intention, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -682,19 +724,27 @@ class ProjectPermission_Access
 		
 		if (is_numeric($organisation_unit_id))
 		{
-			if ($intention == null)
+			if (isset($intention))
 			{
-				$intention_insert = "AND intention IS NULL";
+				$intention_insert = "AND intention = :intention";
 			}
 			else
 			{
-				$intention_insert = "AND intention = ".$intention."";
+				$intention_insert = "AND intention IS NULL";
 			}
 			
 			$return_array = array();
 				
-			$sql = "SELECT project_id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id." ".$intention_insert."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT project_id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id = :organisation_unit_id ".$intention_insert."";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			
+			if (isset($intention))
+			{
+				$db->bind_value($res, ":intention", $intention, PDO::PARAM_INT);
+			}
+			
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -727,8 +777,11 @@ class ProjectPermission_Access
 			
 		if (is_numeric($project_id) and is_numeric($user_id))
 		{			
-			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and user_id = ".$user_id." AND TRUE = (SELECT * FROM project_permission_user(".$project_id.", ".$user_id."))";
-			$res = $db->db_query($sql);
+			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = :project_id and user_id = :user_id AND TRUE = (SELECT * FROM project_permission_user(:project_id, :user_id))";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['numberofentries'])
@@ -757,8 +810,11 @@ class ProjectPermission_Access
 			
 		if (is_numeric($project_id) and is_numeric($organisation_unit_id))
 		{
-			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and organisation_unit_id = ".$organisation_unit_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = :project_id and organisation_unit_id = :organisation_unit_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['numberofentries'])
@@ -787,8 +843,11 @@ class ProjectPermission_Access
 
 		if (is_numeric($project_id) and is_numeric($group_id))
 		{	
-			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." and group_id = ".$group_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT COUNT(id) AS numberofentries FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = :project_id and group_id = :group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['numberofentries'])
@@ -819,8 +878,11 @@ class ProjectPermission_Access
 		{
 			$return_array = array();
 			
-			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = ".$project_id." AND intention = ".$intention." AND intention IS NOT NULL";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE project_id = :project_id AND intention = :intention AND intention IS NOT NULL";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":intention", $intention, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			return true;
 		}
@@ -840,8 +902,10 @@ class ProjectPermission_Access
 		
 		if (is_numeric($user_id))
 		{
-			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE user_id = ".$user_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE user_id = :user_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":user_id", $user_id, PDO::PARAM_INT);
+			$db->execute($res);
 			return true;
 		}
 		else
@@ -860,8 +924,10 @@ class ProjectPermission_Access
 		
 		if (is_numeric($group_id)) 
 		{
-			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE group_id = ".$group_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE group_id = :group_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":group_id", $group_id, PDO::PARAM_INT);
+			$db->execute($res);
 			return true;
 		}
 		else
@@ -880,8 +946,10 @@ class ProjectPermission_Access
 		
 		if (is_numeric($organisation_unit_id))
 		{	
-			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id = ".$organisation_unit_id."";
-			$res = $db->db_query($sql);	
+			$sql = "DELETE FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id = :organisation_unit_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":organisation_unit_id", $organisation_unit_id, PDO::PARAM_INT);
+			$db->execute($res);
 			return true;
 		}
 		else
@@ -901,8 +969,11 @@ class ProjectPermission_Access
 		
 		if (is_numeric($old_owner_id) and is_numeric($new_owner_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET owner_id = ".$new_owner_id." WHERE owner_id = ".$old_owner_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_PERMISSION_TABLE")." SET owner_id = :new_owner_id WHERE owner_id = :old_owner_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":old_owner_id", $old_owner_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":new_owner_id", $new_owner_id, PDO::PARAM_INT);
+			$db->execute($res);
 			return true;
 		}
 		else
@@ -921,8 +992,10 @@ class ProjectPermission_Access
 		
 		if (is_numeric($permission_id))
 		{			
-			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE user_id IS NOT NULL AND id = ".$permission_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE user_id IS NOT NULL AND id = :permission_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":permission_id", $permission_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -950,8 +1023,10 @@ class ProjectPermission_Access
 		
 		if (is_numeric($permission_id))
 		{			
-			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE group_id IS NOT NULL AND id = ".$permission_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE group_id IS NOT NULL AND id = :permission_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":permission_id", $permission_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -979,8 +1054,10 @@ class ProjectPermission_Access
 		
 		if (is_numeric($permission_id))
 		{			
-			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id IS NOT NULL AND id = ".$permission_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_PERMISSION_TABLE")." WHERE organisation_unit_id IS NOT NULL AND id = :permission_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":permission_id", $permission_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])

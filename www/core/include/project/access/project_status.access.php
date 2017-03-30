@@ -49,8 +49,10 @@ class ProjectStatus_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id='".$project_status_id."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $project_status_id, PDO::PARAM_INT);
+			$db->execute($res);		
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -59,24 +61,8 @@ class ProjectStatus_Access
 				
 				$this->name					= $data['name'];
 				$this->comment				= $data['comment'];
-				
-				if ($data['analysis'] == "t")
-				{
-					$this->analysis			= true;
-				}
-				else
-				{
-					$this->analysis			= false;
-				}
-				
-				if ($data['blocked'] == "t")
-				{
-					$this->blocked			= true;
-				}
-				else
-				{
-					$this->blocked			= false;
-				}
+				$this->analysis				= $data['analysis'];
+				$this->blocked				= $data['blocked'];
 			}
 			else
 			{
@@ -108,25 +94,27 @@ class ProjectStatus_Access
 		
 		if ($name)
 		{
-		
-			if ($comment)
+			$sql_write = "INSERT INTO ".constant("PROJECT_STATUS_TABLE")." " .
+							"(id,name,analysis,blocked,comment) " .
+							"VALUES (nextval('".self::PROJECT_STATUS_PK_SEQUENCE."'::regclass), :name, 'f', 'f', :comment)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":name", $name, PDO::PARAM_STR);
+			
+			if (isset($comment))
 			{
-				$comment_insert = "'".$comment."'";
+				$db->bind_value($res_write, ":comment", $comment, PDO::PARAM_STR);
 			}
 			else
 			{
-				$comment_insert = "NULL";
+				$db->bind_value($res_write, ":comment", null, PDO::PARAM_NULL);
 			}
-		
-			$sql_write = "INSERT INTO ".constant("PROJECT_STATUS_TABLE")." " .
-							"(id,name,analysis,blocked,comment) " .
-							"VALUES (nextval('".self::PROJECT_STATUS_PK_SEQUENCE."'::regclass),'".$name."','f','f',".$comment_insert.")";
-			$res_write = $db->db_query($sql_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = currval('".self::PROJECT_STATUS_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 								
 				self::__construct($data_read['id']);				
@@ -157,8 +145,10 @@ class ProjectStatus_Access
     		
     		$this->__destruct();
     		
-    		$sql = "DELETE FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = ".$tmp_project_status_id."";
-    		$res = $db->db_query($sql);
+    		$sql = "DELETE FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = :id";
+    		$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $tmp_project_status_id, PDO::PARAM_INT);
+			$db->execute($res);
     		
     		if ($db->row_count($res) == 1)
     		{
@@ -245,8 +235,11 @@ class ProjectStatus_Access
 
 		if ($this->project_status_id and $name)
 		{
-			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET name = '".$name."' WHERE id = ".$this->project_status_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET name = :name WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->project_status_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":name", $name, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -273,18 +266,12 @@ class ProjectStatus_Access
 		global $db;
 		
 		if ($this->project_status_id and isset($analysis))
-		{
-			if ($analysis == true)
-			{
-				$analysis_insert = "t";
-			}
-			else
-			{
-				$analysis_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET analysis = '".$analysis_insert."' WHERE id = ".$this->project_status_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET analysis = :analysis WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->project_status_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":analysis", $analysis, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -311,18 +298,12 @@ class ProjectStatus_Access
 		global $db;
 
 		if ($this->project_status_id and isset($blocked))
-		{
-			if ($blocked == true)
-			{
-				$blocked_insert = "t";
-			}
-			else
-			{
-				$blocked_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET blocked = '".$blocked_insert."' WHERE id = ".$this->project_status_id."";
-			$res = $db->db_query($sql);
+		{			
+			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET blocked = :blocked WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->project_status_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":blocked", $blocked, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -350,8 +331,11 @@ class ProjectStatus_Access
 
 		if ($this->project_status_id and $comment)
 		{
-			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET comment = '".$comment."' WHERE id = ".$this->project_status_id."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_STATUS_TABLE")." SET comment = :comment WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->project_status_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":comment", $comment, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -380,8 +364,10 @@ class ProjectStatus_Access
 
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_STATUS_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])

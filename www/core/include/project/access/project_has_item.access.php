@@ -52,8 +52,10 @@ class ProjectHasItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);		
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -65,24 +67,8 @@ class ProjectHasItem_Access
 				$this->gid					= $data['gid'];
 				$this->project_status_id	= $data['project_status_id'];
 				$this->parent_item_id		= $data['parent_item_id'];
-				
-				if ($data['active'] == 't')
-				{
-					$this->active = true;
-				}
-				else
-				{
-					$this->active = false;
-				}
-				
-				if ($data['required'] == 't')
-				{
-					$this->required = true;
-				}
-				else
-				{
-					$this->required = false;
-				}
+				$this->active				= $data['active'];
+				$this->required				= $data['required'];
 			}
 			else
 			{
@@ -115,24 +101,30 @@ class ProjectHasItem_Access
 		global $db;
 		
 		if (is_numeric($project_id) and is_numeric($item_id))
-		{
+		{			
+			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_ITEM_TABLE")." (primary_key,project_id,item_id,active, required, gid, project_status_id) " .
+					"VALUES (nextval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass), :project_id, :item_id, 't', 'f', :gid, NULL)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":item_id", $item_id, PDO::PARAM_INT);
+			
 			if (is_numeric($gid))
 			{
-				$gid_insert = $gid;	
+				$db->bind_value($res_write, ":gid", $gid, PDO::PARAM_INT);
 			}
 			else
 			{
-				$gid_insert = "NULL";
+				$db->bind_value($res_write, ":gid", null, PDO::PARAM_NULL);
 			}
 			
-			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_ITEM_TABLE")." (primary_key,project_id,item_id,active, required, gid, project_status_id) " .
-					"VALUES (nextval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass),".$project_id.",".$item_id.",'t','f',".$gid_insert.",NULL)";
-			$res_write = $db->db_query($sql_write);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key = currval('".self::PROJECT_HAS_ITEM_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -163,8 +155,10 @@ class ProjectHasItem_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -296,8 +290,11 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET project_id = '".$project_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET project_id = :project_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -325,8 +322,11 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($item_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET item_id = '".$item_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET item_id = :item_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -354,17 +354,11 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and isset($active))
 		{
-			if ($active == true)
-			{
-				$active_insert = "t";
-			}
-			else
-			{
-				$active_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET active = '".$active_insert."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET active = :active WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":active", $active, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -392,17 +386,11 @@ class ProjectHasItem_Access
 	
 		if ($this->primary_key and isset($required))
 		{
-			if ($required == true)
-			{
-				$required_insert = "t";
-			}
-			else
-			{
-				$required_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET required = '".$required_insert."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET required = :required WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":required", $required, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -430,8 +418,11 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($gid))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET gid = '".$gid."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET gid = :gid WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":gid", $gid, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -459,8 +450,11 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($project_status_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET project_status_id = '".$project_status_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET project_status_id = :project_status_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -488,8 +482,11 @@ class ProjectHasItem_Access
 
 		if ($this->primary_key and is_numeric($parent_item_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET parent_item_id = '".$parent_item_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_ITEM_TABLE")." SET parent_item_id = :parent_item_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -522,8 +519,11 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND project_id = ".$project_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = :item_id AND project_id = :project_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 				
 			if ($data['primary_key'])
@@ -554,8 +554,10 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT project_id,project_status_id,gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id." AND parent_item_id IS NULL";
-			$res = $db->db_query($sql);
+			$sql = "SELECT project_id,project_status_id,gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = :item_id AND parent_item_id IS NULL";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -595,8 +597,11 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id." AND project_id = ".$project_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = :parent_item_id AND project_id = :project_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -631,8 +636,10 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = ".$parent_item_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE parent_item_id = :parent_item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -667,8 +674,10 @@ class ProjectHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE item_id = :item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -707,14 +716,20 @@ class ProjectHasItem_Access
 			
 			if ($sub_items == true)
 			{
-				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = :project_id AND project_status_id = :project_status_id";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+				$db->bind_value($res, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
 			else
 			{
-				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id." AND parent_item_id IS NULL";
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = :project_id AND project_status_id = :project_status_id AND parent_item_id IS NULL";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+				$db->bind_value($res, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
-			
-			$res = $db->db_query($sql);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -753,14 +768,20 @@ class ProjectHasItem_Access
 			
 			if ($sub_items == true)
 			{
-				$sql = "SELECT item_id, gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id."";
+				$sql = "SELECT item_id, gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = :project_id AND project_status_id = :project_status_id";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+				$db->bind_value($res, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
 			else
 			{
-				$sql = "SELECT item_id, gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND project_status_id = ".$project_status_id." AND parent_item_id IS NULL";
+				$sql = "SELECT item_id, gid FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = :project_id AND project_status_id = :project_status_id AND parent_item_id IS NULL";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+				$db->bind_value($res, ":project_status_id", $project_status_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
-			
-			$res = $db->db_query($sql);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -798,14 +819,18 @@ class ProjectHasItem_Access
 			
 			if ($sub_items == true)
 			{
-				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id."";
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = :project_id";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
 			else
 			{
-				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = ".$project_id." AND parent_item_id IS NULL";
+				$sql = "SELECT item_id FROM ".constant("PROJECT_HAS_ITEM_TABLE")." WHERE project_id = :project_id AND parent_item_id IS NULL";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
-			
-			$res = $db->db_query($sql);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -842,17 +867,21 @@ class ProjectHasItem_Access
 			{
 				$sql = "DELETE FROM ".constant("PROJECT_HAS_ITEM_TABLE")." " .
 						" WHERE " .
-						" ".constant("PROJECT_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id." AND ".constant("PROJECT_HAS_ITEM_TABLE").".project_id = ".$project_id."";
+						" ".constant("PROJECT_HAS_ITEM_TABLE").".parent_item_id = :parent_item_id AND ".constant("PROJECT_HAS_ITEM_TABLE").".project_id = ".$project_id."";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
 			else
 			{
 				$sql = "DELETE FROM ".constant("PROJECT_HAS_ITEM_TABLE")." " .
 						" WHERE " .
-						" ".constant("PROJECT_HAS_ITEM_TABLE").".parent_item_id = ".$parent_item_id."";
+						" ".constant("PROJECT_HAS_ITEM_TABLE").".parent_item_id = :parent_item_id";
+				$res = $db->prepare($sql);
+				$db->bind_value($res, ":parent_item_id", $parent_item_id, PDO::PARAM_INT);
+				$db->execute($res);
 			}
-			
-			$res = $db->db_query($sql);
-			
+
 			if ($res !== false)
 			{
 				return true;

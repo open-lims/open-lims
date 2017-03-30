@@ -47,8 +47,10 @@ class ProjectHasExtensionRun_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -89,13 +91,19 @@ class ProjectHasExtensionRun_Access
 		if (is_numeric($project_id) and is_numeric($extension_id) and is_numeric($run))
 		{			
 			$sql_write = "INSERT INTO ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." (primary_key, project_id, extension_id, run) " .
-					"VALUES (nextval('".self::PROJECT_HAS_EXTENSION_RUN_PK_SEQUENCE."'::regclass),".$project_id.",".$extension_id.",".$run.")";
-			$res_write = $db->db_query($sql_write);
+					"VALUES (nextval('".self::PROJECT_HAS_EXTENSION_RUN_PK_SEQUENCE."'::regclass), :project_id, :extension_id, :run)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":extension_id", $extension_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":run", $run, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE primary_key = currval('".self::PROJECT_HAS_EXTENSION_RUN_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['primary_key']);
@@ -126,8 +134,10 @@ class ProjectHasExtensionRun_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE primary_key = ".$tmp_primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -199,8 +209,11 @@ class ProjectHasExtensionRun_Access
 		
 		if ($this->primary_key and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." SET project_id = '".$project_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." SET project_id = :project_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -228,8 +241,11 @@ class ProjectHasExtensionRun_Access
 		
 		if ($this->primary_key and is_numeric($extension_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." SET extension_id = '".$extension_id."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." SET extension_id = :extension_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":extension_id", $extension_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -257,8 +273,11 @@ class ProjectHasExtensionRun_Access
 		
 		if ($this->primary_key and is_numeric($run))
 		{
-			$sql = "UPDATE ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." SET run = '".$run."' WHERE primary_key = '".$this->primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." SET run = :run WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":run", $run, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -290,8 +309,11 @@ class ProjectHasExtensionRun_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT run FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE extension_id='".$extension_id."' AND project_id='".$project_id."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT run FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE extension_id = :extension_id AND project_id = :project_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":extension_id", $extension_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -323,8 +345,10 @@ class ProjectHasExtensionRun_Access
 		
 		if (is_numeric($project_id))
 		{
-			$sql = "DELETE FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE project_id='".$project_id."'";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_HAS_EXTENSION_RUN_TABLE")." WHERE project_id = :project_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($res !== false)
 			{

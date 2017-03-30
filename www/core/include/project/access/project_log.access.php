@@ -51,8 +51,10 @@ class ProjectLog_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_LOG_TABLE")." WHERE id='".$log_id."'";
-			$res = $db->db_query($sql);			
+			$sql = "SELECT * FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $log_id, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -64,24 +66,8 @@ class ProjectLog_Access
 				$this->content			= $data['content'];
 				$this->owner_id			= $data['owner_id'];
 				$this->action_checksum	= $data['action_checksum'];
-			
-				if ($data['cancel'] == "t")
-				{
-					$this->cancel		= true;
-				}
-				else
-				{
-					$this->cancel		= false;
-				}
-				
-				if ($data['important'] == "t")
-				{
-					$this->important	= true;
-				}
-				else
-				{
-					$this->important	= false;
-				}
+				$this->cancel			= $data['cancel'];
+				$this->important		= $data['important'];
 			}
 			else
 			{
@@ -120,43 +106,34 @@ class ProjectLog_Access
 		
 		if (is_numeric($project_id) and $owner_id)
 		{
-			if ($cancel == true)
-			{
-				$cancel_insert = "t";
-			}
-			else
-			{
-				$cancel_insert = "f";
-			}
-			
-			if ($important == true)
-			{
-				$important_insert = "t";
-			}
-			else
-			{
-				$important_insert = "f";
-			}
-			
-			if (!$content)
-			{
-				$content_insert = "NULL";
-			}
-			else
-			{
-				$content_insert = "'".$content."'";
-			}
-			
 			$datetime = date("Y-m-d H:i:s");
 			
 			$sql_write = "INSERT INTO ".constant("PROJECT_LOG_TABLE")." (id, project_id, datetime, content, cancel, important, owner_id) " .
-					"VALUES (nextval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass),".$project_id.",'".$datetime."',".$content_insert.",'".$cancel_insert."','".$important_insert."',".$owner_id.")";
-			$res_write = $db->db_query($sql_write);
+					"VALUES (nextval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass), :project_id, :datetime, :content, :cancel, :important, :owner_id)";
+			
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->bind_value($res_write, ":cancel", $cancel, PDO::PARAM_BOOL);
+			$db->bind_value($res_write, ":important", $important, PDO::PARAM_BOOL);
+			$db->bind_value($res_write, ":owner_id", $owner_id, PDO::PARAM_INT);
+						
+			if (isset($content))
+			{
+				$db->bind_value($res_write, ":content", $content, PDO::PARAM_STR);
+			}
+			else
+			{
+				$db->bind_value($res_write, ":content", null, PDO::PARAM_NULL);
+			}
+			
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 				$sql_read = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = currval('".self::PROJECT_LOG_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 				
 				self::__construct($data_read['id']);
@@ -187,8 +164,10 @@ class ProjectLog_Access
 			
 			$this->__destruct();
 						
-			$sql = "DELETE FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = ".$tmp_log_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $tmp_log_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -297,8 +276,11 @@ class ProjectLog_Access
 		
 		if ($this->log_id and is_numeric($project_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET project_id = '".$project_id."' WHERE id = '".$this->log_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET project_id = :project_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->log_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -326,8 +308,11 @@ class ProjectLog_Access
 
 		if ($this->log_id and $datetime)
 		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET datetime = '".$datetime."' WHERE id = '".$this->log_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET datetime = :datetime WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->log_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":datetime", $datetime, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -355,8 +340,11 @@ class ProjectLog_Access
 	
 		if ($this->log_id and $content)
 		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET content = '".$content."' WHERE id = '".$this->log_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET content = :content WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->log_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":content", $content, PDO::PARAM_STR);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -384,17 +372,11 @@ class ProjectLog_Access
 
 		if ($this->log_id and isset($cancel))
 		{
-			if ($cancel == true)
-			{
-				$cancel_insert = "t";
-			}
-			else
-			{
-				$cancel_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET cancel = '".$cancel_insert."' WHERE id = '".$this->log_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET cancel = :cancel WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->log_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":cancel", $cancel, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -422,17 +404,11 @@ class ProjectLog_Access
 
 		if ($this->log_id and isset($important))
 		{
-			if ($important == true)
-			{
-				$important_insert = "t";
-			}
-			else
-			{
-				$important_insert = "f";
-			}
-			
-			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET important = '".$important_insert."' WHERE id = '".$this->log_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET important = :important WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->log_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":important", $important, PDO::PARAM_BOOL);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -460,8 +436,11 @@ class ProjectLog_Access
 
 		if ($this->log_id and is_numeric($owner_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET owner_id = '".$owner_id."' WHERE id = '".$this->log_id."'";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_TABLE")." SET owner_id = :owner_id WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $this->log_id, PDO::PARAM_INT);
+			$db->bind_value($res, ":owner_id", $owner_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -490,8 +469,10 @@ class ProjectLog_Access
 
 		if (is_numeric($id))
 		{
-			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = ".$id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE id = :id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":id", $id, PDO::PARAM_INT);
+			$db->execute($res);
 			$data = $db->fetch($res);
 			
 			if ($data['id'])
@@ -521,8 +502,10 @@ class ProjectLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE project_id = ".$project_id." ORDER BY datetime DESC, id DESC";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE project_id = :project_id ORDER BY datetime DESC, id DESC";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_id", $project_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -556,8 +539,10 @@ class ProjectLog_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE owner_id = ".$owner_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")." WHERE owner_id = :owner_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":owner_id", $owner_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			while ($data = $db->fetch($res))
 			{
@@ -589,7 +574,8 @@ class ProjectLog_Access
 		$return_array = array();
 		
 		$sql = "SELECT id FROM ".constant("PROJECT_LOG_TABLE")."";
-		$res = $db->db_query($sql);
+		$res = $db->prepare($sql);
+		$db->execute($res);
 		
 		while ($data = $db->fetch($res))
 		{

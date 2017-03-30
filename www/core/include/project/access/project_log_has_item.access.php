@@ -47,8 +47,10 @@ class ProjectLogHasItem_Access
 		}
 		else
 		{
-			$sql = "SELECT * FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE primary_key='".$primary_key."'";
-			$res = $db->db_query($sql);
+			$sql = "SELECT * FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $primary_key, PDO::PARAM_INT);
+			$db->execute($res);	
 			$data = $db->fetch($res);
 			
 			if ($data['primary_key'])
@@ -87,15 +89,19 @@ class ProjectLogHasItem_Access
 		if (is_numeric($item_id) and is_numeric($project_log_id))
 		{
 			$sql_write = "INSERT INTO ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." (primary_key,item_id,project_log_id) " .
-					"VALUES (nextval('".self::PROJECT_LOG_HAS_ITEM_PK_SEQUENCE."'::regclass),".$item_id.",".$project_log_id.")";
+					"VALUES (nextval('".self::PROJECT_LOG_HAS_ITEM_PK_SEQUENCE."'::regclass), :item_id, :project_log_id)";
 					
-			$res_write = $db->db_query($sql_write);	
+			$res_write = $db->prepare($sql_write);
+			$db->bind_value($res_write, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->bind_value($res_write, ":project_log_id", $project_log_id, PDO::PARAM_INT);
+			$db->execute($res_write);
 			
 			if ($db->row_count($res_write) == 1)
 			{
 			
 				$sql_read = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE primary_key = currval('".self::PROJECT_LOG_HAS_ITEM_PK_SEQUENCE."'::regclass)";
-				$res_read = $db->db_query($sql_read);
+				$res_read = $db->prepare($sql_read);
+				$db->execute($res_read);
 				$data_read = $db->fetch($res_read);
 									
 				self::__construct($data_read['primary_key']);
@@ -122,12 +128,14 @@ class ProjectLogHasItem_Access
 			
 		if ($this->primary_key)
 		{
-			$primary_key_tmp = $this->primary_key;
+			$tmp_primary_key = $this->primary_key;
 			
 			$this->__destruct();
 			
-			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE primary_key = ".$primary_key_tmp."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $tmp_primary_key, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res) == 1)
 			{
@@ -184,8 +192,11 @@ class ProjectLogHasItem_Access
 		
 		if ($this->primary_key and is_numeric($project_log_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." SET project_log_id = ".$project_log_id." WHERE primary_key = ".$this->primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." SET project_log_id = :project_log_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":project_log_id", $project_log_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -213,8 +224,11 @@ class ProjectLogHasItem_Access
 			
 		if ($this->primary_key and is_numeric($item_id))
 		{
-			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." SET item_id = ".$item_id." WHERE primary_key = ".$this->primary_key."";
-			$res = $db->db_query($sql);
+			$sql = "UPDATE ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." SET item_id = :item_id WHERE primary_key = :primary_key";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":primary_key", $this->primary_key, PDO::PARAM_INT);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
 			
 			if ($db->row_count($res))
 			{
@@ -245,8 +259,11 @@ class ProjectLogHasItem_Access
 		{
 			$return_array = array();
 			
-			$sql = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE project_log_id = ".$project_log_id."";
-			$res = $db->db_query($sql);
+			$sql = "SELECT primary_key FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE project_log_id = :project_log_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_log_id", $project_log_id, PDO::PARAM_INT);
+			$db->execute($res);
+			
 			while ($data = $db->fetch($res))
 			{
 				array_push($return_array, $data['primary_key']);
@@ -268,19 +285,23 @@ class ProjectLogHasItem_Access
 	}
 	
 	/**
-	 * @param integer $log_id
+	 * @param integer $project_log_id
 	 * @return bool
 	 */
-	public static function delete_by_log_id($log_id)
+	public static function delete_by_log_id($project_log_id)
 	{
     	global $db;
 		
-		if (is_numeric($log_id))
+		if (is_numeric($project_log_id))
 		{
-			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE project_log_id = ".$log_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE project_log_id = :project_log_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":project_log_id", $project_log_id, PDO::PARAM_INT);
+			$db->execute($res);
+			
 			return true;
-		}else
+		}
+		else
 		{
 			return false;
 		}
@@ -296,10 +317,14 @@ class ProjectLogHasItem_Access
 		
 		if (is_numeric($item_id))
 		{
-			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE item_id = ".$item_id."";
-			$res = $db->db_query($sql);
+			$sql = "DELETE FROM ".constant("PROJECT_LOG_HAS_ITEM_TABLE")." WHERE item_id = :item_id";
+			$res = $db->prepare($sql);
+			$db->bind_value($res, ":item_id", $item_id, PDO::PARAM_INT);
+			$db->execute($res);
+			
 			return true;
-		}else
+		}
+		else
 		{
 			return false;
 		}
